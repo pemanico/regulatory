@@ -1,0 +1,30 @@
+{
+  "name": "regdata-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Regulatory Data Analytics Platform — React + Node.js (NestJS) monorepo",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build:contracts": "npm run build -w @regdata/contracts",
+    "build": "npm run build:contracts && npm run build -w @regdata/api && npm run build -w @regdata/web",
+    "dev": "npm run build:contracts && concurrently -k -n api,web -c blue,green \"npm run start:dev -w @regdata/api\" \"npm run dev -w @regdata/web\"",
+    "test": "npm run build:contracts && npm run test --workspaces --if-present",
+    "typecheck": "npm run build:contracts && npm run typecheck --workspaces --if-present",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "concurrently": "^9.0.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^15.0.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.0.0"
+  }
+}
