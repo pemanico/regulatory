@@ -17,3 +17,6 @@
 | Allowlist de DAGs | Lista fechada de DAGs Airflow que o agente pode disparar |
 | UTI / USI / TRN | Identificadores de transação (EMIR / CFTC / MiFID) |
 | DTCC GTR | Repositório de transações usado nas reconciliações |
+| Documentação como código | Documentação em ficheiros de texto (Markdown, CSV, YAML) versionada em Git, com revisão por PR |
+| Documento funcional | Spec em Markdown com front matter (id, owner, versão, vigência, jurisdição, ligações a regras/marts/métricas) |
+| Front matter | Bloco YAML no topo de um Markdown com os metadados do documento |

@@ -34,6 +34,7 @@
 - O que domina são reports operacionais recorrentes, feitos com análise e pivot em Excel.
 - O volume ultrapassa o limite prático do Excel, o que obriga a extrações parciais e pré-agregações manuais.
 - As definições reais dos KPIs vivem hoje nos Excels da equipa.
+- A documentação (specs, regras, mapeamentos) está toda em Excel, Word, PDF e CSV, fora de controlo de versões.
 
 ## Âmbito
 
