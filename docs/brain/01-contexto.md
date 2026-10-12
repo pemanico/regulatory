@@ -43,7 +43,7 @@ Dentro:
 - Pivot interativo e drill-through.
 - Reports recorrentes automatizados; reports e KPIs por prompt.
 - Explicação de regras, código e categorias de erro (agente com RAG).
-- Primeiro caso de uso: análise de matching EMIR (estados de pairing/matching, motivos de falha, aging) sobre os resultados já produzidos a montante, com KPIs e tabelas por prompt.
+- Agentic RAG multi-regulatório: começa por EMIR (trade reporting, matching, clearing, risk mitigation, collateral, várias categorias de KPI); depois MiFID II/MiFIR, SEC, CFTC e Canadá. Matching analisado sobre os resultados já produzidos a montante.
 - Jobs no Airflow a pedido, só por allowlist.
 
 Fora:

@@ -27,3 +27,7 @@
 | Director | Agente orquestrador do sistema EMIR Matching; não acede a dados nem faz RAG |
 | Resumo de regras (rules digest) | Resumo curado e versionado das regras EMIR e internas, incluído no prompt do Director |
 | Placeholder de valor | `{{result_id:row:column}}`: referência a um número nos resultados, substituída pelo backend; os LLMs nunca escrevem números |
+| Pack de regulação | Pasta no repositório de conhecimento com manifesto, resumo de regras, módulo de análise, KPIs, marts e golden set de uma regulação |
+| Tipo de pedido | Classificação do Director: context, calculation, mixed, regulatory_assessment, general, out_of_scope |
+| Runtime de orquestração | Código no NestJS que executa os planos do Director, injeta resultados, aplica limites e corre os validadores |
+| Enrichment | Pipeline offline que prepara documentos, código, comentários e metadados dos Parquet para a vector DB |

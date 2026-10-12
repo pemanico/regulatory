@@ -20,7 +20,8 @@ O RAG serve para conhecimento não estruturado: explicar, contextualizar, citar.
 | Mapeamentos de campos | **Tabelas**, não RAG | query tipada |
 | Definições de métricas | **Semantic layer**, não RAG | `metrics.query` / `metrics.explain` |
 | Versões em vigor de regras | **Registry**, não RAG | `rules.get(as_of)` |
-| Dados dos marts | **Semantic layer / Trino**, nunca RAG | `metrics.query` |
+| Dados dos marts (linhas, valores) | **Semantic layer / ClickHouse**, nunca RAG | `metrics.query` |
+| Descrição dos dados Parquet (schemas, colunas, domínios de valores) | OpenSearch (RAG) | `docs.search` (doc_type `data_dictionary`) |
 
 Regra prática: se a pergunta tem uma resposta exata e verificável ("qual a versão em vigor", "qual o valor do campo X"), não é RAG.
 
@@ -202,7 +203,7 @@ O LLM ajuda na conversão (classificar folhas, propor front matter, limpar tabel
 
 ## 7. Primeiro caso de uso
 
-Sistema multi-agente EMIR Matching: ver [`08-agentes-emir-matching.md`](08-agentes-emir-matching.md).
+Agentic RAG multi-regulatório, a começar por EMIR: ver [`08-agentic-rag-multi-regulatory.md`](08-agentic-rag-multi-regulatory.md). O pipeline de enrichment (documentos em PT, código e comentários em EN, metadados dos Parquet) está na secção 9 desse ficheiro.
 
 ## 8. Questões abertas do RAG
 

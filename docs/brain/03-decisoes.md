@@ -4,7 +4,11 @@ Mais recente primeiro. Decisões técnicas da aplicação têm ADR em `regdata-p
 
 | Data | Decisão | Porquê |
 | --- | --- | --- |
-| 2026-10-13 | Primeiro caso de uso do Agentic RAG: sistema multi-agente EMIR com foco em matching; Director (orquestrador, sem RAG) + Retriever (único acesso a dados e vector DB), Matching, KPI, Análise EMIR, Tabelas; Planeador opcional | Definido pelo Ordep; detalhe em `08-agentes-emir-matching.md` |
+| 2026-10-13 | Agentic RAG multi-regulatório (v2), substitui o desenho EMIR Matching v1: começa por EMIR (reporting, matching, clearing, risk mitigation, collateral), depois MiFID II/MiFIR, SEC, CFTC, Canadá | Definido pelo Ordep; `08-agentic-rag-multi-regulatory.md` |
+| 2026-10-13 | Duas fontes separadas: vector DB para perceber/contexto; ClickHouse (ou motor sobre Parquet) para calcular. Nunca calcular KPIs na vector DB | Definido pelo Ordep |
+| 2026-10-13 | Agentes: Director (sem RAG nem ClickHouse), Retriever (único na vector DB), KPI e Matching (ClickHouse), Análise Regulatória (extensível por regulação), Tabelas, General, Enrichment | Definido pelo Ordep |
+| 2026-10-13 | Regras de língua: código e comentários em inglês; documentos funcionais, regras de negócio e prompts podem ser em português; arquitetura e explicações técnicas podem ser em inglês | Definido pelo Ordep |
+| 2026-10-13 | RAG enriquecido com dados Parquet, documentos funcionais, código-fonte e comentários | Definido pelo Ordep; proposta: dos Parquet só metadados, nunca linhas |
 | 2026-10-12 | A documentação migrada é editada pelo módulo Admin na aplicação React, que abre PRs no Git interno por baixo | Operacionais não precisam de usar Git; evita que o Word volte a ser a fonte |
 | 2026-10-12 | Repositório mantém-se público, com as referências atuais ao banco, à equipa e ao stack | Ordep confirma que não há problema |
 | 2026-10-12 | Repositório público `pemanico/regulatory` só para código genérico e exemplos fictícios/anonimizados; conhecimento real (documentação convertida, catálogo, casos) só no Git interno do banco | No banco só há acesso ao Git interno; o público serve de transferência e é visível para todos |

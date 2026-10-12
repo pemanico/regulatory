@@ -33,7 +33,7 @@ Um orquestrador com agentes especializados; nenhum agente fala diretamente com o
 
 Fluxo Agentic RAG adaptado: rewrite → fast path para pedidos simples → escolha de fonte (tools internas, nunca internet) → retrieval → LLM redige → verificação determinística (números existem nos resultados, citações presentes) → máximo 2–3 iterações.
 
-**Primeiro caso de uso — EMIR Matching:** Director (orquestrador, sem RAG) e agentes Retriever, Matching, KPI, Análise EMIR e Tabelas; ver [`08-agentes-emir-matching.md`](08-agentes-emir-matching.md). Este desenho substitui, para este caso, a lista genérica de agentes acima.
+**Desenho atual dos agentes (v2, multi-regulatório):** Director (sem RAG nem ClickHouse), Retriever (só vector DB), KPI e Matching (ClickHouse via semantic layer), Análise Regulatória (módulos por regulação), Tabelas, General e Enrichment (offline); ver [`08-agentic-rag-multi-regulatory.md`](08-agentic-rag-multi-regulatory.md). Substitui a lista genérica de agentes acima.
 
 **Desenho completo do RAG** (o que entra e o que não entra, OpenSearch, fluxo passo a passo, ingestão de código PySpark e de documentação Word/Excel/CSV/PDF): ver [`07-rag.md`](07-rag.md).
 
