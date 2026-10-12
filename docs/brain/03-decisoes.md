@@ -4,6 +4,7 @@ Mais recente primeiro. Decisões técnicas da aplicação têm ADR em `regdata-p
 
 | Data | Decisão | Porquê |
 | --- | --- | --- |
+| 2026-10-13 | Primeiro caso de uso do Agentic RAG: sistema multi-agente EMIR com foco em matching; Director (orquestrador, sem RAG) + Retriever (único acesso a dados e vector DB), Matching, KPI, Análise EMIR, Tabelas; Planeador opcional | Definido pelo Ordep; detalhe em `08-agentes-emir-matching.md` |
 | 2026-10-12 | A documentação migrada é editada pelo módulo Admin na aplicação React, que abre PRs no Git interno por baixo | Operacionais não precisam de usar Git; evita que o Word volte a ser a fonte |
 | 2026-10-12 | Repositório mantém-se público, com as referências atuais ao banco, à equipa e ao stack | Ordep confirma que não há problema |
 | 2026-10-12 | Repositório público `pemanico/regulatory` só para código genérico e exemplos fictícios/anonimizados; conhecimento real (documentação convertida, catálogo, casos) só no Git interno do banco | No banco só há acesso ao Git interno; o público serve de transferência e é visível para todos |

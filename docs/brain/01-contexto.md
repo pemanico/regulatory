@@ -43,6 +43,7 @@ Dentro:
 - Pivot interativo e drill-through.
 - Reports recorrentes automatizados; reports e KPIs por prompt.
 - Explicação de regras, código e categorias de erro (agente com RAG).
+- Primeiro caso de uso: análise de matching EMIR (estados de pairing/matching, motivos de falha, aging) sobre os resultados já produzidos a montante, com KPIs e tabelas por prompt.
 - Jobs no Airflow a pedido, só por allowlist.
 
 Fora:

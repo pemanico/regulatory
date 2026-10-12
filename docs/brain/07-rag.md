@@ -200,6 +200,10 @@ O LLM ajuda na conversão (classificar folhas, propor front matter, limpar tabel
 - **Qualidade da conversão:** PDFs e tabelas complexas perdem estrutura; `conversion_quality: low` até revisão.
 - **Onde vive o repositório:** o repositório de conhecimento vive só no Git interno do banco. No repositório público desenvolvem-se apenas as ferramentas de conversão e o CI, testados com ficheiros fictícios; correm dentro do banco sobre os documentos reais.
 
-## 7. Questões abertas do RAG
+## 7. Primeiro caso de uso
+
+Sistema multi-agente EMIR Matching: ver [`08-agentes-emir-matching.md`](08-agentes-emir-matching.md).
+
+## 8. Questões abertas do RAG
 
 Ver `04-questoes-abertas.md` (#12, #13, #15, #16).
