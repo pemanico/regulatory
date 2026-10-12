@@ -16,5 +16,4 @@
 | 13 | Os documentos têm owner e versão identificáveis? | Sem owner e versão não há citação fiável nem filtro de vigência | Ordep |
 | 14 | Validar formatos de destino, estrutura `knowledge/` e template de documento funcional (07-rag.md §6) | Princípio já decidido; detalhe é proposta | Ordep |
 | 15 | Que produto é o Git interno (GitLab, Bitbucket, GitHub Enterprise) e se tem CI | Define onde corre o CI do repositório de conhecimento e a reindexação | Ordep / IT |
-| 16 | Até o editor do Admin existir, quem edita os documentos já migrados? | Sem regra interina, o Word volta a ser a fonte | Ordep |
 | 19 | O Git interno tem API para criar branches, commits e PRs, e é permitida uma conta de serviço? | O Admin depende disso para abrir PRs em nome do utilizador | IT |
