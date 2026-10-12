@@ -6,7 +6,7 @@ import {
   type ViewSpecInput,
   type ViewSpecValidationResult,
 } from '@regdata/contracts';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { api } from './api';
 
 type Placement = 'none' | 'rows' | 'columns';
@@ -104,17 +104,16 @@ export function App() {
 
   if (loadError) {
     return (
-      <main className="page">
-        <h1>Regulatory Data Platform</h1>
+      <Shell>
         <p className="banner banner-error">Não foi possível carregar o catálogo: {loadError}</p>
-      </main>
+      </Shell>
     );
   }
 
   return (
-    <main className="page">
+    <Shell>
       <header className="page-header">
-        <h1>Regulatory Data Platform</h1>
+        <h1>Construtor de vistas</h1>
         <p className="muted">Passo 1 — construtor e validador de specs de vista (catálogo fictício)</p>
       </header>
 
@@ -220,7 +219,21 @@ export function App() {
           )}
         </section>
       </div>
-    </main>
+    </Shell>
+  );
+}
+
+function Shell({ children }: { children: ReactNode }) {
+  return (
+    <>
+      <div className="topbar">
+        <div className="topbar-inner">
+          <span className="topbar-title">Regulatory Data Platform</span>
+          <span className="topbar-subtitle">EMIR · CFTC · MiFID TR</span>
+        </div>
+      </div>
+      <main className="page">{children}</main>
+    </>
   );
 }
 

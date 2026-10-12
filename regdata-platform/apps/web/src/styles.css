@@ -1,13 +1,30 @@
+/*
+ * Paleta BNP Paribas.
+ * PROVISÓRIO: --brand-green vem de fontes públicas (#009464); outras fontes indicam #008755.
+ * Confirmar com o guia de marca / design system interno e trocar só aqui.
+ *
+ * Regra de contraste: o verde de marca (#009464) com texto branco tem contraste ~3,9:1,
+ * abaixo do mínimo WCAG AA (4,5:1) para texto normal. Por isso:
+ *   --brand-green       → barras, bordas, foco, elementos sem texto
+ *   --brand-green-dark  → fundos com texto branco (botões) e texto verde
+ */
 :root {
-  --bg: #f6f7f9;
+  --brand-green: #009464;
+  --brand-green-dark: #007a52;
+  --brand-green-light: #e6f4ee;
+
+  --bg: #f5f7f6;
   --surface: #ffffff;
-  --text: #1c2430;
-  --muted: #5d6878;
-  --border: #d9dee5;
-  --accent: #00704a;
+  --text: #1a1f1c;
+  --muted: #5b6660;
+  --border: #d6ddd9;
+  --accent: var(--brand-green-dark);
   --accent-text: #ffffff;
-  --ok-bg: #e7f5ee;
-  --ok-text: #135c3a;
+  --focus: var(--brand-green);
+  --topbar-bg: var(--brand-green);
+  --topbar-text: #ffffff;
+  --ok-bg: var(--brand-green-light);
+  --ok-text: #0f5a3c;
   --error-bg: #fdecec;
   --error-text: #8f1d1d;
   --warning-bg: #fff6e0;
@@ -19,13 +36,17 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #12161c;
-    --surface: #1b2129;
-    --text: #e6e9ee;
-    --muted: #9aa5b4;
-    --border: #2d3540;
-    --accent: #3fb984;
-    --accent-text: #0b1a12;
+    --brand-green-light: #12382a;
+    --bg: #111513;
+    --surface: #1a201d;
+    --text: #e5ebe8;
+    --muted: #98a59f;
+    --border: #2b3530;
+    --accent: var(--brand-green);
+    --accent-text: #06140e;
+    --focus: #3dbe8b;
+    --topbar-bg: #0c2a1f;
+    --topbar-text: #e5ebe8;
     --ok-bg: #143224;
     --ok-text: #8fe0b6;
     --error-bg: #3a1a1a;
@@ -44,6 +65,36 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
+}
+
+.topbar {
+  background: var(--topbar-bg);
+  color: var(--topbar-text);
+  border-bottom: 3px solid var(--brand-green);
+}
+
+.topbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.topbar-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.topbar-subtitle {
+  opacity: 0.85;
+  font-size: 0.85rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
 .page {
@@ -81,6 +132,8 @@ body {
 .card h2 {
   margin: 0 0 12px;
   font-size: 1.1rem;
+  padding-left: 8px;
+  border-left: 3px solid var(--brand-green);
 }
 
 .card h3 {
@@ -203,6 +256,10 @@ input[type='date'] {
   background: var(--accent);
   color: var(--accent-text);
   cursor: pointer;
+}
+
+.button:hover:not(:disabled) {
+  filter: brightness(1.08);
 }
 
 .button:disabled {
