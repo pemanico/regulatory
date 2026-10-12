@@ -4,6 +4,7 @@ Mais recente primeiro. Decisões técnicas da aplicação têm ADR em `regdata-p
 
 | Data | Decisão | Porquê |
 | --- | --- | --- |
+| 2026-10-13 | Dados calculados (marts) podem estar em ClickHouse ou em Parquet; a semantic layer encaminha por mart e os agentes não escolhem o motor | Definido pelo Ordep; regras de autoridade e consistência propostas em `08` §2 |
 | 2026-10-13 | Agentic RAG multi-regulatório (v2), substitui o desenho EMIR Matching v1: começa por EMIR (reporting, matching, clearing, risk mitigation, collateral), depois MiFID II/MiFIR, SEC, CFTC, Canadá | Definido pelo Ordep; `08-agentic-rag-multi-regulatory.md` |
 | 2026-10-13 | Duas fontes separadas: vector DB para perceber/contexto; ClickHouse (ou motor sobre Parquet) para calcular. Nunca calcular KPIs na vector DB | Definido pelo Ordep |
 | 2026-10-13 | Agentes: Director (sem RAG nem ClickHouse), Retriever (único na vector DB), KPI e Matching (ClickHouse), Análise Regulatória (extensível por regulação), Tabelas, General, Enrichment | Definido pelo Ordep |

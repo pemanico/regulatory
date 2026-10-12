@@ -7,10 +7,10 @@ Architecture: [`docs/brain/08-agentic-rag-multi-regulatory.md`](../../docs/brain
 | `contracts.md` | — | JSON contracts between runtime, Director and agents | 1 |
 | `agents/director.md` | Director (includes planning) | Strong LLM | 1 |
 | `agents/retriever.md` | Retriever | Deterministic search + small LLM for query rewriting | 1 |
-| `agents/kpi.md` | KPI | Light LLM + ClickHouse tools | 1 |
+| `agents/kpi.md` | KPI | Light LLM + analytical engine tools (ClickHouse / Parquet) | 1 |
 | `agents/tables.md` | Tables / Reporting | Light LLM + deterministic renderer | 1 |
 | `agents/enrichment.md` | Enrichment | Offline pipeline + LLM | 1 |
-| `agents/matching.md` | Matching | Medium LLM + ClickHouse tools | 2 |
+| `agents/matching.md` | Matching | Medium LLM + analytical engine tools (ClickHouse / Parquet) | 2 |
 | `agents/regulatory-analysis.md` | Regulatory Analysis | Strong LLM + regulation module | 3 |
 | `agents/general.md` | General / Reasoning | LLM, no data | Optional (Director covers it first) |
 | `regulations/emir/` | EMIR module and routing hints | Loaded into Director and Regulatory Analysis | 1 |

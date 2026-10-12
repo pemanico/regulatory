@@ -25,7 +25,7 @@
 - Cada data mart responde a uma necessidade de negócio.
 - Marts ao nível da linha (um registo por caso), com as regras de negócio já aplicadas em PySpark no Airflow. Nada pré-agregado.
 - Particionados por business date, separados por jurisdição.
-- Armazenados em S3 Parquet. ClickHouse disponível como opção.
+- Dados calculados (marts) armazenados em S3 Parquet ou em ClickHouse, consoante o mart.
 - Volume: milhões de linhas por mês.
 
 ## Problema

@@ -104,7 +104,7 @@ interface AgentResult {
   step_id: string;
   status: Status;
   findings: Finding[];
-  results?: DataResult[];               // KPI, Matching: outputs of ClickHouse tools
+  results?: DataResult[];               // KPI, Matching: outputs of the analytical engine tools
   passages?: Passage[];                 // Retriever
   table_specs?: TableSpec[];            // Tables
   kpi_cards?: ValueRef[];               // Tables
@@ -130,7 +130,9 @@ interface Need {
 }
 ```
 
-## Tools used by KPI and Matching (ClickHouse through the semantic layer)
+## Tools used by KPI and Matching (analytical engines through the semantic layer)
+
+The semantic layer routes each query to the mart's engine: ClickHouse, or Parquet via Trino. Agents never choose the engine.
 
 ```ts
 // metrics.query: no SQL; the semantic layer generates it
@@ -165,6 +167,7 @@ interface RecordsSample {
 interface DataResult {
   result_id: string;
   tool: "metrics.query" | "matching.breakdown" | "records.sample";
+  engine: "clickhouse" | "parquet";   // where the semantic layer ran the query
   as_of: IsoDate;
   snapshot_id: string;
   columns: { name: string; type: string }[];
