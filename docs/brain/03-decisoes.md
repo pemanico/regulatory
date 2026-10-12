@@ -4,6 +4,7 @@ Mais recente primeiro. Decisões técnicas da aplicação têm ADR em `regdata-p
 
 | Data | Decisão | Porquê |
 | --- | --- | --- |
+| 2026-10-12 | Repositório público `pemanico/regulatory` só para código genérico e exemplos fictícios/anonimizados; conhecimento real (documentação convertida, catálogo, casos) só no Git interno do banco | No banco só há acesso ao Git interno; o público serve de transferência e é visível para todos |
 | 2026-10-12 | Toda a documentação (Word, Excel, PDF, CSV) é convertida para texto e versionada em Git; o Git passa a fonte de verdade e o RAG indexa a partir dele | Cada alteração visível para agentes e intervenientes; PDF caro e opaco a diffs |
 | 2026-10-12 | O Claude atualiza a memória do projeto (`docs/brain/` e cópia no Project) por iniciativa própria sempre que algo importante acontece | Pedido do Ordep; evita perder contexto entre conversas |
 | 2026-10-12 | Cores da BNP Paribas no frontend, verde provisório #009464 numa variável CSS | Fontes públicas divergem (#009464 / #008755); confirmar com guia de marca interno |

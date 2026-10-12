@@ -15,5 +15,7 @@
 | 12 | Que Excels e CSVs são referência (mapeamentos, regras) e quais são dados ou cálculos | Só referência entra no registry/RAG; cálculos vão para a descoberta | Ordep / operacionais |
 | 13 | Os documentos têm owner e versão identificáveis? | Sem owner e versão não há citação fiável nem filtro de vigência | Ordep |
 | 14 | Validar formatos de destino, estrutura `knowledge/` e template de documento funcional (07-rag.md §6) | Princípio já decidido; detalhe é proposta | Ordep |
-| 15 | Em que Git interno do banco vive o repositório de conhecimento (GitLab, Bitbucket, GitHub Enterprise) | Documentação interna não pode ir para GitHub pessoal | Ordep / IT |
+| 15 | Que produto é o Git interno (GitLab, Bitbucket, GitHub Enterprise) e se tem CI | Define onde corre o CI do repositório de conhecimento e a reindexação | Ordep / IT |
+| 17 | A política do banco permite trazer código de um repositório público externo para dentro, e descrever o projeto publicamente? | Risco de compliance em ambos os sentidos | Ordep / compliance |
+| 18 | Repositório público: tornar privado, ou manter público e remover referências ao banco? | Hoje identifica o banco, a equipa, o stack e números internos | Ordep |
 | 16 | Quem edita a documentação depois de migrada, e por onde (editor web do Git, Admin em React) | Sem resposta, o Word volta a ser a fonte | Ordep |

@@ -82,6 +82,13 @@ Comandos (dentro de `regdata-platform/`): `npm install`, `npm test`, `npm run ty
 
 O ambiente cloud do Claude pode não ter acesso ao registo npm. Nesse caso, a verificação é feita pelo CI no GitHub: abrir PR e ler o resultado dos checks.
 
-## Dados sensíveis
+## Dados sensíveis — este repositório é PÚBLICO
 
-Não colocar no repositório dados reais de clientes, contrapartes, LEIs reais, volumes reais ou nomes de colegas. Casos e marts usam nomes de colunas reais só se o Ordep o permitir; caso contrário, nomes alterados com os mesmos tipos.
+Este repositório (`pemanico/regulatory`) é público no GitHub. Serve para desenvolver o código da plataforma fora do banco; o Ordep faz download para correr localmente no banco, onde só tem acesso ao Git interno.
+
+Regra: **nada interno do banco entra aqui**, nem no histórico do Git (apagar depois não resolve).
+
+- Proibido: documentação interna (specs, regras, mapeamentos), nomes reais de marts, colunas, sistemas, entidades, DAGs ou tabelas; definições reais de KPIs; casos práticos com detalhe real; volumes; dados de clientes, contrapartes, LEIs; nomes de colegas.
+- Permitido: código genérico da plataforma, ferramentas de conversão, exemplos **fictícios e marcados como tal**, casos e marts **anonimizados** (estrutura, tipos, lógica, nomes inventados).
+- O conhecimento real (documentação convertida, catálogo real, casos reais) vive só no repositório de conhecimento no Git interno do banco.
+- Na dúvida, perguntar ao Ordep antes de escrever.
