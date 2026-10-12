@@ -40,6 +40,13 @@ Fluxo Agentic RAG adaptado: rewrite → fast path para pedidos simples → escol
 - **Ficha de mart:** propósito, necessidade de negócio, jurisdição, granularidade, dimensões, medidas (aditivas ou não), localização, DAG e regras, frescura, owner, consumidores.
 - **Ficha de regra:** gerada por LLM a partir do código PySpark (parsing AST), revista por humano antes de ser oficial, versionada em Git, ligada às métricas que a usam.
 
+## Módulo Admin (React)
+
+- Edição da documentação funcional (Markdown com front matter), tabelas de referência (CSV) e fichas, sem expor Git ao utilizador.
+- Cada gravação abre um PR no Git interno; aprovação 4-eyes (quem escreve não aprova); CI valida antes do merge.
+- Mostra diff legível, impacto via ligações (regras, marts, métricas afetados) e histórico de versões.
+- Os mesmos fluxos servem para regras, métricas e specs de reports.
+
 ## Spec de vista
 
 O contrato central entre agente, pivot e backend (`packages/contracts/src/view-spec.ts`): jurisdição, mart, métricas, linhas, colunas, filtros, período, comparação. Sem campo para SQL; campos extra são rejeitados. Validada no frontend e no backend contra o catálogo visível para o utilizador.

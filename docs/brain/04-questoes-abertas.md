@@ -16,4 +16,3 @@
 | 13 | Os documentos têm owner e versão identificáveis? | Sem owner e versão não há citação fiável nem filtro de vigência | Ordep |
 | 14 | Validar formatos de destino, estrutura `knowledge/` e template de documento funcional (07-rag.md §6) | Princípio já decidido; detalhe é proposta | Ordep |
 | 15 | Que produto é o Git interno (GitLab, Bitbucket, GitHub Enterprise) e se tem CI | Define onde corre o CI do repositório de conhecimento e a reindexação | Ordep / IT |
-| 16 | Quem edita a documentação depois de migrada, e por onde (editor web do Git, Admin em React) | Sem resposta, o Word volta a ser a fonte | Ordep |

@@ -196,7 +196,7 @@ O LLM ajuda na conversão (classificar folhas, propor front matter, limpar tabel
 ### Riscos
 
 - **Duas fontes de verdade:** se as pessoas continuarem a editar o Word depois da conversão, o Git fica desatualizado. Após migrar um documento, o Word original é congelado e passa a só leitura.
-- **Barreira à edição:** operacionais podem não usar Git. Edição via editor web do Git ou, mais tarde, pelo módulo Admin em React, que abre PRs por baixo.
+- **Barreira à edição:** decidido que a edição é feita pelo módulo Admin em React, que abre PRs no Git interno por baixo. Até o Admin existir, a edição fica restrita a quem usa Git, para não reabrir o Word.
 - **Qualidade da conversão:** PDFs e tabelas complexas perdem estrutura; `conversion_quality: low` até revisão.
 - **Onde vive o repositório:** o repositório de conhecimento vive só no Git interno do banco. No repositório público desenvolvem-se apenas as ferramentas de conversão e o CI, testados com ficheiros fictícios; correm dentro do banco sobre os documentos reais.
 
