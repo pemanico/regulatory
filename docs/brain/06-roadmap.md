@@ -6,7 +6,8 @@
 | --- | --- | --- |
 | 0 | Architecture Design | Claude Docs + PDF no Project |
 | 1 | Monorepo React + NestJS, contratos Zod, spec de vista com validação, auth mock, catálogo fictício | `regdata-platform/`, commit inicial |
-| 1.1 | Ficheiros em falta repostos, CI no GitHub Actions (a passar), tema BNP Paribas, memória do projeto | PR #1 |
+| 1.1 | Ficheiros em falta repostos, CI no GitHub Actions (a passar), tema BNP Paribas, memória do projeto | PR #1 (merged) |
+| 1.2 | Regra de atualização proativa da memória no `CLAUDE.md` | PR #2 |
 
 ## Próximo
 

@@ -33,6 +33,8 @@ Um orquestrador com agentes especializados; nenhum agente fala diretamente com o
 
 Fluxo Agentic RAG adaptado: rewrite → fast path para pedidos simples → escolha de fonte (tools internas, nunca internet) → retrieval → LLM redige → verificação determinística (números existem nos resultados, citações presentes) → máximo 2–3 iterações.
 
+**Desenho completo do RAG** (o que entra e o que não entra, OpenSearch, fluxo passo a passo, ingestão de código PySpark e de documentação Word/Excel/CSV/PDF): ver [`07-rag.md`](07-rag.md).
+
 ## Conhecimento
 
 - **Ficha de mart:** propósito, necessidade de negócio, jurisdição, granularidade, dimensões, medidas (aditivas ou não), localização, DAG e regras, frescura, owner, consumidores.

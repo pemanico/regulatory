@@ -21,6 +21,7 @@ Lê isto primeiro em qualquer conversa nova sobre este projeto.
 | `docs/brain/04-questoes-abertas.md` | O que falta saber ou decidir |
 | `docs/brain/05-glossario.md` | Termos do domínio e do projeto |
 | `docs/brain/06-roadmap.md` | Passos feitos e próximos |
+| `docs/brain/07-rag.md` | RAG e Agentic RAG: fontes, OpenSearch, fluxo, ingestão de código e documentação |
 | `docs/brain/casos/` | Casos práticos dos operacionais (um ficheiro por caso) |
 | `docs/brain/marts/` | Fichas de data mart (uma por mart) |
 | `regdata-platform/docs/adr/` | ADRs técnicos da aplicação |
@@ -36,6 +37,34 @@ Antes de propor código ou arquitetura, lê os ficheiros relevantes. Se um caso 
 - Exemplos fictícios ficam marcados como fictícios.
 - Regista decisões em `docs/brain/03-decisoes.md` (e ADR quando for técnica).
 - Quando o Ordep apresentar um caso prático ou um data mart, cria o ficheiro em `casos/` ou `marts/` a partir do template e atualiza o índice.
+
+## Manter a memória atualizada (obrigatório, sem esperar pedido)
+
+O Ordep quer que a memória seja atualizada sempre que algo importante aconteça. Não esperes que ele peça.
+
+**Atualiza quando:**
+
+| Acontece | Ficheiro |
+| --- | --- |
+| Uma decisão é tomada (técnica, de âmbito ou de produto) | `03-decisoes.md` (+ ADR se técnica) |
+| É apresentado um caso prático | `casos/CASO-NNN-*.md` + tabela em `README.md` |
+| É apresentado um data mart | `marts/<id>.md` + tabela em `README.md` |
+| Uma questão aberta é respondida, ou surge uma nova | `04-questoes-abertas.md` (e o ficheiro onde a resposta pertence) |
+| Muda o contexto, âmbito ou stack | `01-contexto.md` ou `02-arquitetura.md` |
+| Muda algo no RAG, nas fontes de conhecimento ou na ingestão | `07-rag.md` |
+| Um passo é concluído ou o plano muda | `06-roadmap.md` |
+| Surge um termo novo do domínio | `05-glossario.md` |
+
+**Não atualizes** por detalhes passageiros: tentativas falhadas, conversa exploratória sem conclusão, opiniões ainda não decididas.
+
+**Como:**
+
+1. Edita os ficheiros em `docs/brain/` no mesmo turno em que a informação surge.
+2. Commit num branch e PR (ou junta ao PR aberto da sessão). Mensagem: `memória: <o que mudou>`.
+3. Atualiza a cópia no Project "Agentic Rag" (`claude/memoria-projeto.md`), gerada com `scripts/memory-snapshot.sh`, quando a mudança for relevante para conversas sem o repositório ligado.
+4. Diz ao Ordep, numa linha, o que foi registado e onde.
+
+Só factos ditos pelo Ordep ou verificados; o que for proposta tua e não decidida não entra como decisão.
 
 ## Repositório
 
