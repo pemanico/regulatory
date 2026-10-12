@@ -31,4 +31,4 @@ concorrência do piloto.
 
 ## Atualização 2026-10-13
 
-Os dados calculados podem estar em ClickHouse ou em Parquet, consoante o mart (definido pelo Ordep). A semantic layer encaminha cada query para o motor do mart; os agentes e a aplicação não escolhem. Regras de cópia de referência e consistência: `docs/brain/08-agentic-rag-multi-regulatory.md` §2.
+Os dados calculados podem estar em ClickHouse ou em Parquet, consoante o mart (definido pelo Ordep). A semantic layer encaminha cada query para o motor do mart; os agentes e a aplicação não escolhem. Parquet é a cópia de referência; o ClickHouse é cópia derivada. Regras de consistência: `docs/brain/08-agentic-rag-multi-regulatory.md` §2.

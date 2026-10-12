@@ -13,13 +13,14 @@
 
 ## Próxima sessão
 
-Começar por um **exemplo prático** apresentado pelo Ordep (caso de operacionais e/ou data mart, anonimizado), de preferência de **matching EMIR**, para testar o desenho de `08-agentic-rag-multi-regulatory.md` (fase 1) e fechar as questões #19–#21 e #25.
+Começar por um **exemplo prático de matching EMIR** apresentado pelo Ordep (caso de operacionais e ficha do mart, anonimizados), para testar a **fase 1** de `08-agentic-rag-multi-regulatory.md` (Director, Retriever, KPI, Tabelas).
 
-1. Ler `CLAUDE.md` e `docs/brain/` (contexto, decisões, questões abertas, RAG).
+1. Ler `CLAUDE.md`, `docs/brain/` (sobretudo `08`, `03`, `04`) e `regdata-platform/prompts/`.
 2. Registar o caso em `casos/` e o mart em `marts/` a partir dos templates; atualizar o índice.
 3. Fazer no máximo 3 perguntas sobre o que faltar.
-4. Mostrar como a plataforma o resolve: métricas da semantic layer, spec de vista ou de report, papel do agente, exemplo de prompt.
-5. Decidir com o Ordep o passo seguinte (PoC do Cube sobre esse mart, ou piloto de conversão de documentação).
+4. Simular o pedido de ponta a ponta com o desenho: classificação do Director, plano, chamadas às tools (`metrics.query`), validações, tabela final. Identificar o que falha no desenho.
+5. Fechar com o Ordep as definições dos KPIs do caso (#19) e as propostas da v2 (#25).
+6. Decidir o passo seguinte: runtime de orquestração (passo 8) ou PoC da semantic layer sobre esse mart (passo 2).
 
 ## Próximo
 

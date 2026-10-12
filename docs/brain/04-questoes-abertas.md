@@ -24,4 +24,4 @@
 | 24 | Quem escreve e mantém o resumo de regras (digest) de cada regulação | É o conhecimento do Director; sem owner fica desatualizado | Ordep / negócio |
 | 25 | Confirmar as propostas da v2: KPI/Matching só via semantic layer (sem SQL livre); dos Parquet só metadados na vector DB; Enrichment offline; fases de entrada dos agentes | Mudam o desenho pedido | Ordep |
 | 26 | Modelo de embeddings multilingue aprovado (PT + EN) | Pesquisa entre documentos em PT e código em EN | Ordep / IT |
-| 27 | Quando um mart existe em ClickHouse e em Parquet, qual é a cópia de referência, e com que atraso a outra é atualizada? | Duas cópias divergem; a resposta tem de dizer de onde vem o número | Ordep |
+| 27 | Com que atraso a cópia ClickHouse de um mart é atualizada a partir do Parquet (referência)? | Define quando a semantic layer pode usar o ClickHouse sem divergir | Ordep |

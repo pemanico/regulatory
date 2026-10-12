@@ -58,7 +58,8 @@ Rules (proposal):
 
 | Rule | Why |
 | --- | --- |
-| One authoritative engine per mart. If a mart exists in both (e.g. Parquet as source, ClickHouse as fast copy), `marts.yaml` names the authoritative one and the copy declares its freshness | Two copies drift; the answer must say which one it used |
+| **Parquet is the authoritative copy** (decided by Ordep, 2026-10-13). When a mart also exists in ClickHouse, the ClickHouse copy is a derived, faster copy and declares its freshness in `marts.yaml` | Two copies drift; the answer must say which one it used |
+| If the ClickHouse copy is behind the requested `as_of`, the semantic layer reads Parquet instead | The number must never depend on which copy happened to answer |
 | No joins across engines in a single query | Federated joins are slow and hard to reason about; combine results only in the semantic layer, by separate queries on the same snapshot date |
 | Results from different engines in one answer must share `as_of`; the validator checks it | Avoids mixing yesterday's ClickHouse copy with today's Parquet |
 | Interactive pivots prefer ClickHouse; scheduled reports can use either | Latency (ADR-001) |
