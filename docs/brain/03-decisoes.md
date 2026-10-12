@@ -4,6 +4,7 @@ Mais recente primeiro. Decisões técnicas da aplicação têm ADR em `regdata-p
 
 | Data | Decisão | Porquê |
 | --- | --- | --- |
+| 2026-10-12 | A ingestão do RAG tem de cobrir documentação em Word, Excel, CSV e PDF, além do código PySpark | Requisito do Ordep; desenho proposto em `07-rag.md` §6, a confirmar |
 | 2026-10-12 | O Claude atualiza a memória do projeto (`docs/brain/` e cópia no Project) por iniciativa própria sempre que algo importante acontece | Pedido do Ordep; evita perder contexto entre conversas |
 | 2026-10-12 | Cores da BNP Paribas no frontend, verde provisório #009464 numa variável CSS | Fontes públicas divergem (#009464 / #008755); confirmar com guia de marca interno |
 | 2026-10-12 | Código mantém-se na subpasta `regdata-platform/`; CI com `working-directory` | Preferência do Ordep |

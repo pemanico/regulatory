@@ -21,6 +21,7 @@ Lê isto primeiro em qualquer conversa nova sobre este projeto.
 | `docs/brain/04-questoes-abertas.md` | O que falta saber ou decidir |
 | `docs/brain/05-glossario.md` | Termos do domínio e do projeto |
 | `docs/brain/06-roadmap.md` | Passos feitos e próximos |
+| `docs/brain/07-rag.md` | RAG e Agentic RAG: fontes, OpenSearch, fluxo, ingestão de código e documentação |
 | `docs/brain/casos/` | Casos práticos dos operacionais (um ficheiro por caso) |
 | `docs/brain/marts/` | Fichas de data mart (uma por mart) |
 | `regdata-platform/docs/adr/` | ADRs técnicos da aplicação |
@@ -50,6 +51,7 @@ O Ordep quer que a memória seja atualizada sempre que algo importante aconteça
 | É apresentado um data mart | `marts/<id>.md` + tabela em `README.md` |
 | Uma questão aberta é respondida, ou surge uma nova | `04-questoes-abertas.md` (e o ficheiro onde a resposta pertence) |
 | Muda o contexto, âmbito ou stack | `01-contexto.md` ou `02-arquitetura.md` |
+| Muda algo no RAG, nas fontes de conhecimento ou na ingestão | `07-rag.md` |
 | Um passo é concluído ou o plano muda | `06-roadmap.md` |
 | Surge um termo novo do domínio | `05-glossario.md` |
 

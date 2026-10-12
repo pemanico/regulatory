@@ -12,3 +12,7 @@
 | 8 | Versão de Node.js e registo npm internos | O build tem de correr na infraestrutura do banco | IT |
 | 9 | Regime do MVP | Critério: mais horas de Excel no inventário | Ordep |
 | 10 | Identity provider para o SSO (ex. Entra ID / OIDC) | Integração futura de auth | IT |
+| 11 | Onde está hoje a documentação (SharePoint, Confluence, pastas partilhadas, Git) e em que formatos | Define os conectores de ingestão | Ordep |
+| 12 | Que Excels e CSVs são referência (mapeamentos, regras) e quais são dados ou cálculos | Só referência entra no registry/RAG; cálculos vão para a descoberta | Ordep / operacionais |
+| 13 | Os documentos têm owner e versão identificáveis? | Sem owner e versão não há citação fiável nem filtro de vigência | Ordep |
+| 14 | Confirmar a proposta de ingestão de Word/Excel/CSV/PDF (07-rag.md, secção 6) | Passa de proposta a decisão | Ordep |

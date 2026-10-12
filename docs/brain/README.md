@@ -10,6 +10,7 @@ Conhecimento acumulado do projeto, para que qualquer conversa nova (Claude ou pe
 4. [Questões abertas](04-questoes-abertas.md)
 5. [Glossário](05-glossario.md)
 6. [Roadmap](06-roadmap.md): passos feitos e próximos
+7. [RAG e Agentic RAG](07-rag.md): o que entra no RAG, OpenSearch, fluxo, ingestão de código e documentação
 
 ## Casos práticos dos operacionais
 
