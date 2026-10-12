@@ -2,7 +2,7 @@
 
 Desenho do conhecimento que o agente consulta: o que entra no RAG, o que não entra, como é guardado no OpenSearch, como é ingerido (código PySpark e documentação em Word, Excel, CSV e PDF) e como o agente o usa.
 
-Estado: secções 1–5 e 7 vêm do *Architecture Design* (acordado). A secção 6 (ingestão de Word, Excel e CSV) é **proposta**, a confirmar pelo Ordep.
+Estado: secções 1–5 vêm do *Architecture Design* (acordado). Secção 6: princípio decidido pelo Ordep (documentação convertida para texto em Git); formatos, estrutura e ferramentas são proposta a validar.
 
 ## 1. Princípio: RAG só para o que é texto
 
@@ -107,47 +107,99 @@ Diferenças face ao padrão genérico da imagem de referência:
 - "Não tenho evidência" é uma resposta válida.
 - Golden set de perguntas por regime, com respostas validadas por especialistas, como gate no CI de prompts e modelos.
 
-## 6. Ingestão de documentação: Word, Excel, CSV e PDF (proposta)
+## 6. Documentação como código: Word, Excel, CSV e PDF convertidos para texto em Git
 
-Os formatos não são iguais e não podem ir todos para o RAG da mesma forma. O erro mais comum é indexar Excels e CSVs como texto: o agente passa a "ler" tabelas em pedaços e a responder números errados.
+**Decisão do Ordep (2026-10-12):** toda a documentação (hoje em Word, Excel, PDF e CSV) é convertida para ficheiros de texto e versionada em Git, para que cada alteração seja visível para agentes e intervenientes. O PDF deixa de ser formato de trabalho: é caro de processar e opaco a diffs.
 
-### Primeiro passo: classificar cada ficheiro pelo que contém, não pela extensão
+Consequência: o Git passa a ser a **fonte de verdade da documentação**, e o RAG indexa a partir do Git, não dos ficheiros originais. Um só formato de entrada, histórico de alterações nativo, revisão por PR e reindexação em cada merge.
 
-| Conteúdo | Exemplo | Destino |
+### Formatos de destino
+
+| Origem | Contém | Destino em Git |
 | --- | --- | --- |
-| Texto explicativo | Spec funcional em Word, runbook | RAG |
-| Tabela de referência | Mapeamento de campos, lista de validation rules, catálogo de controlos em Excel/CSV | Tabela no registry + ficha descritiva no RAG |
-| Definição de KPI / report | Excel dos operacionais com pivots e fórmulas | **Fase de descoberta**: candidatos a métricas da semantic layer, não RAG |
-| Dados (linhas de trades, extrações) | Excel/CSV com dados de negócio | **Não entra.** Os dados vêm dos marts |
+| Word (.docx) | Spec funcional, runbook, procedimento | Markdown com front matter (documento funcional) |
+| PDF digital | Spec, documentação interna | Markdown com front matter; original arquivado fora do Git |
+| PDF digitalizado | Idem | OCR → Markdown, marcado `conversion_quality: low` até revisão humana |
+| PDF regulatório externo (ESMA, CFTC) | Texto oficial | Markdown só de leitura em `regulation/`, com link à fonte oficial |
+| Excel, folha de referência | Mapeamentos, listas de regras, catálogos | CSV + `*.schema.yaml` (colunas, tipos, chave) |
+| Excel, folha de cálculo/pivot | Definição de KPI ou report | YAML de definição de métrica/report (fórmulas, filtros, dimensões extraídos) → candidato à semantic layer |
+| Excel, folha de dados | Linhas de negócio | **Rejeitada**: os dados vêm dos marts |
+| CSV | Tabela de referência | CSV + `*.schema.yaml` |
 
-### Word (.docx) e PDF
+Os originais binários **não** entram no Git (nem LFS): ficam arquivados no repositório documental atual, referenciados por `source_original` no front matter.
 
-- Extração preservando estrutura: títulos, listas, tabelas.
-- Chunk por secção (heading); tabelas inteiras num chunk, convertidas para Markdown.
-- Metadata do documento: versão, data, owner, jurisdição.
-- PDFs digitalizados: OCR só se não houver versão digital; marcar baixa confiança.
+### Documento funcional (formato Markdown)
 
-### Excel (.xlsx)
+```markdown
+---
+doc_id: SPEC-EMIR-0012            # estável, nunca reutilizado
+title:
+doc_type: functional_spec         # functional_spec | runbook | procedure | reference | regulation
+jurisdiction: EMIR                # EMIR | CFTC | MIFID_TR | ALL
+owner:                            # equipa, não pessoa
+status: draft                     # draft | in_review | approved | deprecated
+version: 1.0
+effective_from:
+effective_to:
+related:
+  rules: []                       # rule_id
+  marts: []                       # mart_id
+  metrics: []                     # metric_id
+source_original:                  # caminho do Word/PDF de origem
+conversion_quality: high          # high | low (OCR, tabelas complexas)
+---
 
-- Detetar o tipo de cada folha: tabela de referência, definição de cálculo, ou dados.
-- **Tabelas de referência** → carregadas como tabela versionada (com schema), consultada por tool; no RAG entra só uma ficha a descrever o que a tabela contém e quando usar.
-- **Folhas com pivots e fórmulas** → extrair fórmulas, campos do pivot, filtros e colunas usadas; o LLM propõe definições de métricas; um humano valida antes de entrarem na semantic layer.
-- **Folhas de dados** → rejeitadas na ingestão, com aviso.
-- Células com comentários ou notas explicativas → podem ir para o RAG como texto.
+# Título
 
-### CSV
+## Objetivo
+## Âmbito
+## Regras de negócio
+## Dados (fontes, campos, marts)
+## Controlos e exceções
+## Histórico de alterações relevantes
+```
 
-- Sem estrutura de documento: tratado sempre como tabela.
-- Validar schema, tipos e chave; carregar como tabela versionada.
-- No RAG, apenas a ficha descritiva da tabela.
+### Estrutura proposta do repositório de conhecimento
 
-### Controlos comuns a todos os formatos
+```
+knowledge/
+  specs/<jurisdição>/        documentos funcionais (.md)
+  runbooks/                  procedimentos operacionais (.md)
+  reference/<jurisdição>/    tabelas de referência (.csv + .schema.yaml)
+  kpis/<jurisdição>/         definições extraídas dos Excels (.yaml), estado draft até validação
+  regulation/<jurisdição>/   texto regulatório externo (.md, só leitura)
+  rules/                     fichas de regra (geradas do PySpark, revistas)
+  marts/                     fichas de mart
+```
 
-- **Deteção de dados sensíveis antes de indexar** (identificadores de clientes, LEIs, nomes): bloquear ou mascarar.
-- **Deduplicação** por `content_hash`; uma versão nova substitui a anterior, a anterior fica com `effective_to`.
-- **Owner obrigatório** por documento; sem owner não entra.
-- **Origem rastreável** (`source_uri`), para a resposta poder citar e o utilizador abrir o original.
+### Conversão (uma vez por documento, depois edita-se o Markdown)
+
+| Origem | Ferramenta candidata | Notas |
+| --- | --- | --- |
+| Word | pandoc (docx → Markdown GFM) | Preserva títulos, listas e tabelas simples; tabelas com células fundidas exigem revisão |
+| PDF digital | extração de texto com estrutura (ex. pdfplumber / marker) | Tabelas e layouts complexos perdem estrutura; revisão humana obrigatória |
+| PDF digitalizado | OCR | Último recurso |
+| Excel | script Python (openpyxl): classificar folhas, exportar CSV, extrair fórmulas e definições de pivot | O LLM pode propor a classificação e a definição de métrica; humano valida |
+| CSV | validação de schema | Já é texto |
+
+O LLM ajuda na conversão (classificar folhas, propor front matter, limpar tabelas), mas cada documento convertido passa por PR e revisão do owner antes de `status: approved`.
+
+### CI do repositório de conhecimento
+
+- Front matter válido e completo (owner, versão, jurisdição obrigatórios).
+- CSV conforme o `*.schema.yaml`.
+- Deteção de dados sensíveis (identificadores de clientes, LEIs, nomes) bloqueia o merge.
+- Links internos (`related`) apontam para ids existentes.
+- Lint de Markdown.
+- Em cada merge: reindexação no OpenSearch e registo de `change_event` (alimenta "o que mudou na regra X desde junho?").
+
+### Riscos
+
+- **Duas fontes de verdade:** se as pessoas continuarem a editar o Word depois da conversão, o Git fica desatualizado. Após migrar um documento, o Word original é congelado e passa a só leitura.
+- **Barreira à edição:** operacionais podem não usar Git. Edição via editor web do Git ou, mais tarde, pelo módulo Admin em React, que abre PRs por baixo.
+- **Qualidade da conversão:** PDFs e tabelas complexas perdem estrutura; `conversion_quality: low` até revisão.
+- **Onde vive o repositório:** o repositório de conhecimento vive só no Git interno do banco. No repositório público desenvolvem-se apenas as ferramentas de conversão e o CI, testados com ficheiros fictícios; correm dentro do banco sobre os documentos reais.
 
 ## 7. Questões abertas do RAG
 
-Ver `04-questoes-abertas.md` (#11–#14).
+Ver `04-questoes-abertas.md` (#12, #13, #15, #16).

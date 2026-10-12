@@ -34,6 +34,7 @@
 - O que domina são reports operacionais recorrentes, feitos com análise e pivot em Excel.
 - O volume ultrapassa o limite prático do Excel, o que obriga a extrações parciais e pré-agregações manuais.
 - As definições reais dos KPIs vivem hoje nos Excels da equipa.
+- A documentação (specs, regras, mapeamentos) está toda em Excel, Word, PDF e CSV, fora de controlo de versões.
 
 ## Âmbito
 
@@ -53,3 +54,9 @@ Fora:
 ## Objetivo mensurável
 
 Zero reports recorrentes produzidos manualmente em Excel. Exportações pontuais continuam permitidas e são medidas.
+
+## Forma de trabalho entre fora e dentro do banco
+
+- No banco, o Ordep só tem acesso ao Git interno.
+- O desenvolvimento com o Claude é feito no repositório público `pemanico/regulatory`; o Ordep faz download e corre localmente no banco.
+- Consequência: o repositório público só pode ter código genérico e exemplos fictícios ou anonimizados. Conhecimento real fica no Git interno.
