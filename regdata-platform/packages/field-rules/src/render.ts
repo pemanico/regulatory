@@ -41,6 +41,9 @@ export function renderChunk(record: FieldRuleRecord, options: RenderOptions = { 
     ...moreFormat.map((line) => `  ${line}`),
   ];
 
+  // Optional action types absent from the source (e.g. POSC, not used yet) are left out.
+  const notInSource = new Set(record.actionTypesNotInSource);
+  const actionTypes = ACTION_TYPES.filter((type) => !notInSource.has(type));
   const roles: ['party_1', 'party_2'] = ['party_1', 'party_2'];
   roles.forEach((role, index) => {
     lines.push(
@@ -49,7 +52,7 @@ export function renderChunk(record: FieldRuleRecord, options: RenderOptions = { 
       `  Condition: ${record.condition}`,
       `  Error_Codes: [${record.errorCodes.join(', ')}]`,
       '  Status_por_Action_Type:',
-      ...ACTION_TYPES.map((type) => `    ${type}: ${record.statusByActionType[type] ?? '?'}`),
+      ...actionTypes.map((type) => `    ${type}: ${record.statusByActionType[type] ?? '?'}`),
     );
   });
 

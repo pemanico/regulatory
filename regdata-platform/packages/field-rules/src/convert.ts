@@ -24,7 +24,14 @@ export const MAX_ROWS_PER_SHEET = 10_000;
 export interface ConvertOptions {
   documentVersion?: string | null;
   effectiveFrom?: string | null;
+  /**
+   * Action types whose column may be absent. A missing optional column is not an issue,
+   * and problems in its cells are warnings. POSC is not used yet (Ordep, 2026-10-13).
+   */
+  optionalActionTypes?: readonly ActionType[];
 }
+
+export const DEFAULT_OPTIONAL_ACTION_TYPES: readonly ActionType[] = ['POSC'];
 
 export interface ConvertedField {
   record: FieldRuleRecord;
@@ -47,9 +54,27 @@ interface ActionTypeRow {
 
 interface MappingRow {
   dtccName: string;
+  /** Table.Item from the optional mapping column, normalised; null when absent or empty. */
+  fieldId: string | null;
   bnpp: string[];
   source: SourceRef;
   used: boolean;
+}
+
+interface MappingIndex {
+  hasFieldIdColumn: boolean;
+  rows: MappingRow[];
+  byName: Map<string, MappingRow>;
+  byFieldId: Map<string, MappingRow>;
+}
+
+function emptyMappingIndex(): MappingIndex {
+  return { hasFieldIdColumn: false, rows: [], byName: new Map(), byFieldId: new Map() };
+}
+
+/** Normalises a Table.Item cell: "2.24", " 2.24 " and "2+24" all become "2.24". */
+export function normalizeFieldId(raw: string): string {
+  return raw.trim().replace(/\s+/g, '').replace(/\+/g, '.');
 }
 
 const STATUS_WORDS: Record<string, FieldStatus> = {
@@ -117,7 +142,7 @@ function pickOne(located: LocatedSheet[], kind: SheetKind, label: string, upload
 /**
  * Converts the rules, action type and mapping sheets into canonical records.
  * Join between rules and action types: Table + Item. Section and Field are only verified.
- * Join with the mapping: normalized field name (the mapping has no Table.Item).
+ * Join with the mapping: Table.Item column when present, verified by name; otherwise normalized field name.
  */
 export function convertFieldRules(sheets: SheetData[], options: ConvertOptions = {}): ConversionResult {
   const uploadIssues: ConversionIssue[] = [];
@@ -150,7 +175,10 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
     });
   }
 
-  const missingActionTypeColumns = actionSheet ? ACTION_TYPES.filter((type) => actionSheet.actionTypeColumns[type] === undefined) : [];
+  const optionalActionTypes = new Set<ActionType>(options.optionalActionTypes ?? DEFAULT_OPTIONAL_ACTION_TYPES);
+  const absentColumns = actionSheet ? ACTION_TYPES.filter((type) => actionSheet.actionTypeColumns[type] === undefined) : [];
+  const missingActionTypeColumns = absentColumns.filter((type) => !optionalActionTypes.has(type));
+  const actionTypesNotInSource = absentColumns.filter((type) => optionalActionTypes.has(type));
   if (actionSheet && missingActionTypeColumns.length > 0) {
     uploadIssues.push({
       severity: 'error',
@@ -160,7 +188,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
   }
 
   const actionRows = actionSheet ? readActionTypes(actionSheet, uploadIssues) : new Map<string, ActionTypeRow>();
-  const mappingRows = mappingSheet ? readMapping(mappingSheet, uploadIssues) : new Map<string, MappingRow>();
+  const mapping = mappingSheet ? readMapping(mappingSheet, uploadIssues) : emptyMappingIndex();
 
   const fields = new Map<string, ConvertedField>();
   const rows = rulesSheet.sheet.rows;
@@ -244,33 +272,37 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
           source: actionRow.source,
         });
       }
-      const empty: ActionType[] = [];
-      const invalid: string[] = [];
+      const problems = { empty: { required: [] as string[], optional: [] as string[] }, invalid: { required: [] as string[], optional: [] as string[] } };
       for (const type of ACTION_TYPES) {
         const raw = actionRow.statuses[type];
         if (raw === undefined) continue;
         const parsed = parseStatus(raw);
         statusByActionType[type] = parsed.status;
-        if (parsed.problem === 'empty') empty.push(type);
-        if (parsed.problem === 'invalid') invalid.push(`${type}="${raw.trim()}"`);
+        const bucket = optionalActionTypes.has(type) ? 'optional' : 'required';
+        if (parsed.problem === 'empty') problems.empty[bucket].push(type);
+        if (parsed.problem === 'invalid') problems.invalid[bucket].push(`${type}="${raw.trim()}"`);
       }
-      if (empty.length > 0) {
-        issues.push({
-          severity: 'error',
-          code: 'EMPTY_STATUS',
-          message: `Estado vazio em ${empty.join(', ')}. Uma célula vazia não é tratada como NA.`,
-          fieldId,
-          source: actionRow.source,
-        });
-      }
-      if (invalid.length > 0) {
-        issues.push({
-          severity: 'error',
-          code: 'INVALID_STATUS',
-          message: `Estados fora de M/C/O/-: ${invalid.join(', ')}.`,
-          fieldId,
-          source: actionRow.source,
-        });
+      for (const bucket of ['required', 'optional'] as const) {
+        const severity = bucket === 'required' ? 'error' : 'warning';
+        const suffix = bucket === 'optional' ? ' (action type opcional, ainda não usado)' : '';
+        if (problems.empty[bucket].length > 0) {
+          issues.push({
+            severity,
+            code: 'EMPTY_STATUS',
+            message: `Estado vazio em ${problems.empty[bucket].join(', ')}. Uma célula vazia não é tratada como NA.${suffix}`,
+            fieldId,
+            source: actionRow.source,
+          });
+        }
+        if (problems.invalid[bucket].length > 0) {
+          issues.push({
+            severity,
+            code: 'INVALID_STATUS',
+            message: `Estados fora de M/C/O/-: ${problems.invalid[bucket].join(', ')}.${suffix}`,
+            fieldId,
+            source: actionRow.source,
+          });
+        }
       }
     }
 
@@ -290,10 +322,10 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
       });
     }
 
-    const mapping = mappingRows.get(normalizeForCompare(fieldName));
+    const mappingRow = findMappingRow(mapping, fieldId, fieldName, issues);
     let bnppFields: FieldRuleRecord['bnppFields'] = [];
     if (mappingSheet) {
-      if (!mapping) {
+      if (!mappingRow) {
         issues.push({
           severity: 'warning',
           code: 'NO_BNPP_MAPPING',
@@ -301,17 +333,17 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
           fieldId,
         });
       } else {
-        mapping.used = true;
-        if (mapping.bnpp.length === 0) {
+        mappingRow.used = true;
+        if (mappingRow.bnpp.length === 0) {
           issues.push({
             severity: 'warning',
             code: 'EMPTY_BNPP_MAPPING',
             message: `O mapping de "${fieldName}" não tem campos BNPP.`,
             fieldId,
-            source: mapping.source,
+            source: mappingRow.source,
           });
         }
-        const classified = classifyBnppFields(mapping.bnpp);
+        const classified = classifyBnppFields(mappingRow.bnpp);
         bnppFields = classified.fields;
         if (classified.unpaired.length > 0) {
           issues.push({
@@ -319,7 +351,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
             code: 'PARTY_FIELD_UNPAIRED',
             message: `Campos de parte sem o par da outra parte: ${classified.unpaired.join(', ')}.`,
             fieldId,
-            source: mapping.source,
+            source: mappingRow.source,
           });
         }
       }
@@ -336,6 +368,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
       condition: cleanCondition(cell(row, columns.conditions)),
       errorCodes,
       statusByActionType,
+      actionTypesNotInSource,
       bnppFields,
       document: {
         version: options.documentVersion ?? null,
@@ -344,7 +377,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
       source: {
         rules: source,
         actionTypes: actionRow?.source ?? null,
-        mapping: mapping?.source ?? null,
+        mapping: mappingRow?.source ?? null,
       },
     };
 
@@ -375,13 +408,13 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
     }
   }
 
-  for (const mapping of mappingRows.values()) {
-    if (!mapping.used) {
+  for (const row of mapping.rows) {
+    if (!row.used) {
       uploadIssues.push({
         severity: 'warning',
         code: 'UNUSED_MAPPING',
-        message: `O campo DTCC "${mapping.dtccName}" do mapping não corresponde a nenhum campo da folha de regras.`,
-        source: mapping.source,
+        message: `O campo DTCC "${row.dtccName}"${row.fieldId ? ` (${row.fieldId})` : ''} do mapping não corresponde a nenhum campo da folha de regras.`,
+        source: row.source,
       });
     }
   }
@@ -432,8 +465,53 @@ function readActionTypes(located: LocatedSheet, uploadIssues: ConversionIssue[])
   return result;
 }
 
-function readMapping(located: LocatedSheet, uploadIssues: ConversionIssue[]): Map<string, MappingRow> {
-  const result = new Map<string, MappingRow>();
+/**
+ * Mapping lookup. With a Table.Item column the id is the key and the name is checked:
+ * an id stored as a number in Excel loses trailing zeros (2.10 becomes 2.1) and points
+ * to the wrong field, which only the name check reveals.
+ */
+function findMappingRow(mapping: MappingIndex, fieldId: string, fieldName: string, issues: ConversionIssue[]): MappingRow | undefined {
+  const byName = mapping.byName.get(normalizeForCompare(fieldName));
+  if (!mapping.hasFieldIdColumn) return byName;
+
+  const byId = mapping.byFieldId.get(fieldId);
+  if (byId) {
+    if (normalizeForCompare(byId.dtccName) !== normalizeForCompare(fieldName)) {
+      if (byName && byName !== byId) {
+        issues.push({
+          severity: 'warning',
+          code: 'MAPPING_NAME_MISMATCH',
+          message: `No mapping, ${fieldId} está ligado a "${byId.dtccName}", mas o campo chama-se "${fieldName}"; foi usada a linha com o mesmo nome (Table.Item "${byName.fieldId ?? 'vazio'}"). Confirmar o Table.Item: um valor guardado como número perde zeros (2.10 → 2.1).`,
+          fieldId,
+          source: byName.source,
+        });
+        return byName;
+      }
+      issues.push({
+        severity: 'warning',
+        code: 'MAPPING_NAME_MISMATCH',
+        message: `No mapping, ${fieldId} está ligado a "${byId.dtccName}", mas o campo chama-se "${fieldName}". Confirmar o Table.Item e o nome.`,
+        fieldId,
+        source: byId.source,
+      });
+    }
+    return byId;
+  }
+
+  if (byName) {
+    issues.push({
+      severity: 'warning',
+      code: 'MAPPING_ID_MISMATCH',
+      message: `Ligado ao mapping pelo nome: o Table.Item no mapping é "${byName.fieldId ?? 'vazio'}" e não ${fieldId}.`,
+      fieldId,
+      source: byName.source,
+    });
+  }
+  return byName;
+}
+
+function readMapping(located: LocatedSheet, uploadIssues: ConversionIssue[]): MappingIndex {
+  const index: MappingIndex = { ...emptyMappingIndex(), hasFieldIdColumn: located.columns.fieldId !== undefined };
   const owners = new Map<string, string>();
   const columns = located.columns;
 
@@ -443,10 +521,17 @@ function readMapping(located: LocatedSheet, uploadIssues: ConversionIssue[]): Ma
     const dtccName = cell(row, columns.dtcc).trim();
     if (!dtccName) continue;
 
-    const key = normalizeForCompare(dtccName);
-    const bnpp = splitBnppFields(cell(row, columns.bnpp));
+    const fieldIdRaw = index.hasFieldIdColumn ? normalizeFieldId(cell(row, columns.fieldId)) : '';
+    const entry: MappingRow = {
+      dtccName,
+      fieldId: fieldIdRaw === '' ? null : fieldIdRaw,
+      bnpp: splitBnppFields(cell(row, columns.bnpp)),
+      source,
+      used: false,
+    };
 
-    if (result.has(key)) {
+    const nameKey = normalizeForCompare(dtccName);
+    if (index.byName.has(nameKey)) {
       uploadIssues.push({
         severity: 'warning',
         code: 'DUPLICATE_MAPPING',
@@ -456,7 +541,21 @@ function readMapping(located: LocatedSheet, uploadIssues: ConversionIssue[]): Ma
       continue;
     }
 
-    for (const name of bnpp) {
+    if (entry.fieldId) {
+      const previous = index.byFieldId.get(entry.fieldId);
+      if (previous) {
+        uploadIssues.push({
+          severity: 'warning',
+          code: 'DUPLICATE_MAPPING',
+          message: `O Table.Item ${entry.fieldId} aparece em "${previous.dtccName}" e em "${dtccName}" (${where(source)}). Se um deles for, por exemplo, 2.10 guardado como número, aparece como 2.1.`,
+          source,
+        });
+      } else {
+        index.byFieldId.set(entry.fieldId, entry);
+      }
+    }
+
+    for (const name of entry.bnpp) {
       const owner = owners.get(name);
       if (owner && owner !== dtccName) {
         uploadIssues.push({
@@ -470,7 +569,8 @@ function readMapping(located: LocatedSheet, uploadIssues: ConversionIssue[]): Ma
       }
     }
 
-    result.set(key, { dtccName, bnpp, source, used: false });
+    index.byName.set(nameKey, entry);
+    index.rows.push(entry);
   }
-  return result;
+  return index;
 }

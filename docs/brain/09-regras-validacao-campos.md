@@ -92,14 +92,15 @@ Padrões encontrados (nomes fictícios):
 | Três campos | `P1_ASSET_CLASS, P2_ASSET_CLASS, X_PRIMARY_ASSET_CLASS` | Duas partes + um campo adicional (derivado ou consolidado) |
 | Campos numerados do lado DTCC | "Settlement currency 1" → `P1_SETTLEMENT_CCY_1, P2_SETTLEMENT_CCY_1` | O "1"/"2" do campo DTCC é do próprio campo; o prefixo é a parte |
 
-**O mapping não tem `Table.Item`**: liga ao ficheiro de regras só pelo nome do campo DTCC.
+**Coluna `Table.Item` no mapping:** o Ordep confirmou (2026-10-13) que o mapping pode ter a coluna `Table.Item`, concatenação de `Table` e `Item`. Quando existe, é a chave de ligação às regras; o nome do campo DTCC passa a verificação. Sem a coluna, o conversor liga pelo nome normalizado.
 
 **Folha de estado por action type:**
 
 | Coluna | Conteúdo |
 | --- | --- |
 | `Table`, `Item`, `Section`, `Field` | Mesma identificação da folha de regras |
-| `NEWT`, `MODI`, `VALU`, `CORR`, `TERM`, `EROR`, `REVI` (e `POSC`, a confirmar: não visível na foto) | Um valor por action type |
+| `NEWT`, `MODI`, `VALU`, `CORR`, `TERM`, `EROR`, `REVI` | Um valor por action type (obrigatórios) |
+| `POSC` | Não é usado por agora (Ordep, 2026-10-13). Opcional: se faltar, não é erro e fica fora do chunk |
 
 Valores encontrados: `M`, `C`, `O` e `-`. O `-` corresponde a não aplicável → `NA`. Os valores já vêm abreviados; o mapeamento por extenso (Mandatory, Conditional…) da especificação só é preciso se aparecerem noutras versões do ficheiro.
 
@@ -155,9 +156,18 @@ Cada campo BNPP tem `usado_no_controlo: sim/não` por controlo, para o mapping e
 
 Não há exceção: todos os campos usam `Table.Item`.
 
-### 4.3a O mapping liga-se às regras pelo nome do campo
+### 4.3a Ligação do mapping às regras — resolvido
 
-O mapping só tem o nome do campo DTCC; as regras têm `Table.Item`. Ligar por nome falha com qualquer diferença de texto (ex. "report tracking number" vs "Report tracking number"). Proposta: acrescentar uma vez a coluna `Table.Item` ao mapping, e usar o nome só como verificação. Até lá, o conversor liga por nome normalizado e **lista todos os campos que não ligaram**.
+O mapping tem a coluna `Table.Item` (concatenação de `Table` e `Item`). Implementado:
+
+- cabeçalhos aceites: `Table.Item`, `Table Item`, `Table+Item`, `ID_CAMPO`, `Field id`; valor normalizado (espaços removidos, `+` → `.`);
+- ligação pelo `Table.Item`; o nome DTCC é verificação (`MAPPING_NAME_MISMATCH`);
+- se o `Table.Item` não ligar mas o nome ligar, usa a linha do nome e avisa (`MAPPING_ID_MISMATCH`);
+- `Table.Item` repetido no mapping → `DUPLICATE_MAPPING`.
+
+**Risco:** se a coluna estiver formatada como número no Excel, `2.10` é lido como `2.1` e colide com o campo 2.1. O conversor deteta-o pela verificação do nome e pelo id duplicado, mas a correção é formatar a coluna como **texto** no Excel.
+
+Sem a coluna, o conversor liga por nome normalizado e lista os campos que não ligaram.
 
 ### 4.3 O join não deve depender de texto
 
@@ -180,7 +190,7 @@ Para citar e filtrar por vigência (`07-rag.md` §2), cada registo precisa tamb�
 ## 5. Verificações do conversor
 
 - Número de campos à saída igual ao número de campos no Excel.
-- Todos os campos com estado nos 8 action types (NEWT, MODI, VALU, CORR, TERM, EROR, REVI, POSC).
+- Todos os campos com estado nos 7 action types obrigatórios (NEWT, MODI, VALU, CORR, TERM, EROR, REVI); `POSC` opcional enquanto não for usado (célula vazia ou inválida = aviso).
 - Nenhum valor de estado fora de M/C/O/NA.
 - Nenhum `ID_CAMPO` duplicado.
 - Todas as referências cruzadas ("field 1.1") apontam para campos existentes.

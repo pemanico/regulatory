@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { convertFieldRules, renderChunk } from '../src';
-import { ACTION_ROWS, MAPPING_ROWS, RULE_ROWS, actionSheet, mappingSheet, rulesSheet, standardSheets } from './fixtures';
+import { convertFieldRules, normalizeFieldId, renderChunk } from '../src';
+import { ACTION_ROWS, MAPPING_ROWS, MAPPING_WITH_ID_HEADER, MAPPING_WITH_ID_ROWS, RULE_ROWS, actionSheet, mappingSheet, rulesSheet, standardSheets } from './fixtures';
 
 const codes = (issues: { code: string }[]) => issues.map((issue) => issue.code);
 
@@ -84,13 +84,63 @@ describe('convertFieldRules', () => {
     expect(field(result, '9.1').record.statusByActionType).toEqual({ NEWT: 'M', MODI: 'C', VALU: 'NA', CORR: 'O', TERM: 'NA', EROR: 'NA', REVI: 'M', POSC: 'C' });
   });
 
-  it('reports a missing POSC column on the upload and on each field', () => {
+  it('accepts a missing POSC column (optional, not used yet) and keeps it out of the chunk', () => {
     const header = ['Table', 'Item', 'Section', 'Field', 'NEWT', 'MODI', 'VALU', 'CORR', 'TERM', 'EROR', 'REVI'];
     const rows = ACTION_ROWS.map((row) => row.slice(0, 11));
     const result = convertFieldRules([rulesSheet(RULE_ROWS), actionSheet(rows, header), mappingSheet(MAPPING_ROWS)]);
+    expect(result.uploadIssues).toEqual([]);
+    const converted = field(result, '9.1');
+    expect(converted.issues).toEqual([]);
+    expect(converted.record.actionTypesNotInSource).toEqual(['POSC']);
+    expect(converted.record.statusByActionType.POSC).toBeNull();
+    const chunk = renderChunk(converted.record);
+    expect(chunk).toContain('    REVI: C');
+    expect(chunk).not.toContain('POSC');
+  });
+
+  it('still reports a missing required action type column', () => {
+    const header = ['Table', 'Item', 'Section', 'Field', 'NEWT', 'VALU', 'CORR', 'TERM', 'EROR', 'REVI', 'POSC'];
+    const rows = ACTION_ROWS.map((row) => [...row.slice(0, 5), ...row.slice(6)]);
+    const result = convertFieldRules([rulesSheet(RULE_ROWS), actionSheet(rows, header), mappingSheet(MAPPING_ROWS)]);
     expect(codes(result.uploadIssues)).toContain('MISSING_ACTION_TYPE_COLUMN');
     expect(codes(field(result, '9.1').issues)).toContain('STATUS_MISSING');
-    expect(field(result, '9.1').record.statusByActionType.POSC).toBeNull();
+  });
+
+  it('downgrades an empty POSC cell to a warning', () => {
+    const rows = ACTION_ROWS.map((row) => [...row]);
+    rows[0]![11] = '';
+    const result = convertFieldRules([rulesSheet(RULE_ROWS), actionSheet(rows), mappingSheet(MAPPING_ROWS)]);
+    const issues = field(result, '9.1').issues.filter((issue) => issue.code === 'EMPTY_STATUS');
+    expect(issues).toHaveLength(1);
+    expect(issues[0]!.severity).toBe('warning');
+  });
+
+  it('joins the mapping by its Table.Item column', () => {
+    const mapping = MAPPING_WITH_ID_ROWS.map((row) => [...row]);
+    mapping[1]![1] = 'Example type (renamed in mapping)';
+    const result = convertFieldRules([rulesSheet(RULE_ROWS), actionSheet(ACTION_ROWS), mappingSheet(mapping, MAPPING_WITH_ID_HEADER)]);
+    expect(result.uploadIssues).toEqual([]);
+    const converted = field(result, '9.2');
+    expect(converted.record.bnppFields.map((entry) => entry.name)).toEqual(['X_EX_TYPE']);
+    expect(codes(converted.issues)).toEqual(['MAPPING_NAME_MISMATCH']);
+    expect(codes(field(result, '9.1').issues)).toEqual([]);
+  });
+
+  it('detects a Table.Item stored as a number (9.10 read as 9.1)', () => {
+    const rules = [...RULE_ROWS, ['9', '10', 'Section 9b - Example amounts', 'Example amount 10', 'Up to 18 numeric characters', 'None.', '1. EX-VR-9010-01']];
+    const actions = [...ACTION_ROWS, ['9', '10', 'Section 9b - Example amounts', 'Example amount 10', 'O', 'O', 'O', 'O', '-', '-', 'O', 'O']];
+    const mapping = [...MAPPING_WITH_ID_ROWS, ['9.1', 'Example amount 10', 'P1_EX_AMOUNT_10, P2_EX_AMOUNT_10']];
+    const result = convertFieldRules([rulesSheet(rules), actionSheet(actions), mappingSheet(mapping, MAPPING_WITH_ID_HEADER)]);
+    expect(codes(result.uploadIssues)).toContain('DUPLICATE_MAPPING');
+    const converted = field(result, '9.10');
+    expect(converted.record.bnppFields.map((entry) => entry.name)).toEqual(['P1_EX_AMOUNT_10', 'P2_EX_AMOUNT_10']);
+    expect(codes(converted.issues)).toContain('MAPPING_ID_MISMATCH');
+    expect(field(result, '9.1').record.bnppFields.map((entry) => entry.name)).toEqual(['P1_EX_CODE', 'P2_EX_CODE']);
+  });
+
+  it('normalises Table.Item values', () => {
+    expect(normalizeFieldId(' 2 + 24 ')).toBe('2.24');
+    expect(normalizeFieldId('2.24')).toBe('2.24');
   });
 
   it('flags duplicates, missing mappings and unused mappings', () => {

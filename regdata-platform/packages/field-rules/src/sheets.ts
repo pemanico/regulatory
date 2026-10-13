@@ -43,6 +43,9 @@ const MAPPING_HEADERS: Record<string, string[]> = {
   bnpp: ['bnpp', 'bnpp field', 'bnpp fields'],
 };
 
+/** Optional mapping column with the concatenation Table.Item (e.g. "2.24"). */
+const MAPPING_FIELD_ID_HEADERS = ['table.item', 'table item', 'tableitem', 'table+item', 'id_campo', 'id campo', 'field id'];
+
 const ACTION_TYPE_LONG_NAMES: Record<string, ActionType> = {
   NEW: 'NEWT',
   MODIFY: 'MODI',
@@ -121,6 +124,8 @@ export function locateSheets(sheets: SheetData[]): LocatedSheet[] {
       if (!foundMapping) {
         const columns = findColumns(header, MAPPING_HEADERS);
         if (columns) {
+          const fieldIdColumn = header.findIndex((cellValue) => MAPPING_FIELD_ID_HEADERS.includes(normalizeForCompare(cellValue)));
+          if (fieldIdColumn >= 0) columns.fieldId = fieldIdColumn;
           located.push({ sheet, kind: 'mapping', headerRow: rowIndex, columns, actionTypeColumns: {} });
           foundMapping = true;
         }

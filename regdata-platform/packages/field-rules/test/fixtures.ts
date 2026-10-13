@@ -17,8 +17,8 @@ export function actionSheet(rows: string[][], header = ACTION_HEADER): SheetData
   return { fileName: 'example-rules.xlsx', sheetName: 'ActionTypes', rows: [header, ...rows] };
 }
 
-export function mappingSheet(rows: string[][]): SheetData {
-  return { fileName: 'example-mapping.xlsx', sheetName: 'Mapping', rows: [MAPPING_HEADER, ...rows] };
+export function mappingSheet(rows: string[][], header = MAPPING_HEADER): SheetData {
+  return { fileName: 'example-mapping.xlsx', sheetName: 'Mapping', rows: [header, ...rows] };
 }
 
 export const RULE_ROWS: string[][] = [
@@ -46,6 +46,10 @@ export const MAPPING_ROWS: string[][] = [
   ['example type', 'X_EX_TYPE'],
   ['Example amount 1', 'P1_EX_AMOUNT_1, P2_EX_AMOUNT_1, Z_EX_AMOUNT_TOTAL'],
 ];
+
+/** Mapping with the Table.Item column (concatenation of Table and Item). */
+export const MAPPING_WITH_ID_HEADER = ['Table.Item', 'DTCC Report', 'BNPP'];
+export const MAPPING_WITH_ID_ROWS: string[][] = MAPPING_ROWS.map((row, index) => [`9.${index + 1}`, ...row]);
 
 export function standardSheets(): SheetData[] {
   return [rulesSheet(RULE_ROWS), actionSheet(ACTION_ROWS), mappingSheet(MAPPING_ROWS)];

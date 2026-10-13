@@ -61,6 +61,8 @@ export const FieldRuleRecordSchema = z.object({
   condition: z.string(),
   errorCodes: z.array(z.string()),
   statusByActionType: StatusByActionTypeSchema,
+  /** Optional action types whose column is absent from the source (e.g. POSC, not used yet). */
+  actionTypesNotInSource: z.array(ActionTypeSchema),
   bnppFields: z.array(BnppFieldSchema),
   document: z.object({
     version: z.string().nullable(),
@@ -93,6 +95,8 @@ export type IssueCode =
   | 'EMPTY_STATUS'
   | 'INVALID_STATUS'
   | 'NO_BNPP_MAPPING'
+  | 'MAPPING_NAME_MISMATCH'
+  | 'MAPPING_ID_MISMATCH'
   | 'EMPTY_BNPP_MAPPING'
   | 'UNUSED_MAPPING'
   | 'DUPLICATE_MAPPING'

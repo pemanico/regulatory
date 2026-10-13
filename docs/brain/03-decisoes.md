@@ -4,6 +4,8 @@ Mais recente primeiro. Decisões técnicas da aplicação têm ADR em `regdata-p
 
 | Data | Decisão | Porquê |
 | --- | --- | --- |
+| 2026-10-13 | `POSC` é opcional enquanto não for usado: coluna ausente não é erro e fica fora do chunk; célula vazia ou inválida é aviso | Ordep: "a coluna POSC não é usada em nada para já" |
+| 2026-10-13 | O mapping DTCC ↔ BNPP liga às regras pela coluna `Table.Item` (concatenação de Table e Item); o nome DTCC é só verificação | Confirmado pelo Ordep; elimina o join por texto |
 | 2026-10-13 | Regras por campo carregadas numa página web: upload dos Excel, conversão, revisão campo a campo pelo utilizador (4-eyes) e exportação dos aprovados para o RAG | Pedido do Ordep: algo dinâmico e com validação pelo utilizador |
 | 2026-10-13 | `ID_CAMPO` = `Table.Item` para todos os campos; "2.24" era só um exemplo | Esclarecido pelo Ordep |
 | 2026-10-13 | Conversor em TypeScript dentro da aplicação (não Python à parte); uploads em memória por agora (ADR-004) | A página web precisa do conversor no backend Node |

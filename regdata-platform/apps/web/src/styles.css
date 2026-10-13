@@ -631,6 +631,12 @@ input[type='date'] {
   color: var(--error-text);
 }
 
+.status-unused {
+  color: var(--muted);
+  font-style: italic;
+  font-weight: normal;
+}
+
 .plain-list {
   margin: 0;
   padding-left: 18px;

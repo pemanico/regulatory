@@ -389,6 +389,13 @@ function FieldDetail(props: {
         <tbody>
           <tr>
             {ACTION_TYPES.map((type) => {
+              if (record.actionTypesNotInSource.includes(type)) {
+                return (
+                  <td key={type} className="status status-unused" title="Coluna ausente no ficheiro; action type ainda não usado">
+                    não usado
+                  </td>
+                );
+              }
               const status = record.statusByActionType[type];
               return (
                 <td key={type} className={`status status-${status ?? 'missing'}`}>

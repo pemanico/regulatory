@@ -1,4 +1,4 @@
-export { convertFieldRules, parseStatus, MAX_ROWS_PER_SHEET } from './convert';
+export { convertFieldRules, parseStatus, normalizeFieldId, MAX_ROWS_PER_SHEET, DEFAULT_OPTIONAL_ACTION_TYPES } from './convert';
 export type { ConvertOptions, ConvertedField, ConversionResult } from './convert';
 export { renderChunk, DEFAULT_BLOCK_LABELS } from './render';
 export type { RenderOptions } from './render';
