@@ -48,7 +48,7 @@ npm install
 
 Pacotes que costumam falhar num registo interno: `@nestjs/*`, `vite`, `@vitejs/plugin-react`, `tsup` (usa `esbuild`, que descarrega um binário por plataforma), `exceljs`, `concurrently`. Se o `esbuild` falhar, o registo interno tem de espelhar também `@esbuild/<plataforma>` (ex. `@esbuild/win32-x64`).
 
-O repositório ainda não tem `package-lock.json`: a primeira instalação bem-sucedida no banco deve gerar um e guardá-lo no Git interno, para que as instalações seguintes usem as mesmas versões.
+O repositório ainda não tem `package-lock.json`, por isso as versões instaladas podem variar entre máquinas. Se uma instalação falhar por versão, guardar o output completo do `npm install` e reportá-lo.
 
 ## 5. Configurar a API
 
