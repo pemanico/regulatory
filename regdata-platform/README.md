@@ -39,6 +39,12 @@ O Vite encaminha `/api` para o backend.
 | GET | `/api/health` | Health check (público) |
 | GET | `/api/catalog/marts` | Marts visíveis para o utilizador |
 | POST | `/api/views/validate` | Valida uma spec de vista |
+| POST | `/api/field-rules/uploads` | Upload de 1–3 `.xlsx` (regras, action types, mapping DTCC ↔ BNPP) e conversão |
+| GET | `/api/field-rules/uploads` | Uploads recentes |
+| GET | `/api/field-rules/uploads/:id` | Campos convertidos, problemas, chunks e estado de revisão |
+| POST | `/api/field-rules/uploads/:id/fields/:fieldId/review` | Aprovar ou rejeitar um campo (4-eyes) |
+| POST | `/api/field-rules/uploads/:id/approve-clean` | Aprovar em bloco os campos sem erros nem avisos |
+| GET | `/api/field-rules/uploads/:id/export?format=json\|markdown` | Exportar os campos aprovados |
 
 Exemplo:
 
@@ -47,6 +53,14 @@ curl -s -X POST localhost:3000/api/views/validate \
   -H 'Content-Type: application/json' \
   -d '{"specVersion":1,"jurisdiction":"EMIR","martId":"example_emir_validation","metrics":["error_count"],"rows":["error_category"],"period":{"from":"2026-07-01","to":"2026-09-30"}}'
 ```
+
+## Regras de validação por campo
+
+Página **Regras de validação** na aplicação web: carregar os Excel, ver os problemas de conversão, rever campo a campo e exportar os aprovados (registos JSON e chunks Markdown para o RAG). Especificação: `docs/brain/09-regras-validacao-campos.md`.
+
+- Para testar a revisão em desenvolvimento, carrega com um utilizador e revê com outro (campo "Utilizador (dev)" no topo): quem carrega não pode aprovar.
+- Os uploads ficam em memória: perdem-se ao reiniciar a API.
+- Configuração em `apps/api/.env.example` (`FIELD_RULES_BLOCK_LABELS`, `FIELD_RULES_FOUR_EYES`).
 
 ## Autenticação em desenvolvimento
 

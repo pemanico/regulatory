@@ -1,14 +1,12 @@
 # Regras de validação por campo (EMIR) — conversão para o sistema
 
-Estado: requisito apresentado pelo Ordep em 2026-10-13. Secção 1 = especificação do Ordep. Secções 2–6 = análise e propostas do Claude, a confirmar.
+Estado: **implementado** (2026-10-13) — página web de upload e revisão, API e conversor (`regdata-platform/packages/field-rules`). Secção 1 = especificação do Ordep. Secções 2–6 = análise e propostas do Claude, aplicadas na implementação; os pontos ainda em aberto estão em `04-questoes-abertas.md`.
 
 Contexto: regras de negócio de um controlo específico, reutilizáveis noutros controlos EMIR. A origem é um Excel com, por campo, a secção, o nome, o formato, as condições, os códigos de erro e, numa tabela separada, o estado por action type. O Excel não pode sair do banco.
 
 ## 1. Especificação (Ordep)
 
-**Chave do campo (`ID_CAMPO`):**
-- campo com ID 2.24: concatenação `Table+Item`;
-- todos os outros: `Table.Item`.
+**Chave do campo (`ID_CAMPO`):** `Table.Item` para todos os campos (ex. Table 2 + Item 24 → `2.24`). Esclarecido pelo Ordep: o "2.24" da especificação original era um exemplo da concatenação, não uma exceção.
 
 **Expansão por leg:** cada campo é expandido em dois blocos, `REGRAS_LEG_1` e `REGRAS_LEG_2`. Mesmo que o Excel só tenha um conjunto de regras ou estados, a estrutura é duplicada para as duas legs.
 
@@ -110,10 +108,14 @@ Problemas reais já visíveis na amostra (justificam §4.3 e §4.4):
 - **`Table` vazio** numa linha (item 131, "Currency of the price/time interval quantity"). Com join por `Table` + `Item`, este campo perde o estado sem erro. O conversor tem de o reportar.
 - Os estados variam por action type no mesmo campo (ex. "Delta": NEWT `C`, MODI `-`, VALU `C`), por isso não há valores por defeito por campo.
 
-## 2. Proposta: o Excel é convertido no banco, por código
+## 2. O Excel é convertido no banco, por código, numa página web
 
-- O conversor é **código genérico** (Python, em inglês), desenvolvido no repositório público e testado com dados fictícios.
-- O Ordep corre-o no banco sobre o Excel real; o resultado vai para o repositório de conhecimento no Git interno.
+Decisão do Ordep (2026-10-13): upload numa página web, com opção de o utilizador validar as regras.
+
+- O conversor é **código genérico** (TypeScript, em inglês) dentro da aplicação, desenvolvido no repositório público e testado com dados fictícios.
+- No banco, o utilizador carrega os Excel na página **Regras de validação**, vê os problemas de conversão, revê campo a campo (4-eyes) e exporta os aprovados.
+- Campos com erros não podem ser aprovados: corrige-se o Excel e volta-se a carregar.
+- Hoje a exportação (registos JSON e chunks Markdown) é a passagem para o RAG; a indexação automática no OpenSearch e a gravação no Git interno são o passo seguinte.
 - As fotos servem só para mostrar a **estrutura** do Excel (cabeçalhos, algumas linhas, a tabela de action types), para escrever o parser e o mapeamento de colunas.
 - Evita transcrever regras a partir de fotos: um único M/C/O mal lido é uma regra errada no sistema, sem ninguém dar por isso.
 
@@ -149,9 +151,9 @@ Alternativa revista:
 
 Cada campo BNPP tem `usado_no_controlo: sim/não` por controlo, para o mapping estar completo mesmo quando o controlo não usa o campo.
 
-### 4.2 A exceção do 2.24 precisa de razão escrita
+### 4.2 ~~A exceção do 2.24~~ — resolvido
 
-Uma regra de formato da chave com uma única exceção, sem motivo registado, perde-se na primeira manutenção. Se houver um conflito de chave (ex. dois itens que geram o mesmo `Table.Item`), a solução robusta é um formato de chave único para todos e, se preciso, um alias.
+Não há exceção: todos os campos usam `Table.Item`.
 
 ### 4.3a O mapping liga-se às regras pelo nome do campo
 
