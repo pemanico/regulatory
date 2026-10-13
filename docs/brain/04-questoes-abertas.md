@@ -25,3 +25,7 @@
 | 25 | Confirmar as propostas da v2: KPI/Matching só via semantic layer (sem SQL livre); dos Parquet só metadados na vector DB; Enrichment offline; fases de entrada dos agentes | Mudam o desenho pedido | Ordep |
 | 26 | Modelo de embeddings multilingue aprovado (PT + EN) | Pesquisa entre documentos em PT e código em EN | Ordep / IT |
 | 27 | Com que atraso a cópia ClickHouse de um mart é atualizada a partir do Parquet (referência)? | Define quando a semantic layer pode usar o ClickHouse sem divergir | Ordep |
+| 28 | O Excel de regras por campo é o ficheiro público de validation rules da ESMA, ou uma versão interna com regras do banco? | Se for público, pode ser convertido fora do banco a partir da fonte oficial | Ordep |
+| 29 | Porque é que o campo 2.24 usa `Table+Item` e os outros `Table.Item`? | Exceção sem razão escrita perde-se na manutenção | Ordep |
+| 30 | Expansão para leg 1 e leg 2 em todos os campos, ou só nos que são por leg (com `APLICA_A` explícito)? Legs não são os lados (contrapartes) da transação | Duplicar em campos sem legs introduz informação falsa no RAG | Ordep |
+| 31 | Aceitar as propostas de `09-regras-validacao-campos.md` §2–§5: conversão por código no banco; registo canónico + chunk gerado; join por Table+Item com verificação de Section/Field; vazio = erro; condições preservadas palavra a palavra; metadados de versão | Mudam a especificação | Ordep |

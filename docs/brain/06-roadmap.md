@@ -34,6 +34,7 @@ Começar por um **exemplo prático de matching EMIR** apresentado pelo Ordep (ca
 | 6 | Reports recorrentes como código | Inventário de reports |
 | 7 | Módulo Admin: edição de documentação com PRs no Git interno | Repositório de conhecimento interno; produto do Git interno (#15) |
 | 8 | Runtime de orquestração no NestJS (fase 1): contratos Zod, Director, Retriever, KPI e Tabelas com LLM simulado, validadores determinísticos, testes | Decisões #23 e #25; mart de matching (#20) |
+| 2c | Conversor de regras de validação por campo (Python): Excel → registo canónico → chunks RAG, com verificações; testado com dados fictícios, corrido no banco | Fotos da estrutura do Excel; questões #28–#31 |
 | 8b | Traduzir para inglês os comentários de código existentes (hoje em português) e acrescentar verificação no CI | Regra de língua de 2026-10-13 |
 | 9 | Golden set de perguntas de matching com respostas validadas | KPIs certificados (#19) |
 

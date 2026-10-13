@@ -31,3 +31,7 @@
 | Tipo de pedido | Classificação do Director: context, calculation, mixed, regulatory_assessment, general, out_of_scope |
 | Runtime de orquestração | Código no NestJS que executa os planos do Director, injeta resultados, aplica limites e corre os validadores |
 | Enrichment | Pipeline offline que prepara documentos, código, comentários e metadados dos Parquet para a vector DB |
+| Action type (EMIR) | Tipo de ação de um report EMIR: NEWT (novo), MODI (modificação), VALU (valorização), CORR (correção), TERM (terminação), EROR (erro), REVI (reativação), POSC (componente de posição) |
+| M / C / O / NA | Estado de um campo por action type: Mandatory, Conditional, Optional, Not Applicable |
+| ID_CAMPO | Chave de um campo nas regras de validação: `Table.Item` (exceção: 2.24 → `Table+Item`) |
+| Leg | Perna de um contrato (ex. as duas pernas de um swap). Não é o mesmo que lado/contraparte da transação |

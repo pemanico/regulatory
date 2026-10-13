@@ -4,6 +4,7 @@ Mais recente primeiro. Decisões técnicas da aplicação têm ADR em `regdata-p
 
 | Data | Decisão | Porquê |
 | --- | --- | --- |
+| 2026-10-13 | Regras de validação por campo (EMIR) entram no sistema com o template definido pelo Ordep (chave Table.Item, exceção 2.24, legs 1 e 2, estado por action type M/C/O/NA, limpeza de condições e códigos de erro) | Regras de um controlo específico, reutilizáveis noutros controlos EMIR; detalhe e propostas em `09-regras-validacao-campos.md` |
 | 2026-10-13 | Parquet é a cópia de referência dos dados calculados; o ClickHouse, quando existe, é cópia derivada e mais rápida | Definido pelo Ordep (questão #27) |
 | 2026-10-13 | Dados calculados (marts) podem estar em ClickHouse ou em Parquet; a semantic layer encaminha por mart e os agentes não escolhem o motor | Definido pelo Ordep; regras de autoridade e consistência propostas em `08` §2 |
 | 2026-10-13 | Agentic RAG multi-regulatório (v2), substitui o desenho EMIR Matching v1: começa por EMIR (reporting, matching, clearing, risk mitigation, collateral), depois MiFID II/MiFIR, SEC, CFTC, Canadá | Definido pelo Ordep; `08-agentic-rag-multi-regulatory.md` |

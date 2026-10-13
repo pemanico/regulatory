@@ -12,6 +12,7 @@ Conhecimento acumulado do projeto, para que qualquer conversa nova (Claude ou pe
 6. [Roadmap](06-roadmap.md): passos feitos e próximos
 7. [RAG e Agentic RAG](07-rag.md): o que entra no RAG, OpenSearch, fluxo, ingestão de código e documentação
 8. [Multi-regulatory Agentic RAG](08-agentic-rag-multi-regulatory.md) (EN): Director, agentes, vector DB vs ClickHouse, packs de regulação, KPIs, enrichment, fases
+9. [Regras de validação por campo](09-regras-validacao-campos.md): especificação de conversão do Excel de regras EMIR, análise e propostas
 
 ## Casos práticos dos operacionais
 
