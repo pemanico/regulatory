@@ -22,6 +22,8 @@ Lê isto primeiro em qualquer conversa nova sobre este projeto.
 | `docs/brain/05-glossario.md` | Termos do domínio e do projeto |
 | `docs/brain/06-roadmap.md` | Passos feitos e próximos |
 | `docs/brain/07-rag.md` | RAG e Agentic RAG: fontes, OpenSearch, fluxo, ingestão de código e documentação |
+| `docs/brain/08-agentic-rag-multi-regulatory.md` | Agentic RAG multi-regulatório (EN): Director, agentes, vector DB vs ClickHouse, packs de regulação, KPIs, enrichment, fases |
+| `regdata-platform/prompts/` | Contratos, prompts dos agentes e módulos por regulação |
 | `docs/brain/casos/` | Casos práticos dos operacionais (um ficheiro por caso) |
 | `docs/brain/marts/` | Fichas de data mart (uma por mart) |
 | `regdata-platform/docs/adr/` | ADRs técnicos da aplicação |
@@ -33,6 +35,7 @@ Antes de propor código ou arquitetura, lê os ficheiros relevantes. Se um caso 
 - Responde em português de Portugal.
 - Debate como um adulto: questiona ideias, aponta falhas, pontos cegos e oportunidades ignoradas. Sem validações desnecessárias.
 - Um passo de cada vez. Em cada passo: objetivo, inputs necessários, output, critério de conclusão. Avança só com confirmação.
+- Regras de língua: código-fonte e comentários de código **em inglês** (obrigatório); documentos funcionais, regras de negócio e prompts dos agentes podem ser em português; descrições de arquitetura e explicações técnicas podem ser em inglês; respostas ao Ordep em português de Portugal.
 - Nunca inventes dados, schemas, KPIs ou regras do BNP. Se faltar, pergunta (máximo 3 perguntas).
 - Exemplos fictícios ficam marcados como fictícios.
 - Regista decisões em `docs/brain/03-decisoes.md` (e ADR quando for técnica).
@@ -52,6 +55,7 @@ O Ordep quer que a memória seja atualizada sempre que algo importante aconteça
 | Uma questão aberta é respondida, ou surge uma nova | `04-questoes-abertas.md` (e o ficheiro onde a resposta pertence) |
 | Muda o contexto, âmbito ou stack | `01-contexto.md` ou `02-arquitetura.md` |
 | Muda algo no RAG, nas fontes de conhecimento ou na ingestão | `07-rag.md` |
+| Muda algo nos agentes ou nos packs de regulação | `08-agentic-rag-multi-regulatory.md` + prompts (versão no cabeçalho) |
 | Um passo é concluído ou o plano muda | `06-roadmap.md` |
 | Surge um termo novo do domínio | `05-glossario.md` |
 

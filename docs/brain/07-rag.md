@@ -20,7 +20,8 @@ O RAG serve para conhecimento não estruturado: explicar, contextualizar, citar.
 | Mapeamentos de campos | **Tabelas**, não RAG | query tipada |
 | Definições de métricas | **Semantic layer**, não RAG | `metrics.query` / `metrics.explain` |
 | Versões em vigor de regras | **Registry**, não RAG | `rules.get(as_of)` |
-| Dados dos marts | **Semantic layer / Trino**, nunca RAG | `metrics.query` |
+| Dados dos marts (linhas, valores) | **Semantic layer / ClickHouse**, nunca RAG | `metrics.query` |
+| Descrição dos dados Parquet (schemas, colunas, domínios de valores) | OpenSearch (RAG) | `docs.search` (doc_type `data_dictionary`) |
 
 Regra prática: se a pergunta tem uma resposta exata e verificável ("qual a versão em vigor", "qual o valor do campo X"), não é RAG.
 
@@ -196,10 +197,14 @@ O LLM ajuda na conversão (classificar folhas, propor front matter, limpar tabel
 ### Riscos
 
 - **Duas fontes de verdade:** se as pessoas continuarem a editar o Word depois da conversão, o Git fica desatualizado. Após migrar um documento, o Word original é congelado e passa a só leitura.
-- **Barreira à edição:** operacionais podem não usar Git. Edição via editor web do Git ou, mais tarde, pelo módulo Admin em React, que abre PRs por baixo.
+- **Barreira à edição:** decidido que a edição é feita pelo módulo Admin em React, que abre PRs no Git interno por baixo. Até o Admin existir, a edição fica restrita a quem usa Git, para não reabrir o Word.
 - **Qualidade da conversão:** PDFs e tabelas complexas perdem estrutura; `conversion_quality: low` até revisão.
 - **Onde vive o repositório:** o repositório de conhecimento vive só no Git interno do banco. No repositório público desenvolvem-se apenas as ferramentas de conversão e o CI, testados com ficheiros fictícios; correm dentro do banco sobre os documentos reais.
 
-## 7. Questões abertas do RAG
+## 7. Primeiro caso de uso
+
+Agentic RAG multi-regulatório, a começar por EMIR: ver [`08-agentic-rag-multi-regulatory.md`](08-agentic-rag-multi-regulatory.md). O pipeline de enrichment (documentos em PT, código e comentários em EN, metadados dos Parquet) está na secção 9 desse ficheiro.
+
+## 8. Questões abertas do RAG
 
 Ver `04-questoes-abertas.md` (#12, #13, #15, #16).

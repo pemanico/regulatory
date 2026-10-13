@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Gera um único ficheiro Markdown com CLAUDE.md e docs/brain/, para guardar
+# Gera um único ficheiro Markdown com CLAUDE.md, docs/brain/ e os prompts dos agentes, para guardar
 # como `claude/memoria-projeto.md` no Project "Agentic Rag".
 # Uso: scripts/memory-snapshot.sh [ficheiro-de-saida]
 set -euo pipefail
@@ -12,6 +12,7 @@ while IFS= read -r f; do files+=("$f"); done < <(
   find docs/brain -name '*.md' ! -name README.md ! -name '_template.md' | sort
 )
 files+=(docs/brain/casos/_template.md docs/brain/marts/_template.md)
+while IFS= read -r f; do files+=("$f"); done < <(find regdata-platform/prompts -name '*.md' 2>/dev/null | sort)
 
 {
   echo "# Memória do projeto — Regulatory Data Platform (cópia)"

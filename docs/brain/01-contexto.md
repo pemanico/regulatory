@@ -25,7 +25,7 @@
 - Cada data mart responde a uma necessidade de negócio.
 - Marts ao nível da linha (um registo por caso), com as regras de negócio já aplicadas em PySpark no Airflow. Nada pré-agregado.
 - Particionados por business date, separados por jurisdição.
-- Armazenados em S3 Parquet. ClickHouse disponível como opção.
+- Dados calculados (marts) armazenados em S3 Parquet (cópia de referência) e, em alguns marts, também em ClickHouse (cópia derivada, mais rápida).
 - Volume: milhões de linhas por mês.
 
 ## Problema
@@ -43,6 +43,7 @@ Dentro:
 - Pivot interativo e drill-through.
 - Reports recorrentes automatizados; reports e KPIs por prompt.
 - Explicação de regras, código e categorias de erro (agente com RAG).
+- Agentic RAG multi-regulatório: começa por EMIR (trade reporting, matching, clearing, risk mitigation, collateral, várias categorias de KPI); depois MiFID II/MiFIR, SEC, CFTC e Canadá. Matching analisado sobre os resultados já produzidos a montante.
 - Jobs no Airflow a pedido, só por allowlist.
 
 Fora:

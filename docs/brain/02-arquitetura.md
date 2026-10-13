@@ -33,12 +33,21 @@ Um orquestrador com agentes especializados; nenhum agente fala diretamente com o
 
 Fluxo Agentic RAG adaptado: rewrite → fast path para pedidos simples → escolha de fonte (tools internas, nunca internet) → retrieval → LLM redige → verificação determinística (números existem nos resultados, citações presentes) → máximo 2–3 iterações.
 
+**Desenho atual dos agentes (v2, multi-regulatório):** Director (sem RAG nem ClickHouse), Retriever (só vector DB), KPI e Matching (ClickHouse via semantic layer), Análise Regulatória (módulos por regulação), Tabelas, General e Enrichment (offline); ver [`08-agentic-rag-multi-regulatory.md`](08-agentic-rag-multi-regulatory.md). Substitui a lista genérica de agentes acima.
+
 **Desenho completo do RAG** (o que entra e o que não entra, OpenSearch, fluxo passo a passo, ingestão de código PySpark e de documentação Word/Excel/CSV/PDF): ver [`07-rag.md`](07-rag.md).
 
 ## Conhecimento
 
 - **Ficha de mart:** propósito, necessidade de negócio, jurisdição, granularidade, dimensões, medidas (aditivas ou não), localização, DAG e regras, frescura, owner, consumidores.
 - **Ficha de regra:** gerada por LLM a partir do código PySpark (parsing AST), revista por humano antes de ser oficial, versionada em Git, ligada às métricas que a usam.
+
+## Módulo Admin (React)
+
+- Edição da documentação funcional (Markdown com front matter), tabelas de referência (CSV) e fichas, sem expor Git ao utilizador.
+- Cada gravação abre um PR no Git interno; aprovação 4-eyes (quem escreve não aprova); CI valida antes do merge.
+- Mostra diff legível, impacto via ligações (regras, marts, métricas afetados) e histórico de versões.
+- Os mesmos fluxos servem para regras, métricas e specs de reports.
 
 ## Spec de vista
 
