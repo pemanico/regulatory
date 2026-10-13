@@ -1,7 +1,7 @@
 /** Text helpers. Normalisation is only used for comparisons, never for stored text. */
 
 const DASHES = /[‐-―−﹘﹣－]/g;
-const BULLET = /^\s*[•●▪◦‣∙·*\-]\s+/;
+const BULLET = /^\s*[•●▪◦‣∙·*-]\s+/;
 const NUMBERED_LINE = /^\s*\d+\s*[.)]\s+/;
 
 /** Comparison key: unified dashes, collapsed whitespace, lower case. */
