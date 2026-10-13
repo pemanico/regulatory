@@ -51,6 +51,14 @@ REGRAS_LEG_2:
   Status_por_Action_Type: [duplicado da leg 1]
 ```
 
+## 1.1 Mapping DTCC ↔ BNPP (Ordep, 2026-10-13)
+
+- Existe um mapping com uma coluna do lado **DTCC** (campo do trade repository) e uma coluna do lado **BNPP** (campo interno).
+- Quando o campo tem **leg 1 e leg 2**, a coluna BNPP tem **dois campos** (um por leg) para o mesmo campo DTCC.
+- Um controlo pode não usar todos os campos BNPP, mas o mapping tem de os ter todos em conta.
+
+Consequência: a expansão por leg faz sentido **ao nível do mapping**. A regra do campo DTCC aplica-se a cada campo BNPP que lhe corresponde, e é aí que a leg 1 e a leg 2 se distinguem.
+
 ## 2. Proposta: o Excel é convertido no banco, por código
 
 - O conversor é **código genérico** (Python, em inglês), desenvolvido no repositório público e testado com dados fictícios.
@@ -73,18 +81,20 @@ O chunk nunca é editado à mão: é sempre regenerado a partir do registo canó
 
 ### 4.1 Duplicar todas as regras para as duas legs introduz informação falsa
 
+> Revisto após §1.1: com o mapping DTCC ↔ BNPP, os blocos por leg ganham significado quando cada bloco aponta para o campo BNPP da respetiva leg. A proposta abaixo passa a ser: **blocos por leg gerados a partir do mapping**, um por campo BNPP mapeado; campos com um só campo BNPP têm um único bloco. Os argumentos seguintes mantêm-se para os campos sem legs.
+
+
 - Muitos campos não são por leg (identificadores, contrapartes, datas de execução). Escrever `REGRAS_LEG_2` para eles afirma que existe uma leg 2 com regras, o que não é verdade. Um agente que recupere esse chunk vai repeti-lo.
 - Os campos que são por leg costumam já existir como campos separados no próprio layout (ex. um campo para a leg 1 e outro para a leg 2). Duplicar cria uma terceira e quarta versão.
 - Chunks quase idênticos ocupam o top-k da pesquisa e empurram resultados úteis para fora.
 - **Legs não são lados da transação.** Leg 1 e leg 2 são as pernas de um contrato (ex. as duas pernas de um swap). Os dois lados da transação são as duas contrapartes. Se o objetivo é dizer que a regra vale para as duas contrapartes, a expansão por leg não diz isso.
 
-Alternativa: um único bloco de regras, com um atributo explícito:
+Alternativa revista:
+- campo DTCC com **dois** campos BNPP (leg 1 e leg 2) → dois blocos, `REGRAS_LEG_1` e `REGRAS_LEG_2`, cada um com o campo BNPP correspondente;
+- campo DTCC com **um** campo BNPP → um único bloco `REGRAS`, com `LEGS: não aplicável`;
+- campo DTCC sem correspondência BNPP → registado na mesma, com `MAPEAMENTO_BNPP: nenhum`, para ser visível que existe.
 
-```
-APLICA_A: [ambas as contrapartes] · LEGS: [não aplicável | leg 1 | leg 2 | ambas]
-```
-
-Duplicar só se o Excel tiver regras diferentes por leg.
+Cada campo BNPP tem `usado_no_controlo: sim/não` por controlo, para o mapping estar completo mesmo quando o controlo não usa o campo.
 
 ### 4.2 A exceção do 2.24 precisa de razão escrita
 
@@ -116,6 +126,7 @@ Para citar e filtrar por vigência (`07-rag.md` §2), cada registo precisa tamb�
 - Nenhum `ID_CAMPO` duplicado.
 - Todas as referências cruzadas ("field 1.1") apontam para campos existentes.
 - Diferenças entre `Section`/`Field` dos dois lados do join reportadas.
+- Todos os campos DTCC presentes no mapping; campos com leg têm exatamente um campo BNPP para a leg 1 e um para a leg 2; nenhum campo BNPP mapeado para dois campos DTCC sem ser assinalado.
 - Relatório de conversão com contagens e erros; a conversão falha se houver erros.
 
 ## 6. Exemplo (fictício)
@@ -131,7 +142,10 @@ item: "99"
 section: "Example section"
 field_name: "Example field"
 format: "ISO 4217 3-letter currency code"
-applies_to: { counterparties: both, legs: not_applicable }
+applies_to: { counterparties: both }
+bnpp_mapping:                      # fictitious internal field names
+  - { bnpp_field: "EX_FIELD_LEG1", leg: 1, used_in_controls: [example-control] }
+  - { bnpp_field: "EX_FIELD_LEG2", leg: 2, used_in_controls: [] }   # mapped, not used by this control
 condition: "(1) Populated when field 9.98 is populated. (2) Refer to field 1.1."
 error_codes: [EX-001, EX-002]
 status_by_action_type: { NEWT: M, MODI: M, VALU: NA, CORR: M, TERM: NA, EROR: NA, REVI: C, POSC: M }
@@ -145,8 +159,22 @@ ID_CAMPO: 9.99
 CONTEXTO: Section: Example section
 NOME_CAMPO: Example field
 FORMATO: ISO 4217 3-letter currency code
-APLICA_A: ambas as contrapartes · LEGS: não aplicável
-REGRAS:
+APLICA_A: ambas as contrapartes
+REGRAS_LEG_1:
+  Campo_BNPP: EX_FIELD_LEG1 (usado no controlo example-control)
+  Condition: (1) Populated when field 9.98 is populated. (2) Refer to field 1.1.
+  Error_Codes: [EX-001, EX-002]
+  Status_por_Action_Type:
+    NEWT: M
+    MODI: M
+    VALU: NA
+    CORR: M
+    TERM: NA
+    EROR: NA
+    REVI: C
+    POSC: M
+REGRAS_LEG_2:
+  Campo_BNPP: EX_FIELD_LEG2 (mapeado; não usado neste controlo)
   Condition: (1) Populated when field 9.98 is populated. (2) Refer to field 1.1.
   Error_Codes: [EX-001, EX-002]
   Status_por_Action_Type:
