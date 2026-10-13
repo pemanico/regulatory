@@ -18,7 +18,7 @@ docs/adr/       Registo de decisões
 
 ## Requisitos
 
-- Node.js 20 ou superior (`.nvmrc` aponta para 22)
+- Node.js 20.12 ou superior (`.nvmrc` aponta para 22)
 - npm 10
 
 ## Arranque
@@ -60,7 +60,8 @@ Página **Regras de validação** na aplicação web: carregar os Excel, ver os 
 
 - Para testar a revisão em desenvolvimento, carrega com um utilizador e revê com outro (campo "Utilizador (dev)" no topo): quem carrega não pode aprovar.
 - Os uploads ficam em memória: perdem-se ao reiniciar a API.
-- Configuração em `apps/api/.env.example` (`FIELD_RULES_BLOCK_LABELS`, `FIELD_RULES_FOUR_EYES`).
+- Configuração: copiar `apps/api/.env.example` para `apps/api/.env` (lido no arranque da API) e ajustar `FIELD_RULES_BLOCK_LABELS`, `FIELD_RULES_PARTY_PREFIX` e `FIELD_RULES_FOUR_EYES`.
+- Arranque passo a passo e problemas comuns: `docs/arranque-local.md`.
 
 ## Autenticação em desenvolvimento
 

@@ -4,6 +4,8 @@ Mais recente primeiro. Decisões técnicas da aplicação têm ADR em `regdata-p
 
 | Data | Decisão | Porquê |
 | --- | --- | --- |
+| 2026-10-13 | Campos de parte no mapping BNPP identificados pelos prefixos `TP1`/`TP2`; blocos do chunk `REGRAS_TP1` / `REGRAS_TP2`; configurado no `.env` local (`FIELD_RULES_PARTY_PREFIX`, `FIELD_RULES_BLOCK_LABELS`) | Confirmado pelo Ordep; evita classificar como parte campos com "1_" no nome |
+| 2026-10-13 | A API lê `apps/api/.env` com o loader nativo do Node (≥ 20.12), sem dotenv | Até aqui o `.env` era ignorado; sem dependências novas para o registo npm interno |
 | 2026-10-13 | `POSC` é opcional enquanto não for usado: coluna ausente não é erro e fica fora do chunk; célula vazia ou inválida é aviso | Ordep: "a coluna POSC não é usada em nada para já" |
 | 2026-10-13 | O mapping DTCC ↔ BNPP liga às regras pela coluna `Table.Item` (concatenação de Table e Item); o nome DTCC é só verificação | Confirmado pelo Ordep; elimina o join por texto |
 | 2026-10-13 | Regras por campo carregadas numa página web: upload dos Excel, conversão, revisão campo a campo pelo utilizador (4-eyes) e exportação dos aprovados para o RAG | Pedido do Ordep: algo dinâmico e com validação pelo utilizador |

@@ -36,7 +36,7 @@ Começar por um **exemplo prático de matching EMIR** apresentado pelo Ordep (ca
 | 6 | Reports recorrentes como código | Inventário de reports |
 | 7 | Módulo Admin: edição de documentação com PRs no Git interno | Repositório de conhecimento interno; produto do Git interno (#15) |
 | 8 | Runtime de orquestração no NestJS (fase 1): contratos Zod, Director, Retriever, KPI e Tabelas com LLM simulado, validadores determinísticos, testes | Decisões #23 e #25; mart de matching (#20) |
-| 2d | Testar a página no banco com o Excel real e rever os problemas reportados | Merge do PR #7; questões #30 e #31; Excel com a coluna `Table.Item` formatada como texto |
+| 2d | Pôr a aplicação a correr localmente (guia `regdata-platform/docs/arranque-local.md`) e testar a página no banco com o Excel real e rever os problemas reportados | Merge do PR #7; questões #30 e #31; Excel com a coluna `Table.Item` formatada como texto |
 | 2e | Persistência dos uploads/revisões e publicação dos aprovados (OpenSearch + Git interno) | Questão #34 |
 | 8b | Traduzir para inglês os comentários de código existentes (hoje em português) e acrescentar verificação no CI | Regra de língua de 2026-10-13 |
 | 9 | Golden set de perguntas de matching com respostas validadas | KPIs certificados (#19) |

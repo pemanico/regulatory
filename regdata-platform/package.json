@@ -8,7 +8,7 @@
     "apps/*"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=20.12"
   },
   "scripts": {
     "build:packages": "npm run build -w @regdata/contracts && npm run build -w @regdata/field-rules",

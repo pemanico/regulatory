@@ -138,6 +138,14 @@ describe('convertFieldRules', () => {
     expect(field(result, '9.1').record.bnppFields.map((entry) => entry.name)).toEqual(['P1_EX_CODE', 'P2_EX_CODE']);
   });
 
+  it('classifies party fields with the configured prefix only', () => {
+    const mapping = [['Example code', 'P1_EX_CODE, P2_EX_CODE'], ['example type', 'X1_EX_TYPE'], MAPPING_ROWS[2]!];
+    const result = convertFieldRules([rulesSheet(RULE_ROWS), actionSheet(ACTION_ROWS), mappingSheet(mapping)], { partyPrefix: 'P' });
+    expect(field(result, '9.1').record.bnppFields.map((entry) => entry.role)).toEqual(['party_1', 'party_2']);
+    expect(field(result, '9.2').record.bnppFields).toEqual([{ name: 'X1_EX_TYPE', role: 'other' }]);
+    expect(codes(field(result, '9.2').issues)).not.toContain('PARTY_FIELD_UNPAIRED');
+  });
+
   it('normalises Table.Item values', () => {
     expect(normalizeFieldId(' 2 + 24 ')).toBe('2.24');
     expect(normalizeFieldId('2.24')).toBe('2.24');
