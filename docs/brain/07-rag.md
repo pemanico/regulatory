@@ -16,7 +16,7 @@ O RAG serve para conhecimento não estruturado: explicar, contextualizar, citar.
 | Código PySpark (ao nível da função) | OpenSearch, ligado ao `rule_id` | `docs.search`, sempre via ficha |
 | Fichas de mart | Registry em Git + OpenSearch | `catalog.get` + `docs.search` |
 | Definições de categorias de erro | Registry + OpenSearch | `category.get` + `docs.search` |
-| Validation rules ESMA / CFTC | **Tabelas**, não RAG | `rules.get` / query tipada |
+| Validation rules ESMA / CFTC | **Tabelas** (registo canónico) + chunk RAG gerado a partir delas (`09-regras-validacao-campos.md`) | `rules.get` (exato) + `docs.search` (contexto) |
 | Mapeamentos de campos | **Tabelas**, não RAG | query tipada |
 | Definições de métricas | **Semantic layer**, não RAG | `metrics.query` / `metrics.explain` |
 | Versões em vigor de regras | **Registry**, não RAG | `rules.get(as_of)` |

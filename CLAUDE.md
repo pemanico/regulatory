@@ -23,6 +23,7 @@ Lê isto primeiro em qualquer conversa nova sobre este projeto.
 | `docs/brain/06-roadmap.md` | Passos feitos e próximos |
 | `docs/brain/07-rag.md` | RAG e Agentic RAG: fontes, OpenSearch, fluxo, ingestão de código e documentação |
 | `docs/brain/08-agentic-rag-multi-regulatory.md` | Agentic RAG multi-regulatório (EN): Director, agentes, vector DB vs ClickHouse, packs de regulação, KPIs, enrichment, fases |
+| `docs/brain/09-regras-validacao-campos.md` | Conversão das regras de validação por campo (EMIR) para registo canónico e chunks RAG |
 | `regdata-platform/prompts/` | Contratos, prompts dos agentes e módulos por regulação |
 | `docs/brain/casos/` | Casos práticos dos operacionais (um ficheiro por caso) |
 | `docs/brain/marts/` | Fichas de data mart (uma por mart) |
