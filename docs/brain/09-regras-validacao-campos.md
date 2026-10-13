@@ -20,6 +20,7 @@ Contexto: regras de negócio de um controlo específico, reutilizáveis noutros 
 | Conditional | C |
 | Optional | O |
 | Not relevant / Not Applicable | NA |
+| `-` (valor real na folha) | NA |
 
 **Limpeza e densidade semântica:**
 - Condições: sem bullet points; condições e notas em várias linhas passam a um único parágrafo coeso, numerado; preservar todas as referências cruzadas a campos (ex. "refer to field 1.1").
@@ -94,6 +95,20 @@ Padrões encontrados (nomes fictícios):
 | Campos numerados do lado DTCC | "Settlement currency 1" → `P1_SETTLEMENT_CCY_1, P2_SETTLEMENT_CCY_1` | O "1"/"2" do campo DTCC é do próprio campo; o prefixo é a parte |
 
 **O mapping não tem `Table.Item`**: liga ao ficheiro de regras só pelo nome do campo DTCC.
+
+**Folha de estado por action type:**
+
+| Coluna | Conteúdo |
+| --- | --- |
+| `Table`, `Item`, `Section`, `Field` | Mesma identificação da folha de regras |
+| `NEWT`, `MODI`, `VALU`, `CORR`, `TERM`, `EROR`, `REVI` (e `POSC`, a confirmar: não visível na foto) | Um valor por action type |
+
+Valores encontrados: `M`, `C`, `O` e `-`. O `-` corresponde a não aplicável → `NA`. Os valores já vêm abreviados; o mapeamento por extenso (Mandatory, Conditional…) da especificação só é preciso se aparecerem noutras versões do ficheiro.
+
+Problemas reais já visíveis na amostra (justificam §4.3 e §4.4):
+- **Traço diferente na `Section`:** "Section 2b – Contract information" (travessão) e "Section 2f - Clearing" (hífen), na mesma folha. Um join por `Section` em texto falha com isto.
+- **`Table` vazio** numa linha (item 131, "Currency of the price/time interval quantity"). Com join por `Table` + `Item`, este campo perde o estado sem erro. O conversor tem de o reportar.
+- Os estados variam por action type no mesmo campo (ex. "Delta": NEWT `C`, MODI `-`, VALU `C`), por isso não há valores por defeito por campo.
 
 ## 2. Proposta: o Excel é convertido no banco, por código
 
