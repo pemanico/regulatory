@@ -87,6 +87,8 @@ Comandos (dentro de `regdata-platform/`): `npm install`, `npm test`, `npm run ty
 
 O ambiente cloud do Claude pode não ter acesso ao registo npm. Nesse caso, a verificação é feita pelo CI no GitHub: abrir PR e ler o resultado dos checks.
 
+Os logs do GitHub Actions também não são descarregáveis a partir do ambiente cloud. Quando um passo falha, `.github/scripts/run-and-annotate.sh` publica o fim do output como anotação; ler com `gh api repos/pemanico/regulatory/check-runs/<id>/annotations`.
+
 ## Dados sensíveis — este repositório é PÚBLICO
 
 Este repositório (`pemanico/regulatory`) é público no GitHub. Serve para desenvolver o código da plataforma fora do banco; o Ordep faz download para correr localmente no banco, onde só tem acesso ao Git interno.

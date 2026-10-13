@@ -2,7 +2,7 @@
   "name": "@regdata/api",
   "version": "0.1.0",
   "private": true,
-  "description": "Backend NestJS: API, autenticação, catálogo de marts, validação de specs",
+  "description": "NestJS backend: API, authentication, mart catalog, view spec validation, field rules upload and review",
   "scripts": {
     "build": "nest build",
     "start": "node dist/main.js",
@@ -15,6 +15,8 @@
     "@nestjs/core": "^10.4.0",
     "@nestjs/platform-express": "^10.4.0",
     "@regdata/contracts": "0.1.0",
+    "@regdata/field-rules": "0.1.0",
+    "exceljs": "^4.4.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
@@ -32,9 +34,22 @@
     "rootDir": ".",
     "testEnvironment": "node",
     "testRegex": ".*\\.spec\\.ts$",
-    "moduleFileExtensions": ["ts", "js", "json"],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
     "transform": {
-      "^.+\\.ts$": ["ts-jest", { "tsconfig": "tsconfig.json" }]
-    }
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.json"
+        }
+      ]
+    },
+    "reporters": [
+      "default",
+      "github-actions"
+    ]
   }
 }

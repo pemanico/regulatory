@@ -22,5 +22,5 @@ reports e jobs).
 
 - Validação idêntica no frontend (feedback imediato) e no backend (decisão oficial).
 - Sem custo de configuração de Nx no arranque; migração para Nx não exige mover pastas.
-- Os contratos têm de ser compilados antes de API e web (`npm run build:contracts`,
+- Os contratos têm de ser compilados antes de API e web (`npm run build:packages`,
   já incluído em `dev`, `test` e `build`).

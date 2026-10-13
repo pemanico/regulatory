@@ -9,7 +9,9 @@
 | 1.1 | Ficheiros em falta repostos, CI no GitHub Actions (a passar), tema BNP Paribas, memória do projeto | PR #1 (merged) |
 | 1.2 | Regra de atualização proativa da memória; desenho completo do RAG (`07-rag.md`) | PR #2 (merged) |
 | 1.3 | Decisões: documentação como código em Git; repositório público só com código genérico; edição pelo módulo Admin | PR #3 (merged) e #4 |
-| 1.4 | Arquitetura e prompts do Agentic RAG multi-regulatório (v2), a começar por EMIR | PR #5 |
+| 1.4 | Arquitetura e prompts do Agentic RAG multi-regulatório (v2), a começar por EMIR | PR #5 (merged) |
+| 1.5 | Regras de validação por campo: especificação e análise | PR #6 |
+| 2c | Página web de upload e revisão das regras por campo; conversor e API; CI com anotações de falhas | PR #7 |
 
 ## Próxima sessão
 
@@ -34,7 +36,8 @@ Começar por um **exemplo prático de matching EMIR** apresentado pelo Ordep (ca
 | 6 | Reports recorrentes como código | Inventário de reports |
 | 7 | Módulo Admin: edição de documentação com PRs no Git interno | Repositório de conhecimento interno; produto do Git interno (#15) |
 | 8 | Runtime de orquestração no NestJS (fase 1): contratos Zod, Director, Retriever, KPI e Tabelas com LLM simulado, validadores determinísticos, testes | Decisões #23 e #25; mart de matching (#20) |
-| 2c | Conversor de regras de validação por campo (Python): Excel → registo canónico → chunks RAG, com verificações; testado com dados fictícios, corrido no banco | Fotos da estrutura do Excel; questões #28–#31 |
+| 2d | Testar a página no banco com o Excel real e rever os problemas reportados | Merge do PR #7; questões #30 e #31; Excel com a coluna `Table.Item` formatada como texto |
+| 2e | Persistência dos uploads/revisões e publicação dos aprovados (OpenSearch + Git interno) | Questão #34 |
 | 8b | Traduzir para inglês os comentários de código existentes (hoje em português) e acrescentar verificação no CI | Regra de língua de 2026-10-13 |
 | 9 | Golden set de perguntas de matching com respostas validadas | KPIs certificados (#19) |
 
