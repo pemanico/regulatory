@@ -10,19 +10,17 @@
 | 1.2 | Regra de atualização proativa da memória; desenho completo do RAG (`07-rag.md`) | PR #2 (merged) |
 | 1.3 | Decisões: documentação como código em Git; repositório público só com código genérico; edição pelo módulo Admin | PR #3 (merged) e #4 |
 | 1.4 | Arquitetura e prompts do Agentic RAG multi-regulatório (v2), a começar por EMIR | PR #5 (merged) |
-| 1.5 | Regras de validação por campo: especificação e análise | PR #6 |
-| 2c | Página web de upload e revisão das regras por campo; conversor e API; CI com anotações de falhas | PR #7 |
+| 1.5 | Regras de validação por campo: especificação e análise | PR #6 (merged) |
+| 2c | Página web de upload e revisão das regras por campo; conversor e API; CI com anotações de falhas | PR #7 (merged) |
+| 2c.1 | POSC opcional; mapping ligado por `Table.Item`; prefixo de parte configurável (TP1/TP2); API lê o `.env`; guia `regdata-platform/docs/arranque-local.md` | PR #8 (merged) |
 
 ## Próxima sessão
 
-Começar por um **exemplo prático de matching EMIR** apresentado pelo Ordep (caso de operacionais e ficha do mart, anonimizados), para testar a **fase 1** de `08-agentic-rag-multi-regulatory.md` (Director, Retriever, KPI, Tabelas).
+**Pôr a aplicação a correr na máquina do banco** (passo 2d). O Ordep executa os comandos e reporta o output; o Claude guia e corrige o código aqui. Texto de arranque no Project: `claude/proximo-chat-arranque.md`. Guia: `regdata-platform/docs/arranque-local.md`.
 
-1. Ler `CLAUDE.md`, `docs/brain/` (sobretudo `08`, `03`, `04`) e `regdata-platform/prompts/`.
-2. Registar o caso em `casos/` e o mart em `marts/` a partir dos templates; atualizar o índice.
-3. Fazer no máximo 3 perguntas sobre o que faltar.
-4. Simular o pedido de ponta a ponta com o desenho: classificação do Director, plano, chamadas às tools (`metrics.query`), validações, tabela final. Identificar o que falha no desenho.
-5. Fechar com o Ordep as definições dos KPIs do caso (#19) e as propostas da v2 (#25).
-6. Decidir o passo seguinte: runtime de orquestração (passo 8) ou PoC da semantic layer sobre esse mart (passo 2).
+Critério de conclusão: `npm run dev` a correr no banco e teste de aceitação (§7 do guia) feito com o Excel real; problemas encontrados registados no guia (§8) e, os de conversão, em `09`.
+
+Depois: exemplo prático de matching EMIR para testar a fase 1 de `08-agentic-rag-multi-regulatory.md`.
 
 ## Próximo
 
