@@ -35,4 +35,5 @@
 | M / C / O / NA | Estado de um campo por action type: Mandatory, Conditional, Optional, Not Applicable |
 | ID_CAMPO | Chave de um campo nas regras de validação: `Table.Item` (exceção: 2.24 → `Table+Item`) |
 | Leg | Perna de um contrato (ex. as duas pernas de um swap). Não é o mesmo que lado/contraparte da transação |
+| Parte 1 / parte 2 (trade party) | Os dois lados de um trade na reconciliação; no mapping BNPP, campos com prefixo de parte guardam o valor reportado por cada lado |
 | Mapping DTCC ↔ BNPP | Correspondência entre cada campo do trade repository (DTCC) e o(s) campo(s) interno(s) do BNPP; campos com leg 1 e leg 2 têm dois campos BNPP |

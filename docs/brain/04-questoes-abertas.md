@@ -27,5 +27,7 @@
 | 27 | Com que atraso a cópia ClickHouse de um mart é atualizada a partir do Parquet (referência)? | Define quando a semantic layer pode usar o ClickHouse sem divergir | Ordep |
 | 28 | O Excel de regras por campo é o ficheiro público de validation rules da ESMA, ou uma versão interna com regras do banco? | Se for público, pode ser convertido fora do banco a partir da fonte oficial | Ordep |
 | 29 | Porque é que o campo 2.24 usa `Table+Item` e os outros `Table.Item`? | Exceção sem razão escrita perde-se na manutenção | Ordep |
-| 30 | Confirmar: blocos por leg gerados a partir do mapping DTCC ↔ BNPP (dois blocos só quando há dois campos BNPP), e `usado_no_controlo` por campo BNPP. Enviar a imagem do mapping (não chegou) | Mapping explicado em `09` §1.1; falta ver a estrutura | Ordep |
+| 30 | Os prefixos de parte no mapping BNPP são parte 1 / parte 2 (trade party), não legs: renomear os blocos para `REGRAS_PARTE_1` / `REGRAS_PARTE_2`? E o que é o terceiro campo em alguns mappings (ex. asset class)? | `LEG` colide com campos que são mesmo por leg em EMIR REFIT; ver `09` §1.2 e §4.1 | Ordep |
+| 32 | Foto das colunas de estado por action type (à direita da coluna G, ou na folha própria): cabeçalhos e 3–4 linhas | Falta para o conversor | Ordep |
+| 33 | Acrescentar a coluna `Table.Item` ao mapping DTCC ↔ BNPP? | Hoje liga às regras só pelo nome do campo | Ordep |
 | 31 | Aceitar as propostas de `09-regras-validacao-campos.md` §2–§5: conversão por código no banco; registo canónico + chunk gerado; join por Table+Item com verificação de Section/Field; vazio = erro; condições preservadas palavra a palavra; metadados de versão | Mudam a especificação | Ordep |

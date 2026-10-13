@@ -59,6 +59,42 @@ REGRAS_LEG_2:
 
 Consequência: a expansão por leg faz sentido **ao nível do mapping**. A regra do campo DTCC aplica-se a cada campo BNPP que lhe corresponde, e é aí que a leg 1 e a leg 2 se distinguem.
 
+## 1.2 Estrutura observada nas fotos (2026-10-13)
+
+Nomes de colunas BNPP **anonimizados** neste repositório (público). Os nomes reais ficam só no banco.
+
+**Folha de regras por campo** (ficheiro interno de reconciliation status matching EMIR REFIT):
+
+| Coluna | Conteúdo | Notas de parsing |
+| --- | --- | --- |
+| A `Table` | Número da tabela (1, 2…) | |
+| B `Item` | Número do item (ex. 11, 17, 151) | `ID_CAMPO` = Table.Item (ex. 2.11) |
+| C `Section` | Ex. "Section 2b - Contract information" | |
+| D `Field` | Nome do campo | |
+| E `Format` | Formato e valores permitidos, por vezes em várias linhas | Manter tal como está |
+| F `Conditions` | Condições numeradas "1. … 2. …", em várias linhas | Juntar linhas, manter numeração e texto |
+| G `Error codes` | Lista numerada "1. EMIR-VR-xxxx-xx 2. …" | Retirar a numeração → array |
+
+O texto das condições e os códigos `EMIR-VR-…` correspondem às validation rules publicadas pela ESMA (a confirmar, questão #28). As colunas de estado por action type não aparecem nas fotos.
+
+**Folha de mapping DTCC ↔ BNPP:**
+
+| Coluna | Conteúdo |
+| --- | --- |
+| `DTCC Report` | Nome do campo no relatório da DTCC (ex. "Asset class", "Settlement currency 1") |
+| `BNPP` | Um ou mais campos internos separados por vírgula, por vezes com vírgula final |
+
+Padrões encontrados (nomes fictícios):
+
+| Padrão | Exemplo fictício | Significado provável |
+| --- | --- | --- |
+| Um campo | `X_UTI` | Campo único, sem valor por parte |
+| Dois campos com prefixo de parte | `P1_ISIN, P2_ISIN` | Valor reportado pela **parte 1** e pela **parte 2** |
+| Três campos | `P1_ASSET_CLASS, P2_ASSET_CLASS, X_PRIMARY_ASSET_CLASS` | Duas partes + um campo adicional (derivado ou consolidado) |
+| Campos numerados do lado DTCC | "Settlement currency 1" → `P1_SETTLEMENT_CCY_1, P2_SETTLEMENT_CCY_1` | O "1"/"2" do campo DTCC é do próprio campo; o prefixo é a parte |
+
+**O mapping não tem `Table.Item`**: liga ao ficheiro de regras só pelo nome do campo DTCC.
+
 ## 2. Proposta: o Excel é convertido no banco, por código
 
 - O conversor é **código genérico** (Python, em inglês), desenvolvido no repositório público e testado com dados fictícios.
@@ -81,7 +117,9 @@ O chunk nunca é editado à mão: é sempre regenerado a partir do registo canó
 
 ### 4.1 Duplicar todas as regras para as duas legs introduz informação falsa
 
-> Revisto após §1.1: com o mapping DTCC ↔ BNPP, os blocos por leg ganham significado quando cada bloco aponta para o campo BNPP da respetiva leg. A proposta abaixo passa a ser: **blocos por leg gerados a partir do mapping**, um por campo BNPP mapeado; campos com um só campo BNPP têm um único bloco. Os argumentos seguintes mantêm-se para os campos sem legs.
+> **Revisto após §1.2:** os dois campos BNPP por campo DTCC correspondem à **parte 1 e à parte 2** do trade (prefixos de trade party), não às legs do contrato. A duplicação pedida pelo Ordep está certa no conteúdo (a regra aplica-se às duas partes da reconciliação), mas o **nome** `LEG` colide com os campos que são mesmo por leg em EMIR REFIT (ex. "Settlement currency 1/2", e campos de notional e taxa por leg). Proposta: blocos `REGRAS_PARTE_1` / `REGRAS_PARTE_2` (ou `TP1`/`TP2`), um por campo BNPP de cada parte; campos adicionais (ex. o terceiro campo de asset class) num bloco próprio.
+>
+> Texto anterior, mantido para histórico: com o mapping DTCC ↔ BNPP, os blocos por leg ganham significado quando cada bloco aponta para o campo BNPP da respetiva leg. A proposta abaixo passa a ser: **blocos por leg gerados a partir do mapping**, um por campo BNPP mapeado; campos com um só campo BNPP têm um único bloco. Os argumentos seguintes mantêm-se para os campos sem legs.
 
 
 - Muitos campos não são por leg (identificadores, contrapartes, datas de execução). Escrever `REGRAS_LEG_2` para eles afirma que existe uma leg 2 com regras, o que não é verdade. Um agente que recupere esse chunk vai repeti-lo.
@@ -99,6 +137,10 @@ Cada campo BNPP tem `usado_no_controlo: sim/não` por controlo, para o mapping e
 ### 4.2 A exceção do 2.24 precisa de razão escrita
 
 Uma regra de formato da chave com uma única exceção, sem motivo registado, perde-se na primeira manutenção. Se houver um conflito de chave (ex. dois itens que geram o mesmo `Table.Item`), a solução robusta é um formato de chave único para todos e, se preciso, um alias.
+
+### 4.3a O mapping liga-se às regras pelo nome do campo
+
+O mapping só tem o nome do campo DTCC; as regras têm `Table.Item`. Ligar por nome falha com qualquer diferença de texto (ex. "report tracking number" vs "Report tracking number"). Proposta: acrescentar uma vez a coluna `Table.Item` ao mapping, e usar o nome só como verificação. Até lá, o conversor liga por nome normalizado e **lista todos os campos que não ligaram**.
 
 ### 4.3 O join não deve depender de texto
 
@@ -126,7 +168,7 @@ Para citar e filtrar por vigência (`07-rag.md` §2), cada registo precisa tamb�
 - Nenhum `ID_CAMPO` duplicado.
 - Todas as referências cruzadas ("field 1.1") apontam para campos existentes.
 - Diferenças entre `Section`/`Field` dos dois lados do join reportadas.
-- Todos os campos DTCC presentes no mapping; campos com leg têm exatamente um campo BNPP para a leg 1 e um para a leg 2; nenhum campo BNPP mapeado para dois campos DTCC sem ser assinalado.
+- Todos os campos das regras ligados ao mapping (lista dos que não ligaram); campos com valor por parte têm exatamente um campo BNPP para a parte 1 e um para a parte 2; campos adicionais classificados; nenhum campo BNPP mapeado para dois campos DTCC sem ser assinalado; vírgulas finais e espaços no mapping tratados.
 - Relatório de conversão com contagens e erros; a conversão falha se houver erros.
 
 ## 6. Exemplo (fictício)
@@ -143,9 +185,11 @@ section: "Example section"
 field_name: "Example field"
 format: "ISO 4217 3-letter currency code"
 applies_to: { counterparties: both }
+dtcc_field_name: "Example field"
 bnpp_mapping:                      # fictitious internal field names
-  - { bnpp_field: "EX_FIELD_LEG1", leg: 1, used_in_controls: [example-control] }
-  - { bnpp_field: "EX_FIELD_LEG2", leg: 2, used_in_controls: [] }   # mapped, not used by this control
+  - { bnpp_field: "P1_EX_FIELD", role: party_1, used_in_controls: [example-control] }
+  - { bnpp_field: "P2_EX_FIELD", role: party_2, used_in_controls: [example-control] }
+  - { bnpp_field: "X_EX_FIELD",  role: other,   used_in_controls: [] }   # mapped, not used by this control
 condition: "(1) Populated when field 9.98 is populated. (2) Refer to field 1.1."
 error_codes: [EX-001, EX-002]
 status_by_action_type: { NEWT: M, MODI: M, VALU: NA, CORR: M, TERM: NA, EROR: NA, REVI: C, POSC: M }
@@ -160,8 +204,8 @@ CONTEXTO: Section: Example section
 NOME_CAMPO: Example field
 FORMATO: ISO 4217 3-letter currency code
 APLICA_A: ambas as contrapartes
-REGRAS_LEG_1:
-  Campo_BNPP: EX_FIELD_LEG1 (usado no controlo example-control)
+REGRAS_PARTE_1:
+  Campo_BNPP: P1_EX_FIELD (usado no controlo example-control)
   Condition: (1) Populated when field 9.98 is populated. (2) Refer to field 1.1.
   Error_Codes: [EX-001, EX-002]
   Status_por_Action_Type:
@@ -173,8 +217,8 @@ REGRAS_LEG_1:
     EROR: NA
     REVI: C
     POSC: M
-REGRAS_LEG_2:
-  Campo_BNPP: EX_FIELD_LEG2 (mapeado; não usado neste controlo)
+REGRAS_PARTE_2:
+  Campo_BNPP: P2_EX_FIELD (usado no controlo example-control)
   Condition: (1) Populated when field 9.98 is populated. (2) Refer to field 1.1.
   Error_Codes: [EX-001, EX-002]
   Status_por_Action_Type:
@@ -186,5 +230,6 @@ REGRAS_LEG_2:
     EROR: NA
     REVI: C
     POSC: M
+OUTROS_CAMPOS_BNPP: X_EX_FIELD (mapeado; não usado neste controlo)
 FONTE: example-validation-rules.xlsx v0.0-example (vigente desde 2026-01-01)
 ```
