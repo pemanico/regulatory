@@ -46,6 +46,10 @@
           "tsconfig": "tsconfig.json"
         }
       ]
-    }
+    },
+    "reporters": [
+      "default",
+      "github-actions"
+    ]
   }
 }
