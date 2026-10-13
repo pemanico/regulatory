@@ -49,4 +49,10 @@ describe('text helpers', () => {
     expect(result.unpaired).toEqual([]);
     expect(classifyBnppFields(['AB1_ONLY']).unpaired).toEqual(['AB1_ONLY']);
   });
+
+  it('only accepts the configured party prefix, case-insensitive', () => {
+    const result = classifyBnppFields(['ab1_X', 'AB2_X', 'CCY1_RATE', 'Z_TOTAL'], 'AB');
+    expect(result.fields.map((field) => field.role)).toEqual(['party_1', 'party_2', 'other', 'other']);
+    expect(result.unpaired).toEqual([]);
+  });
 });

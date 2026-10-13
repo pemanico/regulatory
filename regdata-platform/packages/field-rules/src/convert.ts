@@ -22,6 +22,8 @@ import {
 export const MAX_ROWS_PER_SHEET = 10_000;
 
 export interface ConvertOptions {
+  /** Prefix of party fields in the BNPP mapping (e.g. "AB" for AB1_/AB2_). Empty: any letters. */
+  partyPrefix?: string | null;
   documentVersion?: string | null;
   effectiveFrom?: string | null;
   /**
@@ -343,7 +345,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
             source: mappingRow.source,
           });
         }
-        const classified = classifyBnppFields(mappingRow.bnpp);
+        const classified = classifyBnppFields(mappingRow.bnpp, options.partyPrefix);
         bnppFields = classified.fields;
         if (classified.unpaired.length > 0) {
           issues.push({

@@ -135,6 +135,8 @@ O chunk nunca é editado à mão: é sempre regenerado a partir do registo canó
 
 ### 4.1 Duplicar todas as regras para as duas legs introduz informação falsa
 
+> **Decidido (2026-10-13):** o Ordep confirmou que, na coluna BNPP, os campos com valor por parte começam por `TP1` e `TP2`. Os blocos do chunk usam esses rótulos (`REGRAS_TP1` / `REGRAS_TP2`). Implementado como configuração local (`.env` da API): `FIELD_RULES_PARTY_PREFIX=TP` faz com que só `TP1_…`/`TP2_…` contem como campos de parte (sem prefixo configurado, aceita quaisquer letras seguidas de `1_`/`2_`), e `FIELD_RULES_BLOCK_LABELS=TP1,TP2` dá o nome aos blocos. Os restantes campos BNPP ficam como comuns.
+
 > **Revisto após §1.2:** os dois campos BNPP por campo DTCC correspondem à **parte 1 e à parte 2** do trade (prefixos de trade party), não às legs do contrato. A duplicação pedida pelo Ordep está certa no conteúdo (a regra aplica-se às duas partes da reconciliação), mas o **nome** `LEG` colide com os campos que são mesmo por leg em EMIR REFIT (ex. "Settlement currency 1/2", e campos de notional e taxa por leg). Proposta: blocos `REGRAS_PARTE_1` / `REGRAS_PARTE_2` (ou `TP1`/`TP2`), um por campo BNPP de cada parte; campos adicionais (ex. o terceiro campo de asset class) num bloco próprio.
 >
 > Texto anterior, mantido para histórico: com o mapping DTCC ↔ BNPP, os blocos por leg ganham significado quando cada bloco aponta para o campo BNPP da respetiva leg. A proposta abaixo passa a ser: **blocos por leg gerados a partir do mapping**, um por campo BNPP mapeado; campos com um só campo BNPP têm um único bloco. Os argumentos seguintes mantêm-se para os campos sem legs.

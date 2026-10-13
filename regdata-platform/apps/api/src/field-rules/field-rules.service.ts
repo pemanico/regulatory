@@ -37,6 +37,7 @@ interface StoredUpload {
 export class FieldRulesService {
   private readonly uploads = new Map<string, StoredUpload>();
   private readonly blockLabels = parseBlockLabels(process.env.FIELD_RULES_BLOCK_LABELS);
+  private readonly partyPrefix = parsePartyPrefix(process.env.FIELD_RULES_PARTY_PREFIX);
   private readonly fourEyes = (process.env.FIELD_RULES_FOUR_EYES ?? 'true').toLowerCase() !== 'false';
 
   async createUpload(files: UploadedSpreadsheet[] | undefined, body: unknown, user: AuthenticatedUser): Promise<FieldRulesUploadDetail> {
@@ -64,6 +65,7 @@ export class FieldRulesService {
     const result = convertFieldRules(sheets, {
       documentVersion: metadata.data.documentVersion ?? null,
       effectiveFrom: metadata.data.effectiveFrom ?? null,
+      partyPrefix: this.partyPrefix,
     });
 
     const items: FieldRuleItem[] = result.fields.map(({ record, issues }) => ({
@@ -224,4 +226,11 @@ function refreshCounts(detail: FieldRulesUploadDetail): void {
 function toSummary(detail: FieldRulesUploadDetail): FieldRulesUploadSummary {
   const { id, fileNames, uploadedBy, uploadedAt, blockLabels, counts } = detail;
   return { id, fileNames, uploadedBy, uploadedAt, blockLabels, counts };
+}
+
+function parsePartyPrefix(raw: string | undefined): string | null {
+  const prefix = raw?.trim() ?? '';
+  if (prefix === '') return null;
+  if (!/^[A-Za-z]+$/.test(prefix)) throw new Error(`FIELD_RULES_PARTY_PREFIX inválido: "${raw}". Só letras, sem o número da parte.`);
+  return prefix;
 }
