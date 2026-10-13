@@ -31,13 +31,13 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Lint
-        run: npm run lint
+        run: ../.github/scripts/run-and-annotate.sh Lint npm run lint
 
       - name: Test
-        run: npm test
+        run: ../.github/scripts/run-and-annotate.sh Test npm test
 
       - name: Typecheck
-        run: npm run typecheck
+        run: ../.github/scripts/run-and-annotate.sh Typecheck npm run typecheck
 
       - name: Build
-        run: npm run build
+        run: ../.github/scripts/run-and-annotate.sh Build npm run build
