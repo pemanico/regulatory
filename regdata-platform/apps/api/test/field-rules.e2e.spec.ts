@@ -40,7 +40,7 @@ describe('Field rules upload and review', () => {
     await app.close();
   });
 
-  async function upload(buffer: Buffer, user = 'uploader') {
+  function upload(buffer: Buffer, user = 'uploader') {
     return request(app.getHttpServer())
       .post('/api/field-rules/uploads')
       .set('x-dev-user', user)
