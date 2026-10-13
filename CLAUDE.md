@@ -93,6 +93,8 @@ Os logs do GitHub Actions também não são descarregáveis a partir do ambiente
 
 Este repositório (`pemanico/regulatory`) é público no GitHub. Serve para desenvolver o código da plataforma fora do banco; o Ordep faz download para correr localmente no banco, onde só tem acesso ao Git interno.
 
+No banco o Ordep **não desenvolve**: só descarrega, instala, corre e testa. Todo o código é escrito aqui. Ele diz o que fez e o output que viu; as instruções para o banco são comandos exatos a executar, sem edição de código do lado dele.
+
 Regra: **nada interno do banco entra aqui**, nem no histórico do Git (apagar depois não resolve).
 
 - Proibido: documentação interna (specs, regras, mapeamentos), nomes reais de marts, colunas, sistemas, entidades, DAGs ou tabelas; definições reais de KPIs; casos práticos com detalhe real; volumes; dados de clientes, contrapartes, LEIs; nomes de colegas.
