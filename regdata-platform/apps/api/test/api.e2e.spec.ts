@@ -28,18 +28,18 @@ describe('API', () => {
     await app.close();
   });
 
-  it('GET /api/health é público', async () => {
+  it('GET /api/health is public', async () => {
     await request(app.getHttpServer())
       .get('/api/health')
       .set('x-dev-anonymous', 'true')
       .expect(200, { status: 'ok' });
   });
 
-  it('rejeita pedidos sem autenticação', async () => {
+  it('rejects unauthenticated requests', async () => {
     await request(app.getHttpServer()).get('/api/catalog/marts').set('x-dev-anonymous', 'true').expect(401);
   });
 
-  it('GET /api/catalog/marts filtra pelas jurisdições do utilizador', async () => {
+  it('GET /api/catalog/marts filters by the user jurisdictions', async () => {
     const all = await request(app.getHttpServer()).get('/api/catalog/marts').expect(200);
     expect(all.body.map((m: { id: string }) => m.id)).toEqual(['example_emir_validation', 'example_cftc_recon']);
 
@@ -50,13 +50,13 @@ describe('API', () => {
     expect(cftcOnly.body.map((m: { id: string }) => m.id)).toEqual(['example_cftc_recon']);
   });
 
-  it('POST /api/views/validate aceita uma spec válida', async () => {
+  it('POST /api/views/validate accepts a valid spec', async () => {
     const res = await request(app.getHttpServer()).post('/api/views/validate').send(validSpec).expect(200);
     expect(res.body.valid).toBe(true);
     expect(res.body.spec.filters).toEqual([]);
   });
 
-  it('POST /api/views/validate devolve erros estruturados', async () => {
+  it('POST /api/views/validate returns structured errors', async () => {
     const res = await request(app.getHttpServer())
       .post('/api/views/validate')
       .send({ ...validSpec, metrics: ['unknown_metric'] })
@@ -67,7 +67,7 @@ describe('API', () => {
     ]);
   });
 
-  it('um utilizador sem acesso a EMIR não vê o mart EMIR', async () => {
+  it('a user without EMIR access does not see the EMIR mart', async () => {
     const res = await request(app.getHttpServer())
       .post('/api/views/validate')
       .set('x-dev-jurisdictions', 'CFTC')
@@ -79,11 +79,11 @@ describe('API', () => {
 });
 
 describe('createAuthProvider', () => {
-  it('recusa o mock em produção', () => {
+  it('refuses the mock in production', () => {
     expect(() => createAuthProvider({ AUTH_MODE: 'mock', NODE_ENV: 'production' })).toThrow();
   });
 
-  it('SSO ainda não implementado falha de forma explícita', () => {
-    expect(() => createAuthProvider({ AUTH_MODE: 'sso' })).toThrow(/ainda não está implementado/);
+  it('SSO not implemented yet fails explicitly', () => {
+    expect(() => createAuthProvider({ AUTH_MODE: 'sso' })).toThrow(/not implemented yet/);
   });
 });

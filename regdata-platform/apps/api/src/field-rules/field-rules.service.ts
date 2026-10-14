@@ -42,8 +42,8 @@ export class FieldRulesService {
 
   async createUpload(files: UploadedSpreadsheet[] | undefined, body: unknown, user: AuthenticatedUser): Promise<FieldRulesUploadDetail> {
     this.assertAccess(user);
-    if (!files || files.length === 0) throw new BadRequestException('Nenhum ficheiro recebido (campo "files").');
-    if (files.length > MAX_FILES) throw new BadRequestException(`Máximo de ${MAX_FILES} ficheiros por upload.`);
+    if (!files || files.length === 0) throw new BadRequestException('No file received (field "files").');
+    if (files.length > MAX_FILES) throw new BadRequestException(`At most ${MAX_FILES} files per upload.`);
 
     const metadata = UploadMetadataSchema.safeParse(body ?? {});
     if (!metadata.success) {
@@ -53,12 +53,12 @@ export class FieldRulesService {
     const sheets: SheetData[] = [];
     for (const file of files) {
       if (!file.originalname.toLowerCase().endsWith('.xlsx')) {
-        throw new BadRequestException(`Formato não suportado: ${file.originalname}. Só .xlsx.`);
+        throw new BadRequestException(`Unsupported format: ${file.originalname}. Only .xlsx is accepted.`);
       }
       try {
         sheets.push(...(await readWorkbook(file.originalname, file.buffer)));
       } catch {
-        throw new BadRequestException(`Não foi possível ler ${file.originalname}. Confirma que é um .xlsx válido.`);
+        throw new BadRequestException(`Could not read ${file.originalname}. Check that it is a valid .xlsx file.`);
       }
     }
 
@@ -113,11 +113,11 @@ export class FieldRulesService {
     }
 
     const item = stored.detail.items.find((candidate) => candidate.record.fieldId === fieldId);
-    if (!item) throw new NotFoundException(`Campo ${fieldId} não encontrado neste upload.`);
+    if (!item) throw new NotFoundException(`Field ${fieldId} not found in this upload.`);
 
     this.assertNotUploader(stored.detail, user);
     if (parsed.data.decision === 'approved' && hasErrors(item)) {
-      throw new ConflictException(`O campo ${fieldId} tem erros de conversão e não pode ser aprovado. Corrige o Excel e volta a carregar.`);
+      throw new ConflictException(`Field ${fieldId} has conversion errors and cannot be approved. Fix the Excel file and upload it again.`);
     }
 
     item.review = {
@@ -139,7 +139,7 @@ export class FieldRulesService {
     const now = new Date().toISOString();
     for (const item of stored.detail.items) {
       if (item.review.status === 'pending' && item.issues.length === 0) {
-        item.review = { status: 'approved', reviewer: user.id, comment: 'Aprovação em bloco (sem erros nem avisos)', reviewedAt: now };
+        item.review = { status: 'approved', reviewer: user.id, comment: 'Bulk approval (no errors or warnings)', reviewedAt: now };
       }
     }
     refreshCounts(stored.detail);
@@ -165,24 +165,24 @@ export class FieldRulesService {
       );
       return { fileName: `field-rules-${stamp}.json`, contentType: 'application/json', content, fields: approved.length };
     }
-    throw new BadRequestException('Formato de exportação inválido: usar json ou markdown.');
+    throw new BadRequestException('Invalid export format: use json or markdown.');
   }
 
   private find(id: string): StoredUpload {
     const stored = this.uploads.get(id);
-    if (!stored) throw new NotFoundException('Upload não encontrado.');
+    if (!stored) throw new NotFoundException('Upload not found.');
     return stored;
   }
 
   private assertAccess(user: AuthenticatedUser): void {
     if (!user.jurisdictions.includes('EMIR')) {
-      throw new ForbiddenException('Sem acesso a regras EMIR.');
+      throw new ForbiddenException('No access to EMIR rules.');
     }
   }
 
   private assertNotUploader(detail: FieldRulesUploadDetail, user: AuthenticatedUser): void {
     if (this.fourEyes && detail.uploadedBy === user.id) {
-      throw new ForbiddenException('Quem carregou o ficheiro não pode rever os campos (4-eyes).');
+      throw new ForbiddenException('The user who uploaded the file cannot review its fields (four-eyes).');
     }
   }
 
@@ -199,7 +199,7 @@ function parseBlockLabels(raw: string | undefined): [string, string] {
   if (!raw) return DEFAULT_BLOCK_LABELS;
   const labels = raw.split(',').map((label) => label.trim().toUpperCase());
   const valid = labels.length === 2 && labels.every((label) => /^[A-Z0-9_]{1,20}$/.test(label));
-  if (!valid) throw new Error(`FIELD_RULES_BLOCK_LABELS inválido: "${raw}". Exemplo: LEG_1,LEG_2`);
+  if (!valid) throw new Error(`Invalid FIELD_RULES_BLOCK_LABELS: "${raw}". Example: LEG_1,LEG_2`);
   return [labels[0] as string, labels[1] as string];
 }
 
@@ -231,6 +231,6 @@ function toSummary(detail: FieldRulesUploadDetail): FieldRulesUploadSummary {
 function parsePartyPrefix(raw: string | undefined): string | null {
   const prefix = raw?.trim() ?? '';
   if (prefix === '') return null;
-  if (!/^[A-Za-z]+$/.test(prefix)) throw new Error(`FIELD_RULES_PARTY_PREFIX inválido: "${raw}". Só letras, sem o número da parte.`);
+  if (!/^[A-Za-z]+$/.test(prefix)) throw new Error(`Invalid FIELD_RULES_PARTY_PREFIX: "${raw}". Letters only, without the party number.`);
   return prefix;
 }

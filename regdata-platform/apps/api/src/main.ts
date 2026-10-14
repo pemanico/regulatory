@@ -16,11 +16,11 @@ function loadLocalEnv(): void {
   if (!existsSync(envPath)) return;
   const loader = (process as ProcessWithEnvFile).loadEnvFile;
   if (!loader) {
-    Logger.warn(`Ficheiro ${envPath} ignorado: requer Node.js >= 20.12.`, 'Bootstrap');
+    Logger.warn(`File ${envPath} ignored: requires Node.js >= 20.12.`, 'Bootstrap');
     return;
   }
   loader(envPath);
-  Logger.log(`Configuração lida de ${envPath}`, 'Bootstrap');
+  Logger.log(`Configuration loaded from ${envPath}`, 'Bootstrap');
 }
 
 async function bootstrap(): Promise<void> {
@@ -31,7 +31,7 @@ async function bootstrap(): Promise<void> {
 
   const port = Number(process.env.PORT ?? 3000);
   await app.listen(port);
-  Logger.log(`API a correr em http://localhost:${port}/api`, 'Bootstrap');
+  Logger.log(`API running at http://localhost:${port}/api`, 'Bootstrap');
 }
 
 void bootstrap();

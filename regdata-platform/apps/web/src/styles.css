@@ -1,12 +1,12 @@
 /*
- * Paleta BNP Paribas.
- * PROVISÓRIO: --brand-green vem de fontes públicas (#009464); outras fontes indicam #008755.
- * Confirmar com o guia de marca / design system interno e trocar só aqui.
+ * BNP Paribas palette.
+ * PROVISIONAL: --brand-green comes from public sources (#009464); other sources give #008755.
+ * Confirm with the internal brand guide / design system and change it only here.
  *
- * Regra de contraste: o verde de marca (#009464) com texto branco tem contraste ~3,9:1,
- * abaixo do mínimo WCAG AA (4,5:1) para texto normal. Por isso:
- *   --brand-green       → barras, bordas, foco, elementos sem texto
- *   --brand-green-dark  → fundos com texto branco (botões) e texto verde
+ * Contrast rule: the brand green (#009464) with white text has ~3.9:1 contrast,
+ * below the WCAG AA minimum (4.5:1) for normal text. Therefore:
+ *   --brand-green       → bars, borders, focus, elements without text
+ *   --brand-green-dark  → backgrounds with white text (buttons) and green text
  */
 :root {
   --brand-green: #009464;

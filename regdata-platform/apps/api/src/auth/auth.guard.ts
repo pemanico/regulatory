@@ -4,7 +4,7 @@ import { AUTH_PROVIDER, type AuthProvider } from './auth.types';
 import type { RequestWithUser } from './current-user.decorator';
 import { IS_PUBLIC_KEY } from './public.decorator';
 
-/** Guard global: todos os endpoints exigem autenticação, exceto os marcados com @Public(). */
+/** Global guard: every endpoint requires authentication, except those marked with @Public(). */
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(

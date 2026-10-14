@@ -2,9 +2,9 @@ import { z } from 'zod';
 import { IdentifierSchema, JurisdictionSchema } from './common';
 
 /**
- * Catálogo de data marts (secção 17 do Architecture Design).
- * Cada mart responde a uma necessidade de negócio, está ao nível da linha,
- * com as regras já aplicadas, particionado por business date.
+ * Data mart catalog (section 17 of the Architecture Design).
+ * Each mart answers one business need, is row level with the business
+ * rules already applied, and is partitioned by business date.
  */
 
 export const MetricStatusSchema = z.enum(['draft', 'certified', 'deprecated']);
@@ -25,7 +25,7 @@ export const MetricDefSchema = z.object({
   label: z.string().min(1),
   description: z.string().min(1),
   status: MetricStatusSchema,
-  /** Métricas não aditivas (taxas, percentagens) não podem ser somadas entre linhas. */
+  /** Non-additive metrics (rates, percentages) cannot be summed across rows. */
   additive: z.boolean(),
   version: z.string().min(1),
 });
@@ -41,7 +41,7 @@ export const MartDefSchema = z.object({
   owner: z.string().min(1),
   dimensions: z.array(DimensionDefSchema).min(1),
   metrics: z.array(MetricDefSchema).min(1),
-  /** Período máximo por vista, para proteger os motores de consulta. */
+  /** Maximum period per view, to protect the query engines. */
   maxPeriodDays: z.number().int().positive(),
 });
 export type MartDefinition = z.infer<typeof MartDefSchema>;

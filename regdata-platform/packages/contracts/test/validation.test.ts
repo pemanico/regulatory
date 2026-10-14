@@ -1,27 +1,27 @@
 import { describe, expect, it } from 'vitest';
 import { validateViewSpec, type MartDefinition, type ViewSpecInput } from '../src';
 
-// Catálogo fictício só para testes.
+// Fictitious catalog, for tests only.
 const catalog: MartDefinition[] = [
   {
     id: 'test_emir_mart',
     jurisdiction: 'EMIR',
-    label: 'Mart de teste EMIR',
-    businessNeed: 'Teste',
+    label: 'EMIR test mart',
+    businessNeed: 'Test',
     grain: 'row',
     partitionKey: 'business_date',
     owner: 'tests',
     maxPeriodDays: 400,
     dimensions: [
       { id: 'business_date', label: 'Business date', type: 'date' },
-      { id: 'source_system', label: 'Sistema de origem', type: 'string' },
-      { id: 'error_category', label: 'Categoria de erro', type: 'string' },
-      { id: 'notional_bucket', label: 'Bucket de notional', type: 'number' },
+      { id: 'source_system', label: 'Source system', type: 'string' },
+      { id: 'error_category', label: 'Error category', type: 'string' },
+      { id: 'notional_bucket', label: 'Notional bucket', type: 'number' },
     ],
     metrics: [
-      { id: 'error_count', label: 'Erros', description: 'x', status: 'certified', additive: true, version: '1.0' },
-      { id: 'error_rate', label: 'Taxa de erro', description: 'x', status: 'draft', additive: false, version: '0.1' },
-      { id: 'old_metric', label: 'Antiga', description: 'x', status: 'deprecated', additive: true, version: '1.0' },
+      { id: 'error_count', label: 'Errors', description: 'x', status: 'certified', additive: true, version: '1.0' },
+      { id: 'error_rate', label: 'Error rate', description: 'x', status: 'draft', additive: false, version: '0.1' },
+      { id: 'old_metric', label: 'Old', description: 'x', status: 'deprecated', additive: true, version: '1.0' },
     ],
   },
 ];
@@ -39,7 +39,7 @@ const baseSpec: ViewSpecInput = {
 const codes = (result: ReturnType<typeof validateViewSpec>) => (result.valid ? [] : result.errors.map((e) => e.code));
 
 describe('validateViewSpec', () => {
-  it('aceita uma spec válida e aplica defaults', () => {
+  it('accepts a valid spec and applies defaults', () => {
     const result = validateViewSpec(baseSpec, catalog);
     expect(result.valid).toBe(true);
     if (result.valid) {
@@ -48,12 +48,12 @@ describe('validateViewSpec', () => {
     }
   });
 
-  it('rejeita campos desconhecidos (spec strict)', () => {
+  it('rejects unknown fields (strict spec)', () => {
     const result = validateViewSpec({ ...baseSpec, sql: 'select 1' }, catalog);
     expect(codes(result)).toContain('SCHEMA');
   });
 
-  it('rejeita lista de métricas vazia e datas inexistentes', () => {
+  it('rejects an empty metric list and non-existent dates', () => {
     const result = validateViewSpec({ ...baseSpec, metrics: [], period: { from: '2026-02-30', to: '2026-03-01' } }, catalog);
     expect(result.valid).toBe(false);
     if (!result.valid) {
@@ -63,39 +63,39 @@ describe('validateViewSpec', () => {
     }
   });
 
-  it('rejeita período invertido', () => {
+  it('rejects an inverted period', () => {
     const result = validateViewSpec({ ...baseSpec, period: { from: '2026-09-30', to: '2026-07-01' } }, catalog);
     expect(result.valid).toBe(false);
     if (!result.valid) expect(result.errors[0]?.path).toBe('period.to');
   });
 
-  it('rejeita a mesma dimensão em linhas e colunas', () => {
+  it('rejects the same dimension in rows and columns', () => {
     const result = validateViewSpec({ ...baseSpec, columns: ['error_category'] }, catalog);
     expect(codes(result)).toEqual(['SCHEMA']);
   });
 
-  it('rejeita mart desconhecido ou não visível', () => {
+  it('rejects an unknown or hidden mart', () => {
     expect(codes(validateViewSpec({ ...baseSpec, martId: 'other_mart' }, catalog))).toEqual(['UNKNOWN_MART']);
     expect(codes(validateViewSpec(baseSpec, []))).toEqual(['UNKNOWN_MART']);
   });
 
-  it('rejeita jurisdição diferente da do mart', () => {
+  it('rejects a jurisdiction different from the mart', () => {
     expect(codes(validateViewSpec({ ...baseSpec, jurisdiction: 'CFTC' }, catalog))).toEqual(['JURISDICTION_MISMATCH']);
   });
 
-  it('rejeita métricas e dimensões inexistentes', () => {
+  it('rejects non-existent metrics and dimensions', () => {
     const result = validateViewSpec({ ...baseSpec, metrics: ['nope'], rows: ['nope_dim'] }, catalog);
     expect(codes(result)).toEqual(['UNKNOWN_METRIC', 'UNKNOWN_DIMENSION']);
   });
 
-  it('rejeita métricas descontinuadas e avisa sobre métricas não certificadas', () => {
+  it('rejects deprecated metrics and warns about uncertified metrics', () => {
     expect(codes(validateViewSpec({ ...baseSpec, metrics: ['old_metric'] }, catalog))).toEqual(['METRIC_DEPRECATED']);
     const draft = validateViewSpec({ ...baseSpec, metrics: ['error_rate'] }, catalog);
     expect(draft.valid).toBe(true);
     expect(draft.warnings.map((w) => w.code)).toEqual(['METRIC_NOT_CERTIFIED']);
   });
 
-  it('valida aridade e tipo dos filtros', () => {
+  it('validates filter arity and value types', () => {
     expect(
       codes(validateViewSpec({ ...baseSpec, filters: [{ dimension: 'source_system', operator: 'between', values: ['A'] }] }, catalog)),
     ).toEqual(['SCHEMA']);
@@ -107,7 +107,7 @@ describe('validateViewSpec', () => {
     ).toBe(true);
   });
 
-  it('rejeita períodos acima do máximo do mart', () => {
+  it('rejects periods above the mart maximum', () => {
     const result = validateViewSpec({ ...baseSpec, period: { from: '2025-01-01', to: '2026-09-30' } }, catalog);
     expect(codes(result)).toEqual(['PERIOD_TOO_LONG']);
   });

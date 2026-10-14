@@ -107,7 +107,7 @@ function sourceRef(located: LocatedSheet, rowIndex: number): SourceRef {
 }
 
 function where(source: SourceRef): string {
-  return `${source.fileName} › ${source.sheetName}, linha ${source.row}`;
+  return `${source.fileName} › ${source.sheetName}, row ${source.row}`;
 }
 
 function dataRows(located: LocatedSheet, uploadIssues: ConversionIssue[]): number[] {
@@ -117,7 +117,7 @@ function dataRows(located: LocatedSheet, uploadIssues: ConversionIssue[]): numbe
     uploadIssues.push({
       severity: 'error',
       code: 'TOO_MANY_ROWS',
-      message: `A folha ${located.sheet.sheetName} tem ${rows.length} linhas; o máximo é ${MAX_ROWS_PER_SHEET}. Só as primeiras foram lidas.`,
+      message: `Sheet ${located.sheet.sheetName} has ${rows.length} rows; the maximum is ${MAX_ROWS_PER_SHEET}. Only the first rows were read.`,
     });
   }
   const last = Math.min(rows.length, MAX_ROWS_PER_SHEET);
@@ -133,9 +133,9 @@ function pickOne(located: LocatedSheet[], kind: SheetKind, label: string, upload
     uploadIssues.push({
       severity: 'error',
       code: 'MULTIPLE_SHEETS',
-      message: `Encontradas ${matches.length} folhas de ${label}: ${matches
+      message: `Found ${matches.length} ${label} sheets: ${matches
         .map((entry) => `${entry.sheet.fileName} › ${entry.sheet.sheetName}`)
-        .join('; ')}. Foi usada a primeira.`,
+        .join('; ')}. The first one was used.`,
     });
   }
   return matches[0];
@@ -150,15 +150,15 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
   const uploadIssues: ConversionIssue[] = [];
   const located = locateSheets(sheets);
 
-  const rulesSheet = pickOne(located, 'rules', 'regras', uploadIssues);
-  const actionSheet = pickOne(located, 'actionTypes', 'estado por action type', uploadIssues);
+  const rulesSheet = pickOne(located, 'rules', 'rules', uploadIssues);
+  const actionSheet = pickOne(located, 'actionTypes', 'action type status', uploadIssues);
   const mappingSheet = pickOne(located, 'mapping', 'mapping DTCC ↔ BNPP', uploadIssues);
 
   if (!rulesSheet) {
     uploadIssues.push({
       severity: 'error',
       code: 'NO_RULES_SHEET',
-      message: 'Nenhuma folha de regras encontrada (cabeçalhos esperados: Table, Item, Section, Field, Format, Conditions, Error codes).',
+      message: 'No rules sheet found (expected headers: Table, Item, Section, Field, Format, Conditions, Error codes).',
     });
     return { fields: [], uploadIssues };
   }
@@ -166,14 +166,14 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
     uploadIssues.push({
       severity: 'error',
       code: 'NO_ACTION_TYPES_SHEET',
-      message: 'Nenhuma folha de estado por action type encontrada (cabeçalhos esperados: Table, Item, Section, Field e NEWT … POSC).',
+      message: 'No action type status sheet found (expected headers: Table, Item, Section, Field and NEWT … POSC).',
     });
   }
   if (!mappingSheet) {
     uploadIssues.push({
       severity: 'warning',
       code: 'NO_MAPPING_SHEET',
-      message: 'Nenhuma folha de mapping DTCC ↔ BNPP encontrada (cabeçalhos esperados: DTCC Report, BNPP). Os campos ficam sem campos BNPP.',
+      message: 'No DTCC ↔ BNPP mapping sheet found (expected headers: DTCC Report, BNPP). Fields will have no BNPP fields.',
     });
   }
 
@@ -185,7 +185,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
     uploadIssues.push({
       severity: 'error',
       code: 'MISSING_ACTION_TYPE_COLUMN',
-      message: `Colunas de action type em falta em ${actionSheet.sheet.sheetName}: ${missingActionTypeColumns.join(', ')}.`,
+      message: `Action type columns missing in ${actionSheet.sheet.sheetName}: ${missingActionTypeColumns.join(', ')}.`,
     });
   }
 
@@ -207,7 +207,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
       uploadIssues.push({
         severity: 'error',
         code: table ? 'MISSING_ITEM' : 'MISSING_TABLE',
-        message: `Regra sem ${table ? 'Item' : 'Table'} ("${fieldName || 'sem nome'}") em ${where(source)}. Campo ignorado.`,
+        message: `Rule without ${table ? 'Item' : 'Table'} ("${fieldName || 'no name'}") at ${where(source)}. Field skipped.`,
         source,
       });
       continue;
@@ -219,7 +219,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
       existing.issues.push({
         severity: 'error',
         code: 'DUPLICATE_FIELD_ID',
-        message: `O campo ${fieldId} aparece mais de uma vez na folha de regras (também em ${where(source)}).`,
+        message: `Field ${fieldId} appears more than once in the rules sheet (also at ${where(source)}).`,
         fieldId,
         source,
       });
@@ -235,7 +235,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
       issues.push({
         severity: 'warning',
         code: 'UNUSUAL_ERROR_CODE',
-        message: `Códigos de erro com formato inesperado: ${unusual.join(', ')}.`,
+        message: `Error codes with an unexpected format: ${unusual.join(', ')}.`,
         fieldId,
         source,
       });
@@ -250,7 +250,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
         issues.push({
           severity: 'error',
           code: 'ACTION_TYPES_NOT_FOUND',
-          message: `Sem linha para ${fieldId} na folha de estado por action type.`,
+          message: `No row for ${fieldId} in the action type status sheet.`,
           fieldId,
         });
       }
@@ -260,7 +260,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
         issues.push({
           severity: 'warning',
           code: 'SECTION_MISMATCH',
-          message: `Section diferente entre as folhas: "${section}" (regras) vs "${actionRow.section}" (action types).`,
+          message: `Section differs between sheets: "${section}" (rules) vs "${actionRow.section}" (action types).`,
           fieldId,
           source: actionRow.source,
         });
@@ -269,7 +269,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
         issues.push({
           severity: 'warning',
           code: 'FIELD_NAME_MISMATCH',
-          message: `Nome do campo diferente entre as folhas: "${fieldName}" (regras) vs "${actionRow.fieldName}" (action types).`,
+          message: `Field name differs between sheets: "${fieldName}" (rules) vs "${actionRow.fieldName}" (action types).`,
           fieldId,
           source: actionRow.source,
         });
@@ -286,12 +286,12 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
       }
       for (const bucket of ['required', 'optional'] as const) {
         const severity = bucket === 'required' ? 'error' : 'warning';
-        const suffix = bucket === 'optional' ? ' (action type opcional, ainda não usado)' : '';
+        const suffix = bucket === 'optional' ? ' (optional action type, not used yet)' : '';
         if (problems.empty[bucket].length > 0) {
           issues.push({
             severity,
             code: 'EMPTY_STATUS',
-            message: `Estado vazio em ${problems.empty[bucket].join(', ')}. Uma célula vazia não é tratada como NA.${suffix}`,
+            message: `Empty status in ${problems.empty[bucket].join(', ')}. An empty cell is not treated as NA.${suffix}`,
             fieldId,
             source: actionRow.source,
           });
@@ -300,7 +300,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
           issues.push({
             severity,
             code: 'INVALID_STATUS',
-            message: `Estados fora de M/C/O/-: ${problems.invalid[bucket].join(', ')}.${suffix}`,
+            message: `Statuses outside M/C/O/-: ${problems.invalid[bucket].join(', ')}.${suffix}`,
             fieldId,
             source: actionRow.source,
           });
@@ -312,14 +312,14 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
       issues.push({
         severity: 'error',
         code: 'STATUS_MISSING',
-        message: `Sem estado para ${missingActionTypeColumns.join(', ')} (coluna em falta).`,
+        message: `No status for ${missingActionTypeColumns.join(', ')} (column missing).`,
         fieldId,
       });
     } else if (!actionSheet) {
       issues.push({
         severity: 'error',
         code: 'STATUS_MISSING',
-        message: 'Sem estado por action type (folha em falta).',
+        message: 'No status by action type (sheet missing).',
         fieldId,
       });
     }
@@ -331,7 +331,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
         issues.push({
           severity: 'warning',
           code: 'NO_BNPP_MAPPING',
-          message: `O campo "${fieldName}" não tem correspondência no mapping DTCC ↔ BNPP (ligação pelo nome do campo).`,
+          message: `Field "${fieldName}" has no match in the DTCC ↔ BNPP mapping (linked by field name).`,
           fieldId,
         });
       } else {
@@ -340,7 +340,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
           issues.push({
             severity: 'warning',
             code: 'EMPTY_BNPP_MAPPING',
-            message: `O mapping de "${fieldName}" não tem campos BNPP.`,
+            message: `The mapping for "${fieldName}" has no BNPP fields.`,
             fieldId,
             source: mappingRow.source,
           });
@@ -351,7 +351,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
           issues.push({
             severity: 'warning',
             code: 'PARTY_FIELD_UNPAIRED',
-            message: `Campos de parte sem o par da outra parte: ${classified.unpaired.join(', ')}.`,
+            message: `Party fields without a counterpart for the other party: ${classified.unpaired.join(', ')}.`,
             fieldId,
             source: mappingRow.source,
           });
@@ -393,7 +393,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
       issues.push({
         severity: 'warning',
         code: 'REFERENCE_OUTSIDE_FILE',
-        message: `As condições referem campos que não estão neste ficheiro: ${outside.join(', ')}.`,
+        message: `The conditions refer to fields that are not in this file: ${outside.join(', ')}.`,
         fieldId: record.fieldId,
       });
     }
@@ -404,7 +404,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
       uploadIssues.push({
         severity: 'warning',
         code: 'ACTION_TYPES_WITHOUT_RULE',
-        message: `A folha de action types tem ${fieldId} ("${actionRow.fieldName}"), que não existe na folha de regras.`,
+        message: `The action types sheet has ${fieldId} ("${actionRow.fieldName}"), which does not exist in the rules sheet.`,
         source: actionRow.source,
       });
     }
@@ -415,7 +415,7 @@ export function convertFieldRules(sheets: SheetData[], options: ConvertOptions =
       uploadIssues.push({
         severity: 'warning',
         code: 'UNUSED_MAPPING',
-        message: `O campo DTCC "${row.dtccName}"${row.fieldId ? ` (${row.fieldId})` : ''} do mapping não corresponde a nenhum campo da folha de regras.`,
+        message: `DTCC field "${row.dtccName}"${row.fieldId ? ` (${row.fieldId})` : ''} in the mapping does not match any field in the rules sheet.`,
         source: row.source,
       });
     }
@@ -439,7 +439,7 @@ function readActionTypes(located: LocatedSheet, uploadIssues: ConversionIssue[])
       uploadIssues.push({
         severity: 'error',
         code: table ? 'MISSING_ITEM' : 'MISSING_TABLE',
-        message: `Linha de action types sem ${table ? 'Item' : 'Table'} ("${fieldName || 'sem nome'}"${item ? `, item ${item}` : ''}) em ${where(source)}. O campo correspondente fica sem estados.`,
+        message: `Action types row without ${table ? 'Item' : 'Table'} ("${fieldName || 'no name'}"${item ? `, item ${item}` : ''}) at ${where(source)}. The matching field will have no statuses.`,
         source,
       });
       continue;
@@ -450,7 +450,7 @@ function readActionTypes(located: LocatedSheet, uploadIssues: ConversionIssue[])
       uploadIssues.push({
         severity: 'error',
         code: 'DUPLICATE_FIELD_ID',
-        message: `O campo ${fieldId} aparece mais de uma vez na folha de action types (${where(source)}). Foi usada a primeira linha.`,
+        message: `Field ${fieldId} appears more than once in the action types sheet (${where(source)}). The first row was used.`,
         source,
       });
       continue;
@@ -483,7 +483,7 @@ function findMappingRow(mapping: MappingIndex, fieldId: string, fieldName: strin
         issues.push({
           severity: 'warning',
           code: 'MAPPING_NAME_MISMATCH',
-          message: `No mapping, ${fieldId} está ligado a "${byId.dtccName}", mas o campo chama-se "${fieldName}"; foi usada a linha com o mesmo nome (Table.Item "${byName.fieldId ?? 'vazio'}"). Confirmar o Table.Item: um valor guardado como número perde zeros (2.10 → 2.1).`,
+          message: `In the mapping, ${fieldId} is linked to "${byId.dtccName}", but the field is named "${fieldName}"; the row with the same name was used (Table.Item "${byName.fieldId ?? 'empty'}"). Check the Table.Item: a value stored as a number loses zeros (2.10 → 2.1).`,
           fieldId,
           source: byName.source,
         });
@@ -492,7 +492,7 @@ function findMappingRow(mapping: MappingIndex, fieldId: string, fieldName: strin
       issues.push({
         severity: 'warning',
         code: 'MAPPING_NAME_MISMATCH',
-        message: `No mapping, ${fieldId} está ligado a "${byId.dtccName}", mas o campo chama-se "${fieldName}". Confirmar o Table.Item e o nome.`,
+        message: `In the mapping, ${fieldId} is linked to "${byId.dtccName}", but the field is named "${fieldName}". Check the Table.Item and the name.`,
         fieldId,
         source: byId.source,
       });
@@ -504,7 +504,7 @@ function findMappingRow(mapping: MappingIndex, fieldId: string, fieldName: strin
     issues.push({
       severity: 'warning',
       code: 'MAPPING_ID_MISMATCH',
-      message: `Ligado ao mapping pelo nome: o Table.Item no mapping é "${byName.fieldId ?? 'vazio'}" e não ${fieldId}.`,
+      message: `Linked to the mapping by name: the Table.Item in the mapping is "${byName.fieldId ?? 'empty'}", not ${fieldId}.`,
       fieldId,
       source: byName.source,
     });
@@ -537,7 +537,7 @@ function readMapping(located: LocatedSheet, uploadIssues: ConversionIssue[]): Ma
       uploadIssues.push({
         severity: 'warning',
         code: 'DUPLICATE_MAPPING',
-        message: `O campo DTCC "${dtccName}" aparece mais de uma vez no mapping (${where(source)}). Foi usada a primeira linha.`,
+        message: `DTCC field "${dtccName}" appears more than once in the mapping (${where(source)}). The first row was used.`,
         source,
       });
       continue;
@@ -549,7 +549,7 @@ function readMapping(located: LocatedSheet, uploadIssues: ConversionIssue[]): Ma
         uploadIssues.push({
           severity: 'warning',
           code: 'DUPLICATE_MAPPING',
-          message: `O Table.Item ${entry.fieldId} aparece em "${previous.dtccName}" e em "${dtccName}" (${where(source)}). Se um deles for, por exemplo, 2.10 guardado como número, aparece como 2.1.`,
+          message: `Table.Item ${entry.fieldId} appears in "${previous.dtccName}" and in "${dtccName}" (${where(source)}). If one of them is, for example, 2.10 stored as a number, it shows as 2.1.`,
           source,
         });
       } else {
@@ -563,7 +563,7 @@ function readMapping(located: LocatedSheet, uploadIssues: ConversionIssue[]): Ma
         uploadIssues.push({
           severity: 'warning',
           code: 'BNPP_FIELD_REUSED',
-          message: `O campo BNPP ${name} está mapeado para "${owner}" e para "${dtccName}".`,
+          message: `BNPP field ${name} is mapped to "${owner}" and to "${dtccName}".`,
           source,
         });
       } else {

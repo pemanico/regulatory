@@ -2,8 +2,8 @@ import type { AuthProvider } from './auth.types';
 import { MockAuthProvider } from './mock-auth.provider';
 
 /**
- * Escolhe o provider pelo ambiente. O ponto de integração do SSO é aqui:
- * implementar AuthProvider (ex. OIDC) e devolvê-lo no ramo "sso".
+ * Picks the provider from the environment. This is the SSO integration point:
+ * implement AuthProvider (e.g. OIDC) and return it in the "sso" branch.
  */
 export function createAuthProvider(env: NodeJS.ProcessEnv): AuthProvider {
   const mode = env.AUTH_MODE ?? 'mock';
@@ -11,11 +11,11 @@ export function createAuthProvider(env: NodeJS.ProcessEnv): AuthProvider {
   switch (mode) {
     case 'mock':
       if (env.NODE_ENV === 'production') {
-        throw new Error('AUTH_MODE=mock não é permitido com NODE_ENV=production');
+        throw new Error('AUTH_MODE=mock is not allowed with NODE_ENV=production');
       }
       return new MockAuthProvider();
     case 'sso':
-      throw new Error('AUTH_MODE=sso ainda não está implementado');
+      throw new Error('AUTH_MODE=sso is not implemented yet');
     default:
       throw new Error(`AUTH_MODE desconhecido: ${mode}`);
   }

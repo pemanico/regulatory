@@ -3,11 +3,11 @@ import { daysInclusive, isRealDate } from './common';
 import { ViewSpecSchema, type ViewSpec } from './view-spec';
 
 /**
- * Validação de uma spec de vista em duas fases:
- * 1. estrutura (schema Zod);
- * 2. semântica, contra o catálogo de marts visível para o utilizador.
+ * Validates a view spec in two phases:
+ * 1. structure (Zod schema);
+ * 2. semantics, against the mart catalog visible to the user.
  *
- * Corre no frontend (feedback imediato) e no backend (decisão oficial).
+ * Runs in the frontend (immediate feedback) and in the backend (authoritative decision).
  */
 
 export type ValidationCode =
@@ -23,7 +23,7 @@ export type ValidationCode =
 
 export interface ValidationIssue {
   code: ValidationCode;
-  /** Caminho no JSON da spec, por exemplo "metrics[1]" ou "period.to". */
+  /** Path in the spec JSON, e.g. "metrics[1]" or "period.to". */
   path: string;
   message: string;
 }
@@ -55,8 +55,8 @@ export function validateViewSpec(
 
   const mart = catalog.find((candidate) => candidate.id === spec.martId);
   if (!mart) {
-    // Não distingue "não existe" de "sem permissão", para não revelar marts.
-    errors.push({ code: 'UNKNOWN_MART', path: 'martId', message: `Data mart desconhecido: ${spec.martId}` });
+    // Does not distinguish "does not exist" from "no permission", so marts are not revealed.
+    errors.push({ code: 'UNKNOWN_MART', path: 'martId', message: `Unknown data mart: ${spec.martId}` });
     return { valid: false, errors, warnings };
   }
 
@@ -64,7 +64,7 @@ export function validateViewSpec(
     errors.push({
       code: 'JURISDICTION_MISMATCH',
       path: 'jurisdiction',
-      message: `O mart ${mart.id} pertence a ${mart.jurisdiction}, não a ${spec.jurisdiction}`,
+      message: `Mart ${mart.id} belongs to ${mart.jurisdiction}, not to ${spec.jurisdiction}`,
     });
   }
 
@@ -72,14 +72,14 @@ export function validateViewSpec(
     const metric = mart.metrics.find((candidate) => candidate.id === metricId);
     const path = `metrics[${index}]`;
     if (!metric) {
-      errors.push({ code: 'UNKNOWN_METRIC', path, message: `Métrica ${metricId} não existe no mart ${mart.id}` });
+      errors.push({ code: 'UNKNOWN_METRIC', path, message: `Metric ${metricId} does not exist in mart ${mart.id}` });
     } else if (metric.status === 'deprecated') {
-      errors.push({ code: 'METRIC_DEPRECATED', path, message: `Métrica ${metricId} está descontinuada` });
+      errors.push({ code: 'METRIC_DEPRECATED', path, message: `Metric ${metricId} is deprecated` });
     } else if (metric.status === 'draft') {
       warnings.push({
         code: 'METRIC_NOT_CERTIFIED',
         path,
-        message: `Métrica ${metricId} ainda não está certificada: resultado exploratório`,
+        message: `Metric ${metricId} is not certified yet: exploratory result`,
       });
     }
   });
@@ -87,7 +87,7 @@ export function validateViewSpec(
   const dimensions = new Map(mart.dimensions.map((dimension) => [dimension.id, dimension]));
   const checkDimension = (dimensionId: string, path: string): void => {
     if (!dimensions.has(dimensionId)) {
-      errors.push({ code: 'UNKNOWN_DIMENSION', path, message: `Dimensão ${dimensionId} não existe no mart ${mart.id}` });
+      errors.push({ code: 'UNKNOWN_DIMENSION', path, message: `Dimension ${dimensionId} does not exist in mart ${mart.id}` });
     }
   };
   spec.rows.forEach((id, index) => checkDimension(id, `rows[${index}]`));
@@ -112,7 +112,7 @@ export function validateViewSpec(
         errors.push({
           code: 'FILTER_VALUE_TYPE',
           path: valuePath,
-          message: `Valor ${JSON.stringify(value)} incompatível com a dimensão ${dimension.id} (${dimension.type})`,
+          message: `Value ${JSON.stringify(value)} is not compatible with dimension ${dimension.id} (${dimension.type})`,
         });
       }
     });
@@ -123,7 +123,7 @@ export function validateViewSpec(
     errors.push({
       code: 'PERIOD_TOO_LONG',
       path: 'period',
-      message: `Período de ${days} dias excede o máximo de ${mart.maxPeriodDays} dias para o mart ${mart.id}`,
+      message: `Period of ${days} days exceeds the maximum of ${mart.maxPeriodDays} days for mart ${mart.id}`,
     });
   }
 

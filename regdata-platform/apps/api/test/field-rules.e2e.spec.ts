@@ -58,8 +58,8 @@ describe('Field rules upload and review', () => {
     expect(first.record.statusByActionType).toEqual({ NEWT: 'M', MODI: 'M', VALU: 'NA', CORR: 'M', TERM: 'NA', EROR: 'NA', REVI: 'M', POSC: 'C' });
     expect(first.record.errorCodes).toEqual(['EX-VR-9001-01', 'EX-VR-9001-02']);
     expect(first.record.document).toEqual({ version: '1.0', effectiveFrom: '2026-01-01' });
-    expect(first.chunk).toContain('REGRAS_LEG_1:\n  Campo_BNPP: P1_EX_CODE');
-    expect(first.chunk).toContain('REGRAS_LEG_2:\n  Campo_BNPP: P2_EX_CODE');
+    expect(first.chunk).toContain('RULES_LEG_1:\n  BNPP_Field: P1_EX_CODE');
+    expect(first.chunk).toContain('RULES_LEG_2:\n  BNPP_Field: P2_EX_CODE');
   });
 
   it('rejects non-xlsx files and requests without files', async () => {
@@ -103,7 +103,7 @@ describe('Field rules upload and review', () => {
     await request(app.getHttpServer())
       .post(`/api/field-rules/uploads/${id}/fields/9.2/review`)
       .set('x-dev-user', 'reviewer')
-      .send({ decision: 'rejected', comment: 'Table em falta no Excel' })
+      .send({ decision: 'rejected', comment: 'Table missing in the Excel file' })
       .expect(200);
   });
 
@@ -129,7 +129,7 @@ describe('Field rules upload and review', () => {
       .get(`/api/field-rules/uploads/${id}/export?format=markdown`)
       .set('x-dev-user', 'reviewer')
       .expect(200);
-    expect(markdown.body.content).toContain('ID_CAMPO: 9.2');
+    expect(markdown.body.content).toContain('FIELD_ID: 9.2');
 
     await request(app.getHttpServer()).get(`/api/field-rules/uploads/${id}/export?format=pdf`).expect(400);
   });

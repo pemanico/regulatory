@@ -131,7 +131,7 @@ export const ReviewRequestSchema = z
   })
   .strict()
   .refine((request) => request.decision === 'approved' || (request.comment?.trim().length ?? 0) > 0, {
-    message: 'Comentário obrigatório ao rejeitar',
+    message: 'A comment is required when rejecting',
     path: ['comment'],
   });
 export type ReviewRequest = z.infer<typeof ReviewRequestSchema>;

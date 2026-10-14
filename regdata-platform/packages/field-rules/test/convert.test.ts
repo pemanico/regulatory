@@ -192,22 +192,22 @@ describe('renderChunk', () => {
   it('renders both blocks with the BNPP field of each side', () => {
     const result = convertFieldRules(standardSheets(), { documentVersion: '1.0', effectiveFrom: '2026-01-01' });
     const chunk = renderChunk(field(result, '9.3').record, { blockLabels: ['LEG_1', 'LEG_2'] });
-    expect(chunk).toContain('ID_CAMPO: 9.3');
-    expect(chunk).toContain('CONTEXTO: Section: Section 9b - Example amounts');
-    expect(chunk).toContain('REGRAS_LEG_1:\n  Campo_BNPP: P1_EX_AMOUNT_1');
-    expect(chunk).toContain('REGRAS_LEG_2:\n  Campo_BNPP: P2_EX_AMOUNT_1');
-    expect(chunk).toContain('OUTROS_CAMPOS_BNPP: Z_EX_AMOUNT_TOTAL');
+    expect(chunk).toContain('FIELD_ID: 9.3');
+    expect(chunk).toContain('CONTEXT: Section: Section 9b - Example amounts');
+    expect(chunk).toContain('RULES_LEG_1:\n  BNPP_Field: P1_EX_AMOUNT_1');
+    expect(chunk).toContain('RULES_LEG_2:\n  BNPP_Field: P2_EX_AMOUNT_1');
+    expect(chunk).toContain('OTHER_BNPP_FIELDS: Z_EX_AMOUNT_TOTAL');
     expect(chunk).toContain('Error_Codes: [EX-VR-9003-01]');
     expect(chunk).toContain('    POSC: O');
-    expect(chunk).toContain('FONTE: example-rules.xlsx v1.0, vigente desde 2026-01-01');
+    expect(chunk).toContain('SOURCE: example-rules.xlsx v1.0, effective from 2026-01-01');
   });
 
   it('uses configurable block labels and shows common fields in both blocks', () => {
     const result = convertFieldRules(standardSheets());
-    const chunk = renderChunk(field(result, '9.2').record, { blockLabels: ['PARTE_1', 'PARTE_2'] });
-    expect(chunk).toContain('REGRAS_PARTE_1:\n  Campo_BNPP: X_EX_TYPE (campo comum, sem campo por parte)');
-    expect(chunk).toContain('REGRAS_PARTE_2:');
-    expect(chunk).not.toContain('OUTROS_CAMPOS_BNPP');
+    const chunk = renderChunk(field(result, '9.2').record, { blockLabels: ['PARTY_1', 'PARTY_2'] });
+    expect(chunk).toContain('RULES_PARTY_1:\n  BNPP_Field: X_EX_TYPE (common field, no per-party field)');
+    expect(chunk).toContain('RULES_PARTY_2:');
+    expect(chunk).not.toContain('OTHER_BNPP_FIELDS');
   });
 
   it('shows unreadable statuses as ?', () => {

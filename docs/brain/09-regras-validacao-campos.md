@@ -6,7 +6,7 @@ Contexto: regras de negócio de um controlo específico, reutilizáveis noutros 
 
 ## 1. Especificação (Ordep)
 
-**Chave do campo (`ID_CAMPO`):** `Table.Item` para todos os campos (ex. Table 2 + Item 24 → `2.24`). Esclarecido pelo Ordep: o "2.24" da especificação original era um exemplo da concatenação, não uma exceção.
+**Chave do campo (`ID_CAMPO`, no chunk `FIELD_ID`):** `Table.Item` para todos os campos (ex. Table 2 + Item 24 → `2.24`). Esclarecido pelo Ordep: o "2.24" da especificação original era um exemplo da concatenação, não uma exceção.
 
 **Expansão por leg:** cada campo é expandido em dois blocos, `REGRAS_LEG_1` e `REGRAS_LEG_2`. Mesmo que o Excel só tenha um conjunto de regras ou estados, a estrutura é duplicada para as duas legs.
 
@@ -25,17 +25,18 @@ Contexto: regras de negócio de um controlo específico, reutilizáveis noutros 
 - Códigos de erro: lista limpa em array, ex. `[CODE-01, CODE-02]`.
 - Formatos e taxonomias: manter tal como estão (ISO, NACE, EIC, etc.), porque são críticos para a pesquisa semântica.
 
-**Template obrigatório:**
+**Template obrigatório** (rótulos em inglês desde 2026-10-14; ver §1.3):
 
 ```
-ID_CAMPO: [Table.Item]
-CONTEXTO: Section: [Section Name]
-NOME_CAMPO: [Field Name]
-FORMATO: [Full Format/Taxonomy details]
-REGRAS_LEG_1:
+FIELD_ID: [Table.Item]
+CONTEXT: Section: [Section Name]
+FIELD_NAME: [Field Name]
+FORMAT: [Full Format/Taxonomy details]
+RULES_<BLOCK_1>:
+  BNPP_Field: [campo BNPP da parte 1]
   Condition: [parágrafo coeso com regras e dependências]
   Error_Codes: [array de códigos]
-  Status_por_Action_Type:
+  Status_by_Action_Type:
     NEWT: [M/C/O/NA]
     MODI: [M/C/O/NA]
     VALU: [M/C/O/NA]
@@ -44,11 +45,21 @@ REGRAS_LEG_1:
     EROR: [M/C/O/NA]
     REVI: [M/C/O/NA]
     POSC: [M/C/O/NA]
-REGRAS_LEG_2:
-  Condition: [duplicado da leg 1]
-  Error_Codes: [duplicado da leg 1]
-  Status_por_Action_Type: [duplicado da leg 1]
+RULES_<BLOCK_2>:
+  BNPP_Field: [campo BNPP da parte 2]
+  Condition: [igual ao bloco 1]
+  Error_Codes: [igual ao bloco 1]
+  Status_by_Action_Type: [igual ao bloco 1]
+OTHER_BNPP_FIELDS: [campos comuns, quando há campos de parte]
+REGULATION: EMIR
+SOURCE: [ficheiro, versão, vigência, folha e linha]
 ```
+
+`<BLOCK_1>`/`<BLOCK_2>` vêm de `FIELD_RULES_BLOCK_LABELS` (no banco: `TP1`/`TP2`).
+
+### 1.3 Língua do template (2026-10-14)
+
+Decisão do Ordep: todo o código em inglês, incluindo o template do chunk do RAG. Correspondência com os rótulos originais: `ID_CAMPO` → `FIELD_ID`, `CONTEXTO` → `CONTEXT`, `NOME_CAMPO` → `FIELD_NAME`, `FORMATO` → `FORMAT`, `REGRAS_*` → `RULES_*`, `Campo_BNPP` → `BNPP_Field`, `Status_por_Action_Type` → `Status_by_Action_Type`, `OUTROS_CAMPOS_BNPP` → `OTHER_BNPP_FIELDS`, `REGULACAO` → `REGULATION`, `FONTE` → `SOURCE`. Chunks exportados antes desta data têm os rótulos antigos e devem ser regenerados.
 
 ## 1.1 Mapping DTCC ↔ BNPP (Ordep, 2026-10-13)
 
@@ -114,7 +125,7 @@ Problemas reais já visíveis na amostra (justificam §4.3 e §4.4):
 Decisão do Ordep (2026-10-13): upload numa página web, com opção de o utilizador validar as regras.
 
 - O conversor é **código genérico** (TypeScript, em inglês) dentro da aplicação, desenvolvido no repositório público e testado com dados fictícios.
-- No banco, o utilizador carrega os Excel na página **Regras de validação**, vê os problemas de conversão, revê campo a campo (4-eyes) e exporta os aprovados.
+- No banco, o utilizador carrega os Excel na página **Validation rules**, vê os problemas de conversão, revê campo a campo (4-eyes) e exporta os aprovados.
 - Campos com erros não podem ser aprovados: corrige-se o Excel e volta-se a carregar.
 - Hoje a exportação (registos JSON e chunks Markdown) é a passagem para o RAG; a indexação automática no OpenSearch e a gravação no Git interno são o passo seguinte.
 - As fotos servem só para mostrar a **estrutura** do Excel (cabeçalhos, algumas linhas, a tabela de action types), para escrever o parser e o mapeamento de colunas.
@@ -228,16 +239,15 @@ used_by_controls: [example-control]
 Chunk para RAG gerado (template da secção 1, com a alternativa de 4.1):
 
 ```
-ID_CAMPO: 9.99
-CONTEXTO: Section: Example section
-NOME_CAMPO: Example field
-FORMATO: ISO 4217 3-letter currency code
-APLICA_A: ambas as contrapartes
-REGRAS_PARTE_1:
-  Campo_BNPP: P1_EX_FIELD (usado no controlo example-control)
+FIELD_ID: 9.99
+CONTEXT: Section: Example section
+FIELD_NAME: Example field
+FORMAT: ISO 4217 3-letter currency code
+RULES_PARTY_1:
+  BNPP_Field: P1_EX_FIELD
   Condition: (1) Populated when field 9.98 is populated. (2) Refer to field 1.1.
   Error_Codes: [EX-001, EX-002]
-  Status_por_Action_Type:
+  Status_by_Action_Type:
     NEWT: M
     MODI: M
     VALU: NA
@@ -246,11 +256,11 @@ REGRAS_PARTE_1:
     EROR: NA
     REVI: C
     POSC: M
-REGRAS_PARTE_2:
-  Campo_BNPP: P2_EX_FIELD (usado no controlo example-control)
+RULES_PARTY_2:
+  BNPP_Field: P2_EX_FIELD
   Condition: (1) Populated when field 9.98 is populated. (2) Refer to field 1.1.
   Error_Codes: [EX-001, EX-002]
-  Status_por_Action_Type:
+  Status_by_Action_Type:
     NEWT: M
     MODI: M
     VALU: NA
@@ -259,6 +269,7 @@ REGRAS_PARTE_2:
     EROR: NA
     REVI: C
     POSC: M
-OUTROS_CAMPOS_BNPP: X_EX_FIELD (mapeado; não usado neste controlo)
-FONTE: example-validation-rules.xlsx v0.0-example (vigente desde 2026-01-01)
+OTHER_BNPP_FIELDS: X_EX_FIELD
+REGULATION: EMIR
+SOURCE: example-validation-rules.xlsx v0.0-example, effective from 2026-01-01 · sheet Rules, row 12
 ```
