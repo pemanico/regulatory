@@ -8,9 +8,9 @@ export class ViewsService {
   constructor(private readonly catalog: CatalogService) {}
 
   /**
-   * Valida uma spec contra o catálogo visível para o utilizador.
-   * Um mart de uma jurisdição a que o utilizador não tem acesso aparece
-   * como desconhecido, tal como um mart que não existe.
+   * Validates a spec against the catalog visible to the user.
+   * A mart from a jurisdiction the user cannot access shows as unknown,
+   * just like a mart that does not exist.
    */
   validate(input: unknown, user: AuthenticatedUser): ViewSpecValidationResult {
     return validateViewSpec(input, this.catalog.listForUser(user));

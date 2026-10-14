@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    // Em desenvolvimento, /api vai para o backend NestJS.
+    // In development, /api is proxied to the NestJS backend.
     proxy: {
       '/api': 'http://localhost:3000',
     },

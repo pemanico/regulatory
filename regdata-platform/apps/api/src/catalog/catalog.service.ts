@@ -7,7 +7,7 @@ import { CATALOG_FIXTURES } from './catalog.fixtures';
 export class CatalogService {
   private readonly marts: readonly MartDefinition[] = CATALOG_FIXTURES;
 
-  /** Marts visíveis para o utilizador, filtrados pelas jurisdições que pode ver. */
+  /** Marts visible to the user, filtered by the jurisdictions they can see. */
   listForUser(user: AuthenticatedUser): MartDefinition[] {
     return this.marts.filter((mart) => user.jurisdictions.includes(mart.jurisdiction));
   }

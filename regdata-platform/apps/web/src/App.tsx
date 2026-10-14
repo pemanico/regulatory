@@ -6,8 +6,8 @@ import { ViewBuilderPage } from './ViewBuilderPage';
 type PageId = 'field-rules' | 'view-builder';
 
 const PAGES: { id: PageId; label: string }[] = [
-  { id: 'field-rules', label: 'Regras de validação' },
-  { id: 'view-builder', label: 'Construtor de vistas' },
+  { id: 'field-rules', label: 'Validation rules' },
+  { id: 'view-builder', label: 'View builder' },
 ];
 
 export function App() {
@@ -49,15 +49,15 @@ function Shell(props: {
             }}
           >
             <label>
-              <span>Utilizador (dev)</span>
-              <input value={draftUser} onChange={(event) => setDraftUser(event.target.value)} aria-label="Utilizador de desenvolvimento" />
+              <span>User (dev)</span>
+              <input value={draftUser} onChange={(event) => setDraftUser(event.target.value)} aria-label="Development user" />
             </label>
             <button type="submit" className="button-ghost">
-              Mudar
+              Switch
             </button>
           </form>
         </div>
-        <nav className="tabs" aria-label="Páginas">
+        <nav className="tabs" aria-label="Pages">
           <div className="tabs-inner">
             {PAGES.map((entry) => (
               <button

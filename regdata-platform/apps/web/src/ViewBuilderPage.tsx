@@ -104,20 +104,20 @@ export function ViewBuilderPage() {
 
   if (loadError) {
     return (
-      <p className="banner banner-error">Não foi possível carregar o catálogo: {loadError}</p>
+      <p className="banner banner-error">Could not load the catalog: {loadError}</p>
     );
   }
 
   return (
     <>
       <header className="page-header">
-        <h1>Construtor de vistas</h1>
-        <p className="muted">Passo 1 — construtor e validador de specs de vista (catálogo fictício)</p>
+        <h1>View builder</h1>
+        <p className="muted">Step 1 — view spec builder and validator (fictitious catalog)</p>
       </header>
 
       <div className="layout">
         <section className="card">
-          <h2>Vista</h2>
+          <h2>View</h2>
 
           <label className="field">
             <span>Data mart</span>
@@ -140,7 +140,7 @@ export function ViewBuilderPage() {
           {mart && (
             <>
               <fieldset className="field">
-                <legend>Métricas</legend>
+                <legend>Metrics</legend>
                 {mart.metrics.map((metric) => (
                   <label key={metric.id} className="check">
                     <input type="checkbox" checked={metrics.includes(metric.id)} onChange={() => toggleMetric(metric.id)} />
@@ -151,7 +151,7 @@ export function ViewBuilderPage() {
               </fieldset>
 
               <fieldset className="field">
-                <legend>Dimensões</legend>
+                <legend>Dimensions</legend>
                 {mart.dimensions.map((dimension) => {
                   const placement: Placement = rows.includes(dimension.id)
                     ? 'rows'
@@ -166,8 +166,8 @@ export function ViewBuilderPage() {
                         onChange={(event) => placeDimension(dimension.id, event.target.value as Placement)}
                       >
                         <option value="none">—</option>
-                        <option value="rows">Linhas</option>
-                        <option value="columns">Colunas</option>
+                        <option value="rows">Rows</option>
+                        <option value="columns">Columns</option>
                       </select>
                     </label>
                   );
@@ -178,21 +178,21 @@ export function ViewBuilderPage() {
 
           <div className="field-row">
             <label className="field">
-              <span>De</span>
+              <span>From</span>
               <input type="date" value={from} onChange={(event) => setFrom(event.target.value)} />
             </label>
             <label className="field">
-              <span>Até</span>
+              <span>To</span>
               <input type="date" value={to} onChange={(event) => setTo(event.target.value)} />
             </label>
           </div>
 
           <label className="field">
-            <span>Comparação</span>
+            <span>Comparison</span>
             <select value={comparison} onChange={(event) => setComparison(event.target.value as Comparison | '')}>
-              <option value="">Sem comparação</option>
-              <option value="previous_period">Período anterior</option>
-              <option value="previous_year">Ano anterior</option>
+              <option value="">No comparison</option>
+              <option value="previous_period">Previous period</option>
+              <option value="previous_year">Previous year</option>
             </select>
           </label>
         </section>
@@ -201,17 +201,17 @@ export function ViewBuilderPage() {
           <h2>Spec</h2>
           <pre className="code">{JSON.stringify(spec, null, 2)}</pre>
 
-          <h3>Validação local</h3>
+          <h3>Local validation</h3>
           <ResultView result={localResult} />
 
           <button type="button" className="button" onClick={validateOnServer} disabled={validating}>
-            {validating ? 'A validar…' : 'Validar no servidor'}
+            {validating ? 'Validating…' : 'Validate on server'}
           </button>
 
           {serverError && <p className="banner banner-error">{serverError}</p>}
           {serverResult && (
             <>
-              <h3>Validação no servidor</h3>
+              <h3>Server validation</h3>
               <ResultView result={serverResult} />
             </>
           )}
@@ -225,11 +225,11 @@ function ResultView({ result }: { result: ViewSpecValidationResult }) {
   return (
     <div>
       {result.valid ? (
-        <p className="banner banner-ok">Spec válida</p>
+        <p className="banner banner-ok">Valid spec</p>
       ) : (
-        <IssueList title="Erros" issues={result.errors} tone="error" />
+        <IssueList title="Errors" issues={result.errors} tone="error" />
       )}
-      {result.warnings.length > 0 && <IssueList title="Avisos" issues={result.warnings} tone="warning" />}
+      {result.warnings.length > 0 && <IssueList title="Warnings" issues={result.warnings} tone="warning" />}
     </div>
   );
 }
@@ -250,7 +250,7 @@ function IssueList({ title, issues, tone }: { title: string; issues: ValidationI
 }
 
 function statusLabel(status: MartDefinition['metrics'][number]['status']): string {
-  return status === 'certified' ? 'certificada' : status === 'draft' ? 'não certificada' : 'descontinuada';
+  return status === 'certified' ? 'certified' : status === 'draft' ? 'not certified' : 'deprecated';
 }
 
 function monthsAgo(months: number): Date {

@@ -1,7 +1,7 @@
 import { ACTION_TYPES, type BnppFieldRole, type FieldRuleRecord } from '@regdata/contracts';
 
 export interface RenderOptions {
-  /** Labels of the two rule blocks, e.g. ["LEG_1", "LEG_2"] or ["PARTE_1", "PARTE_2"]. */
+  /** Labels of the two rule blocks, e.g. ["LEG_1", "LEG_2"] or ["PARTY_1", "PARTY_2"]. */
   blockLabels: [string, string];
 }
 
@@ -15,15 +15,15 @@ function bnppLineForBlock(record: FieldRuleRecord, role: 'party_1' | 'party_2'):
   const own = namesWithRole(record, role);
   if (own.length > 0) return own.join(', ');
   const common = namesWithRole(record, 'other');
-  if (common.length > 0) return `${common.join(', ')} (campo comum, sem campo por parte)`;
-  return 'sem mapeamento BNPP';
+  if (common.length > 0) return `${common.join(', ')} (common field, no per-party field)`;
+  return 'no BNPP mapping';
 }
 
 function sourceLine(record: FieldRuleRecord): string {
   const { rules } = record.source;
-  const version = record.document.version ? ` v${record.document.version}` : ' (versão não indicada)';
-  const effective = record.document.effectiveFrom ? `, vigente desde ${record.document.effectiveFrom}` : '';
-  return `${rules.fileName}${version}${effective} · folha ${rules.sheetName}, linha ${rules.row}`;
+  const version = record.document.version ? ` v${record.document.version}` : ' (version not stated)';
+  const effective = record.document.effectiveFrom ? `, effective from ${record.document.effectiveFrom}` : '';
+  return `${rules.fileName}${version}${effective} · sheet ${rules.sheetName}, row ${rules.row}`;
 }
 
 /**
@@ -34,10 +34,10 @@ function sourceLine(record: FieldRuleRecord): string {
 export function renderChunk(record: FieldRuleRecord, options: RenderOptions = { blockLabels: DEFAULT_BLOCK_LABELS }): string {
   const [format, ...moreFormat] = record.formatLines.length > 0 ? record.formatLines : [''];
   const lines: string[] = [
-    `ID_CAMPO: ${record.fieldId}`,
-    `CONTEXTO: Section: ${record.section}`,
-    `NOME_CAMPO: ${record.fieldName}`,
-    `FORMATO: ${format}`,
+    `FIELD_ID: ${record.fieldId}`,
+    `CONTEXT: Section: ${record.section}`,
+    `FIELD_NAME: ${record.fieldName}`,
+    `FORMAT: ${format}`,
     ...moreFormat.map((line) => `  ${line}`),
   ];
 
@@ -47,11 +47,11 @@ export function renderChunk(record: FieldRuleRecord, options: RenderOptions = { 
   const roles: ['party_1', 'party_2'] = ['party_1', 'party_2'];
   roles.forEach((role, index) => {
     lines.push(
-      `REGRAS_${options.blockLabels[index]}:`,
-      `  Campo_BNPP: ${bnppLineForBlock(record, role)}`,
+      `RULES_${options.blockLabels[index]}:`,
+      `  BNPP_Field: ${bnppLineForBlock(record, role)}`,
       `  Condition: ${record.condition}`,
       `  Error_Codes: [${record.errorCodes.join(', ')}]`,
-      '  Status_por_Action_Type:',
+      '  Status_by_Action_Type:',
       ...actionTypes.map((type) => `    ${type}: ${record.statusByActionType[type] ?? '?'}`),
     );
   });
@@ -59,9 +59,9 @@ export function renderChunk(record: FieldRuleRecord, options: RenderOptions = { 
   const others = namesWithRole(record, 'other');
   const hasPartyFields = record.bnppFields.some((field) => field.role !== 'other');
   if (others.length > 0 && hasPartyFields) {
-    lines.push(`OUTROS_CAMPOS_BNPP: ${others.join(', ')}`);
+    lines.push(`OTHER_BNPP_FIELDS: ${others.join(', ')}`);
   }
-  lines.push(`REGULACAO: ${record.regulation}`, `FONTE: ${sourceLine(record)}`);
+  lines.push(`REGULATION: ${record.regulation}`, `SOURCE: ${sourceLine(record)}`);
 
   return lines.join('\n');
 }

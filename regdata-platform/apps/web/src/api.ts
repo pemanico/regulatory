@@ -59,7 +59,7 @@ async function errorMessage(response: Response): Promise<string> {
   } catch {
     // Fall through to the generic message.
   }
-  return `Pedido falhou: ${response.status} ${response.statusText}`;
+  return `Request failed: ${response.status} ${response.statusText}`;
 }
 
 export const api = {

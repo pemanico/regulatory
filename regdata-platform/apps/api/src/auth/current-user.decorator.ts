@@ -6,11 +6,11 @@ export interface RequestWithUser {
   user?: AuthenticatedUser;
 }
 
-/** Injeta o utilizador autenticado no handler. */
+/** Injects the authenticated user into the handler. */
 export const CurrentUser = createParamDecorator((_data: unknown, context: ExecutionContext): AuthenticatedUser => {
   const request = context.switchToHttp().getRequest<RequestWithUser>();
   if (!request.user) {
-    throw new Error('CurrentUser usado num endpoint sem autenticação');
+    throw new Error('CurrentUser used on an endpoint without authentication');
   }
   return request.user;
 });

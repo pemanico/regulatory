@@ -44,7 +44,7 @@ const MAPPING_HEADERS: Record<string, string[]> = {
 };
 
 /** Optional mapping column with the concatenation Table.Item (e.g. "2.24"). */
-const MAPPING_FIELD_ID_HEADERS = ['table.item', 'table item', 'tableitem', 'table+item', 'id_campo', 'id campo', 'field id'];
+const MAPPING_FIELD_ID_HEADERS = ['table.item', 'table item', 'tableitem', 'table+item', 'field_id', 'field id', 'id_campo', 'id campo']; // check-language: allow (accepted legacy header names)
 
 const ACTION_TYPE_LONG_NAMES: Record<string, ActionType> = {
   NEW: 'NEWT',

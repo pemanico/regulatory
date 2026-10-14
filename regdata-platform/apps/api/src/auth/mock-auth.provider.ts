@@ -2,11 +2,11 @@ import { JURISDICTIONS, JurisdictionSchema, type Jurisdiction } from '@regdata/c
 import type { AuthenticatedUser, AuthProvider, AuthRequest } from './auth.types';
 
 /**
- * Autenticação de desenvolvimento. Simula utilizadores através de headers,
- * para testar permissões sem SSO:
- *   x-dev-user:          id do utilizador (default "dev.user")
- *   x-dev-jurisdictions: lista separada por vírgulas, ex. "EMIR,CFTC" (default: todas)
- *   x-dev-anonymous:     "true" simula um pedido sem sessão
+ * Development authentication. Simulates users through headers,
+ * to test permissions without SSO:
+ *   x-dev-user:          user id (default "dev.user")
+ *   x-dev-jurisdictions: comma-separated list, e.g. "EMIR,CFTC" (default: all)
+ *   x-dev-anonymous:     "true" simulates a request without a session
  */
 export class MockAuthProvider implements AuthProvider {
   readonly mode = 'mock' as const;

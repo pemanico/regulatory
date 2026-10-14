@@ -9,8 +9,8 @@ export class ViewsController {
   constructor(private readonly views: ViewsService) {}
 
   /**
-   * Responde sempre 200 com { valid, errors | spec, warnings }:
-   * uma spec inválida é um resultado normal, não um erro do pedido.
+   * Always answers 200 with { valid, errors | spec, warnings }:
+   * an invalid spec is a normal result, not a request error.
    */
   @Post('validate')
   @HttpCode(200)
