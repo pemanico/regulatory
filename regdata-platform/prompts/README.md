@@ -21,5 +21,5 @@ Architecture: [`docs/brain/08-agentic-rag-multi-regulatory.md`](../../docs/brain
 - Prompts are code: change them by PR and bump the version in the header.
 - No prompt change reaches production without passing the golden set (to be created per regulation pack).
 - `{{ }}` variables are filled by the runtime: `packs`, `kpi_catalog`, `regulation_module`, `user_language`, `user_regulations`, `today`, `pack_topics`.
-- Prompts are written in Portuguese; contracts and architecture in English; source code and code comments in English.
+- Prompts, contracts and architecture are written in English (decided 2026-10-14). Agents answer users in the user's language; users may write in Portuguese or English.
 - Examples are **fictitious**. Real ids, rules, thresholds and the rules digest live in the internal knowledge repository.

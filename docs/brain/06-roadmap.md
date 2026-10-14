@@ -14,14 +14,16 @@
 | 2c | Página web de upload e revisão das regras por campo; conversor e API; CI com anotações de falhas | PR #7 (merged) |
 | 2c.1 | POSC opcional; mapping ligado por `Table.Item`; prefixo de parte configurável (TP1/TP2); API lê o `.env`; guia `regdata-platform/docs/arranque-local.md` | PR #8 (merged) |
 | 8b/8c | Código, interface, mensagens e template do chunk em inglês; verificação de língua no lint | PR #11 |
+| 2d | Aplicação a correr na máquina do banco (Windows, registo npm interno, proxy) e teste de aceitação com o Excel real concluído | PR #10, #11; guia `arranque-local.md` |
+| 8d | Prompts dos agentes, contratos e módulos de regulação em inglês | PR #12 |
 
 ## Próxima sessão
 
-**Pôr a aplicação a correr na máquina do banco** (passo 2d). Estado em 2026-10-14: instalação, `.env`, `npm test` e `npm run dev` a funcionar no banco; falta o teste de aceitação (§7 do guia) com o Excel real. O Ordep executa os comandos e reporta o output; o Claude guia e corrige o código aqui. Texto de arranque no Project: `claude/proximo-chat-arranque.md`. Guia: `regdata-platform/docs/arranque-local.md`.
+**Exemplo prático de matching EMIR para a fase 1 do Agentic RAG** (`08-agentic-rag-multi-regulatory.md` §3). Objetivo: ter um mart de matching anonimizado e 3–5 KPIs de matching com definição fechada, para construir o runtime da fase 1 (passo 8) com dados fictícios do mesmo formato.
 
-Critério de conclusão: `npm run dev` a correr no banco e teste de aceitação (§7 do guia) feito com o Excel real; problemas encontrados registados no guia (§8) e, os de conversão, em `09`.
+Inputs do Ordep: ficha anonimizada de um mart com estado de pairing/matching (#20) e os KPIs de matching calculados hoje em Excel, com as escolhas de definição (#19).
 
-Depois: exemplo prático de matching EMIR para testar a fase 1 de `08-agentic-rag-multi-regulatory.md`.
+Critério de conclusão: ficha em `marts/`, KPIs em YAML (`draft`) com numerador, denominador e regras de aging decididas, e as questões #19 e #20 respondidas ou reduzidas a pontos concretos.
 
 ## Próximo
 
@@ -35,7 +37,6 @@ Depois: exemplo prático de matching EMIR para testar a fase 1 de `08-agentic-ra
 | 6 | Reports recorrentes como código | Inventário de reports |
 | 7 | Módulo Admin: edição de documentação com PRs no Git interno | Repositório de conhecimento interno; produto do Git interno (#15) |
 | 8 | Runtime de orquestração no NestJS (fase 1): contratos Zod, Director, Retriever, KPI e Tabelas com LLM simulado, validadores determinísticos, testes | Decisões #23 e #25; mart de matching (#20) |
-| 2d | Pôr a aplicação a correr localmente (guia `regdata-platform/docs/arranque-local.md`) e testar a página no banco com o Excel real e rever os problemas reportados | Merge do PR #7; questões #30 e #31; Excel com a coluna `Table.Item` formatada como texto |
 | 2e | Persistência dos uploads/revisões e publicação dos aprovados (OpenSearch + Git interno) | Questão #34 |
 | 9 | Golden set de perguntas de matching com respostas validadas | KPIs certificados (#19) |
 

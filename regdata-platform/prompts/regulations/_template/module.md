@@ -1,25 +1,25 @@
-# Módulo <REGULAÇÃO> — Análise Regulatória (template)
+# <REGULATION> module — Regulatory Analysis (template)
 
-> Copiar para `regulations/<id>/module.md` quando a regulação entrar. Extrair deste template só depois de o módulo EMIR estar validado em produção; ajustar o template com o que se aprender.
+> Copy to `regulations/<id>/module.md` when the regulation is added. Extract this template only after the EMIR module is validated in production, and adjust it with what was learned.
 
-Versão: 0.0 · Carregado em `{{regulation_module}}` do agente Análise Regulatória.
+Version: 0.0 · Loaded into `{{regulation_module}}` of the Regulatory Analysis agent.
 
-Este módulo diz que temas existem e o que verificar. Não é fonte citável: as afirmações citam passagens recuperadas. As referências são pistas de pesquisa.
+This module states which topics exist and what to check. It is not a citable source: statements cite retrieved passages. The references are search hints.
 
-## Temas
+## Topics
 
-| Tema | O que verificar face aos factos | Pistas de pesquisa |
+| Topic | What to check against the facts | Search hints |
 | --- | --- | --- |
 | | | |
 
-## Factos de que normalmente precisas
+## Facts you usually need
 
-| Tema | Factos |
+| Topic | Facts |
 | --- | --- |
 | | |
 
-## Regras próprias deste módulo
+## Rules specific to this module
 
-- Distingue obrigação regulatória, regra interna e boa prática.
-- Regras com vigência diferente não se misturam.
-- (diferenças relevantes face a outras regulações, ex. jurisdição, identificadores, prazos)
+- Distinguish a regulatory obligation, an internal rule and a good practice.
+- Rules with different effective dates are not mixed.
+- (relevant differences from other regulations, e.g. jurisdiction, identifiers, deadlines)

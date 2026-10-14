@@ -28,13 +28,13 @@
 | 28 | O Excel de regras por campo é o ficheiro público de validation rules da ESMA, ou uma versão interna com regras do banco? | Se for público, pode ser convertido fora do banco a partir da fonte oficial | Ordep |
 | 30 | O que é o terceiro campo BNPP em alguns mappings (ex. asset class): derivado, consolidado, ou usado no controlo? | Hoje fica como campo comum (`OUTROS_CAMPOS_BNPP`); ver `09` §1.2 | Ordep |
 | 31 | Validar com o Excel real as propostas já implementadas em `09-regras-validacao-campos.md` §2–§5: conversão por código no banco; registo canónico + chunk gerado; join por Table+Item com verificação de Section/Field; vazio = erro; condições preservadas palavra a palavra; metadados de versão | Mudam a especificação | Ordep |
-| 36 | Os prompts dos agentes (`regdata-platform/prompts/`, hoje em português) também passam para inglês? E `docs/brain/` fica em português? | Proposta: prompts em inglês, `docs/brain/` em português | Ordep |
 | 34 | Persistência dos uploads e revisões (hoje em memória) e destino final: indexação no OpenSearch e gravação no Git interno | A exportação manual é provisória | Ordep / Claude |
 
 ## Respondidas
 
 | # | Questão | Resposta (data) | Onde ficou |
 | --- | --- | --- | --- |
+| 36 | Os prompts dos agentes passam para inglês? | Sim, prompts, contratos, resumos de regras e módulos de regulação em inglês; `docs/brain/` continua em português (2026-10-14) | `08` §11, `03` |
 | 35 | A regra "interface em inglês" abrange o template do chunk do RAG e as mensagens do conversor? | Sim: todo o código em inglês, incluindo o RAG (2026-10-14) | `09` §1.3, `03` |
 | 32 | A folha de action types tem coluna `POSC`? | `POSC` não é usado por agora; a ausência não é erro (2026-10-13) | `09` §1.2, `03` |
 | 33 | Acrescentar a coluna `Table.Item` ao mapping? | O mapping tem a coluna `Table.Item`, concatenação de Table e Item; é a chave de ligação (2026-10-13) | `09` §4.3a, `03` |

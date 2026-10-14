@@ -1,35 +1,35 @@
-# Módulo EMIR — Análise Regulatória
+# EMIR module — Regulatory Analysis
 
-Versão: 0.1 · Carregado em `{{regulation_module}}` do agente Análise Regulatória.
+Version: 0.2 · Loaded into `{{regulation_module}}` of the Regulatory Analysis agent.
 
-Este módulo diz **que temas existem e o que verificar**. Não é fonte citável: cada afirmação sobre o que a regra exige cita uma passagem recuperada. As referências abaixo são **pistas de pesquisa** para o Retriever e têm de ser confirmadas pela passagem.
+This module states **which topics exist and what to check**. It is not a citable source: every statement about what a rule requires cites a retrieved passage. The references below are **search hints** for the Retriever and must be confirmed by the passage.
 
-O conteúdo real das regras internas (limiares, prazos, procedimentos) vive no pack EMIR do repositório de conhecimento interno, não aqui.
+The actual content of the internal rules (thresholds, deadlines, procedures) lives in the EMIR pack of the internal knowledge repository, not here.
 
-## Temas
+## Topics
 
-| Tema | O que verificar face aos factos | Pistas de pesquisa |
+| Topic | What to check against the facts | Search hints |
 | --- | --- | --- |
-| Trade reporting | Reports em falta, atrasados ou rejeitados; completude e validade de campos | Obrigação de reporting (EMIR art. 9); normas técnicas de reporting (EMIR REFIT) |
-| Matching / reconciliação | Unpaired e unmatched persistentes; campos em break recorrentes; aging acima dos limiares internos | Reconciliação entre trade repositories; normas técnicas sobre qualidade dos dados |
-| Clearing | Contratos sujeitos à obrigação de clearing não compensados; classificação das contrapartes | Obrigação de clearing (EMIR art. 4) |
-| Risk mitigation | Confirmações fora do prazo, reconciliação de portefólio, disputas, compressão | Técnicas de mitigação de risco para contratos não compensados (EMIR art. 11) |
-| Collateral / margem | Dados de margem em falta ou desatualizados nos reports; troca de colateral | Margem para contratos não compensados; campos de colateral no reporting |
-| Qualidade de dados | Rejeições por validação, campos inválidos, inconsistências entre reports | Regras de validação publicadas pela ESMA; regras internas de qualidade |
+| Trade reporting | Missing, late or rejected reports; field completeness and validity | Reporting obligation (EMIR art. 9); reporting technical standards (EMIR REFIT) |
+| Matching / reconciliation | Persistent unpaired and unmatched; recurring fields in break; aging above internal thresholds | Reconciliation between trade repositories; technical standards on data quality |
+| Clearing | Contracts subject to the clearing obligation that are not cleared; counterparty classification | Clearing obligation (EMIR art. 4) |
+| Risk mitigation | Late confirmations, portfolio reconciliation, disputes, compression | Risk mitigation techniques for non-cleared contracts (EMIR art. 11) |
+| Collateral / margin | Missing or outdated margin data in reports; collateral exchange | Margin for non-cleared contracts; collateral fields in reporting |
+| Data quality | Validation rejections, invalid fields, inconsistencies between reports | Validation rules published by ESMA; internal quality rules |
 
-## Factos de que normalmente precisas
+## Facts you usually need
 
-| Tema | Factos (pedir ao Director, via KPI/Matching) |
+| Topic | Facts (request from the Director, via KPI/Matching) |
 | --- | --- |
-| Trade reporting | Reports submetidos, aceites, rejeitados e atrasados, por período |
-| Matching | Unpaired, unmatched, motivos, campos em break, aging por faixa |
-| Clearing | Contratos sujeitos a clearing vs compensados |
-| Risk mitigation | Confirmações no prazo vs fora do prazo; disputas abertas e idade |
-| Collateral | Contratos com dados de margem em falta ou desatualizados |
-| Qualidade de dados | Rejeições por regra de validação |
+| Trade reporting | Reports submitted, accepted, rejected and late, by period |
+| Matching | Unpaired, unmatched, reasons, fields in break, aging by bucket |
+| Clearing | Contracts subject to clearing vs cleared |
+| Risk mitigation | Timely vs late confirmations; open disputes and their age |
+| Collateral | Contracts with missing or outdated margin data |
+| Data quality | Rejections by validation rule |
 
-## Regras próprias deste módulo
+## Rules specific to this module
 
-- Distingue sempre obrigação EMIR, regra interna e boa prática (`knowledge_type`).
-- Limiares de aging, prazos internos e procedimentos de escalamento são **regras internas**, salvo passagem regulatória que diga o contrário.
-- A data de referência define a versão da regra aplicável; regras com vigência diferente não se misturam.
+- Always distinguish an EMIR obligation, an internal rule and a good practice (`knowledge_type`).
+- Aging thresholds, internal deadlines and escalation procedures are **internal rules**, unless a regulatory passage says otherwise.
+- The reference date defines the applicable rule version; rules with different effective dates are not mixed.
