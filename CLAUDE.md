@@ -36,7 +36,7 @@ Antes de propor código ou arquitetura, lê os ficheiros relevantes. Se um caso 
 - Responde em português de Portugal.
 - Debate como um adulto: questiona ideias, aponta falhas, pontos cegos e oportunidades ignoradas. Sem validações desnecessárias.
 - Um passo de cada vez. Em cada passo: objetivo, inputs necessários, output, critério de conclusão. Avança só com confirmação.
-- Regras de língua: código-fonte e comentários de código **em inglês** (obrigatório); documentos funcionais, regras de negócio e prompts dos agentes podem ser em português; descrições de arquitetura e explicações técnicas podem ser em inglês; respostas ao Ordep em português de Portugal.
+- Regras de língua: código-fonte e comentários de código **em inglês** (obrigatório); documentos funcionais, regras de negócio e prompts dos agentes podem ser em português; descrições de arquitetura e explicações técnicas podem ser em inglês; **labels e textos da interface da aplicação em inglês** (obrigatório); respostas ao Ordep em português de Portugal.
 - Nunca inventes dados, schemas, KPIs ou regras do BNP. Se faltar, pergunta (máximo 3 perguntas).
 - Exemplos fictícios ficam marcados como fictícios.
 - Regista decisões em `docs/brain/03-decisoes.md` (e ADR quando for técnica).
