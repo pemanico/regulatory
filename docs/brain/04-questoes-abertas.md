@@ -28,6 +28,7 @@
 | 28 | O Excel de regras por campo é o ficheiro público de validation rules da ESMA, ou uma versão interna com regras do banco? | Se for público, pode ser convertido fora do banco a partir da fonte oficial | Ordep |
 | 30 | O que é o terceiro campo BNPP em alguns mappings (ex. asset class): derivado, consolidado, ou usado no controlo? | Hoje fica como campo comum (`OUTROS_CAMPOS_BNPP`); ver `09` §1.2 | Ordep |
 | 31 | Validar com o Excel real as propostas já implementadas em `09-regras-validacao-campos.md` §2–§5: conversão por código no banco; registo canónico + chunk gerado; join por Table+Item com verificação de Section/Field; vazio = erro; condições preservadas palavra a palavra; metadados de versão | Mudam a especificação | Ordep |
+| 37 | Acrescentar ao Retriever/Director um passo de "juiz" local com saídas tipadas (relevância e suficiência dos trechos, suporte de cada citação)? Decidir com números do golden set (recall@k ao cortar trechos, afirmações sem suporte) | Proposta do Claude: interface trocável, implementação local (reranker + modelo de verificação); não entra na fase 1 | Ordep, depois do passo 9 |
 | 34 | Persistência dos uploads e revisões (hoje em memória) e destino final: indexação no OpenSearch e gravação no Git interno | A exportação manual é provisória | Ordep / Claude |
 
 ## Respondidas

@@ -4,6 +4,7 @@ Mais recente primeiro. Decisões técnicas da aplicação têm ADR em `regdata-p
 
 | Data | Decisão | Porquê |
 | --- | --- | --- |
+| 2026-10-14 | Nenhum serviço externo alojado (API de terceiros) pode receber documentação interna, regras, código ou dados: o reranker e qualquer verificação dos trechos (relevância, suficiência, suporte das citações) correm dentro do banco. Exclui juízes externos como o Jev | Restrição do banco, confirmada pelo Ordep |
 | 2026-10-14 | Prompts dos agentes, contratos, resumos de regras e módulos de regulação em inglês; os agentes respondem na língua do utilizador; `docs/brain/` continua em português | Ordep; resposta à questão #36 |
 | 2026-10-14 | Todo o código em inglês: interface, mensagens da API e do conversor, logs, comentários, testes e template do chunk do RAG (`FIELD_ID`, `RULES_TP1`…); verificação automática no lint (`scripts/check-language.mjs`) | Ordep: o BNP é um banco internacional; resposta à questão #35 |
 | 2026-10-14 | Todas as labels e textos da interface da aplicação em inglês | Definido pelo Ordep |
