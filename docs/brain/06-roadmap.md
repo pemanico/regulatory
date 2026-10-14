@@ -16,7 +16,7 @@
 
 ## Próxima sessão
 
-**Pôr a aplicação a correr na máquina do banco** (passo 2d). O Ordep executa os comandos e reporta o output; o Claude guia e corrige o código aqui. Texto de arranque no Project: `claude/proximo-chat-arranque.md`. Guia: `regdata-platform/docs/arranque-local.md`.
+**Pôr a aplicação a correr na máquina do banco** (passo 2d). Estado em 2026-10-14: instalação, `.env`, `npm test` e `npm run dev` a funcionar no banco; falta o teste de aceitação (§7 do guia) com o Excel real. O Ordep executa os comandos e reporta o output; o Claude guia e corrige o código aqui. Texto de arranque no Project: `claude/proximo-chat-arranque.md`. Guia: `regdata-platform/docs/arranque-local.md`.
 
 Critério de conclusão: `npm run dev` a correr no banco e teste de aceitação (§7 do guia) feito com o Excel real; problemas encontrados registados no guia (§8) e, os de conversão, em `09`.
 
@@ -37,6 +37,7 @@ Depois: exemplo prático de matching EMIR para testar a fase 1 de `08-agentic-ra
 | 2d | Pôr a aplicação a correr localmente (guia `regdata-platform/docs/arranque-local.md`) e testar a página no banco com o Excel real e rever os problemas reportados | Merge do PR #7; questões #30 e #31; Excel com a coluna `Table.Item` formatada como texto |
 | 2e | Persistência dos uploads/revisões e publicação dos aprovados (OpenSearch + Git interno) | Questão #34 |
 | 8b | Traduzir para inglês os comentários de código existentes (hoje em português) e acrescentar verificação no CI | Regra de língua de 2026-10-13 |
+| 8c | Interface da aplicação em inglês (labels, títulos, botões, mensagens) | Decisão de 2026-10-14; questão #35 |
 | 9 | Golden set de perguntas de matching com respostas validadas | KPIs certificados (#19) |
 
 ## Fases (do Architecture Design)

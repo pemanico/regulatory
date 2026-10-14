@@ -39,6 +39,22 @@ Não usar `strict-ssl=false` como solução permanente.
 
 Verificar: `npm ping` e `npm view zod version` devolvem resposta.
 
+Notas para uma rede com proxy corporativo (Windows, PowerShell):
+
+- Se `HTTPS_PROXY` estiver definido, o npm manda também os pedidos ao registo **interno** pelo proxy. Tirar o registo interno do proxy:
+  ```powershell
+  $env:NO_PROXY = "<host-do-registo-interno>,localhost,127.0.0.1"   # janela atual
+  setx NO_PROXY "<host-do-registo-interno>,localhost,127.0.0.1"     # janelas novas
+  ```
+  `localhost` também é necessário para a web chegar à API.
+- Criar a credencial do registo com o próprio npm, que a grava no formato certo (`//host/caminho/:_authToken`):
+  ```powershell
+  npm login --auth-type=legacy --registry=https://<registo-npm-interno>/
+  ```
+  Uma linha `:_authToken` que não comece por `//` é ignorada e o registo responde `E401`.
+- Não pôr utilizador e password dentro de `HTTPS_PROXY` nem colar o output de `npm config list` em canais externos: mostra os tokens.
+- Para verificar o `esbuild` antes do install: `npm view "@esbuild/win32-x64" version`.
+
 ## 4. Instalar
 
 ```bash
@@ -95,6 +111,10 @@ Se a coluna `Table.Item` do mapping estiver formatada como número no Excel, `2.
 | Sintoma | Causa provável | O que fazer |
 | --- | --- | --- |
 | `npm install` com `E401`/`E403` | Registo interno sem autenticação | Configurar o `.npmrc` com a equipa do registo |
+| `403 ... Passwordexpired` no `npm ping` | Password antiga no URL do proxy (`HTTPS_PROXY`) | Tirar o registo interno do proxy (`NO_PROXY`, §3) e mudar a password |
+| `InternetBrowsingBlocked` | O pedido ao registo interno está a passar pelo proxy | `NO_PROXY` com o host do registo (§3) |
+| `E401 Incorrect or missing password` | Token em falta, expirado ou com a chave mal formada (sem `//`) | Apagar as linhas `_authToken` antigas e correr `npm login --auth-type=legacy` (§3) |
+| `The term ... is not recognized` no PowerShell | Comando mal escrito, ou comando de cmd no PowerShell | Confirmar que a linha começa por `PS`; usar os comandos PowerShell do guia |
 | `UNABLE_TO_GET_ISSUER_CERT_LOCALLY` / `SELF_SIGNED_CERT_IN_CHAIN` | Proxy com CA interna | `cafile` no `.npmrc` e `NODE_EXTRA_CA_CERTS` para o Node |
 | `esbuild` falha a instalar | Binário da plataforma não espelhado | Pedir `@esbuild/<plataforma>` no registo interno |
 | `EADDRINUSE :3000` ou `:5173` | Porta ocupada | Mudar `PORT` (e o proxy do Vite) ou libertar a porta |
