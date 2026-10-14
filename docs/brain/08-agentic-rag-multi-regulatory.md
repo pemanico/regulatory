@@ -218,8 +218,8 @@ knowledge/
   regulations/
     emir/
       pack.yaml              # id, name, version, topics, owners, status (active | draft)
-      digest.md              # curated rules digest for the Director (PT)
-      analysis-module.md     # Regulatory Analysis module: topics, checks, severity rules (PT)
+      digest.md              # curated rules digest for the Director (EN)
+      analysis-module.md     # Regulatory Analysis module: topics, checks, severity rules (EN)
       routing.md             # vocabulary and hints for the Director (synonyms, typical questions)
       kpis/                  # metric definitions per category (YAML)
         matching/  reporting/  clearing/  collateral/  risk-mitigation/  data-quality/  operational/
@@ -253,7 +253,7 @@ One YAML per metric, namespaced by regulation and category, loaded into the sema
 
 ```yaml
 id: emir.matching.matching_rate        # fictitious example
-label: Taxa de matching
+label: Matching rate
 category: matching
 regulation: emir
 type: ratio                            # count | sum | ratio | average | distribution
@@ -318,7 +318,8 @@ Index publication:
 | Artifact | Language |
 | --- | --- |
 | Source code and code comments | English (mandatory) |
-| Functional documents, business rules, agent prompts | Portuguese allowed |
+| Agent prompts, contracts, rules digests, regulation modules, RAG chunk templates | English (mandatory, decided 2026-10-14) |
+| Functional documents and business rules (source content in the knowledge repository) | Portuguese allowed |
 | Architecture descriptions, technical explanations | English allowed |
 | Answers to users | The user's language |
 

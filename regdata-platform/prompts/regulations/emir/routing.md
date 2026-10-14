@@ -1,21 +1,23 @@
-# Pistas de encaminhamento — EMIR
+# Routing hints — EMIR
 
-Versão: 0.1 · Incluídas no pack EMIR que o Director recebe (`routing_hints`).
+Version: 0.2 · Included in the EMIR pack the Director receives (`routing_hints`).
 
-## Vocabulário que indica EMIR
+## Vocabulary that indicates EMIR
 
-EMIR, EMIR REFIT, UTI, trade repository, TR, reconciliação, pairing, matching, unpaired, unmatched, campo em break, obrigação de clearing, CCP, técnicas de mitigação de risco, confirmação, reconciliação de portefólio, margem, colateral, ESMA.
+EMIR, EMIR REFIT, UTI, trade repository, TR, reconciliation, pairing, matching, unpaired, unmatched, field in break, clearing obligation, CCP, risk mitigation techniques, confirmation, portfolio reconciliation, margin, collateral, ESMA.
 
-Termos partilhados com outras regulações (UTI, LEI, trade repository, clearing) não chegam sozinhos para decidir; usa o contexto da conversa ou pergunta.
+Users may write in Portuguese. Common Portuguese equivalents: reconciliação, campo em break, obrigação de clearing, técnicas de mitigação de risco, confirmação, reconciliação de portefólio, margem, colateral, taxa de matching.
 
-## Perguntas típicas e tipo de pedido
+Terms shared with other regulations (UTI, LEI, trade repository, clearing) are not enough on their own to decide; use the conversation context or ask.
 
-| Pergunta | Tipo |
+## Typical questions and request type
+
+| Question | Type |
 | --- | --- |
-| "Qual a taxa de matching de ontem?" | `calculation` |
-| "Quantos unmatched têm mais de 10 dias, por contraparte?" | `calculation` |
-| "Porque é que a taxa de matching desceu esta semana?" | `mixed` |
-| "O que significa o motivo de falha X?" | `context` |
-| "Onde está implementada a regra de matching do notional?" | `context` (código) |
-| "Os unmatched persistentes levantam algum problema em EMIR?" | `regulatory_assessment` |
-| "Resubmete os reports rejeitados" | `out_of_scope` |
+| "What was yesterday's matching rate?" | `calculation` |
+| "How many unmatched are older than 10 days, by counterparty?" | `calculation` |
+| "Why did the matching rate drop this week?" | `mixed` |
+| "What does failure reason X mean?" | `context` |
+| "Where is the notional matching rule implemented?" | `context` (code) |
+| "Do the persistent unmatched raise any EMIR issue?" | `regulatory_assessment` |
+| "Resubmit the rejected reports" | `out_of_scope` |

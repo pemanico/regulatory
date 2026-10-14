@@ -44,7 +44,7 @@ interface PackSummary {
   version: string;
   topics: string[];
   kpi_catalog: { id: string; label: string; category: string; status: "certified" | "draft"; dimensions: string[] }[];
-  digest: string;                       // curated rules digest (Portuguese)
+  digest: string;                       // curated rules digest (English)
   routing_hints: string;
 }
 ```
