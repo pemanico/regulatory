@@ -13,6 +13,7 @@
 | 1.5 | Regras de validação por campo: especificação e análise | PR #6 (merged) |
 | 2c | Página web de upload e revisão das regras por campo; conversor e API; CI com anotações de falhas | PR #7 (merged) |
 | 2c.1 | POSC opcional; mapping ligado por `Table.Item`; prefixo de parte configurável (TP1/TP2); API lê o `.env`; guia `regdata-platform/docs/arranque-local.md` | PR #8 (merged) |
+| 8b/8c | Código, interface, mensagens e template do chunk em inglês; verificação de língua no lint | PR #11 |
 
 ## Próxima sessão
 
@@ -36,8 +37,6 @@ Depois: exemplo prático de matching EMIR para testar a fase 1 de `08-agentic-ra
 | 8 | Runtime de orquestração no NestJS (fase 1): contratos Zod, Director, Retriever, KPI e Tabelas com LLM simulado, validadores determinísticos, testes | Decisões #23 e #25; mart de matching (#20) |
 | 2d | Pôr a aplicação a correr localmente (guia `regdata-platform/docs/arranque-local.md`) e testar a página no banco com o Excel real e rever os problemas reportados | Merge do PR #7; questões #30 e #31; Excel com a coluna `Table.Item` formatada como texto |
 | 2e | Persistência dos uploads/revisões e publicação dos aprovados (OpenSearch + Git interno) | Questão #34 |
-| 8b | Traduzir para inglês os comentários de código existentes (hoje em português) e acrescentar verificação no CI | Regra de língua de 2026-10-13 |
-| 8c | Interface da aplicação em inglês (labels, títulos, botões, mensagens) | Decisão de 2026-10-14; questão #35 |
 | 9 | Golden set de perguntas de matching com respostas validadas | KPIs certificados (#19) |
 
 ## Fases (do Architecture Design)

@@ -56,9 +56,9 @@ curl -s -X POST localhost:3000/api/views/validate \
 
 ## Regras de validação por campo
 
-Página **Regras de validação** na aplicação web: carregar os Excel, ver os problemas de conversão, rever campo a campo e exportar os aprovados (registos JSON e chunks Markdown para o RAG). Especificação: `docs/brain/09-regras-validacao-campos.md`.
+Página **Validation rules** na aplicação web: carregar os Excel, ver os problemas de conversão, rever campo a campo e exportar os aprovados (registos JSON e chunks Markdown para o RAG). Especificação: `docs/brain/09-regras-validacao-campos.md`.
 
-- Para testar a revisão em desenvolvimento, carrega com um utilizador e revê com outro (campo "Utilizador (dev)" no topo): quem carrega não pode aprovar.
+- Para testar a revisão em desenvolvimento, carrega com um utilizador e revê com outro (campo "User (dev)" no topo): quem carrega não pode aprovar.
 - Os uploads ficam em memória: perdem-se ao reiniciar a API.
 - Configuração: copiar `apps/api/.env.example` para `apps/api/.env` (lido no arranque da API) e ajustar `FIELD_RULES_BLOCK_LABELS`, `FIELD_RULES_PARTY_PREFIX` e `FIELD_RULES_FOUR_EYES`.
 - Arranque passo a passo e problemas comuns: `docs/arranque-local.md`.

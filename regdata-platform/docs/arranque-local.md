@@ -2,7 +2,7 @@
 
 Guia para pôr a aplicação a correr numa máquina nova, incluindo dentro da rede do banco (registo npm interno, proxy, certificados).
 
-Critério de conclusão: `http://localhost:5173` abre, o separador **Regras de validação** carrega um Excel e mostra os campos convertidos.
+Critério de conclusão: `http://localhost:5173` abre, o separador **Validation rules** carrega um Excel e mostra os campos convertidos.
 
 ## 1. Pré-requisitos
 
@@ -98,10 +98,10 @@ Verificar a API: `http://localhost:3000/api/health` devolve `{"status":"ok"}`.
 
 ## 7. Teste de aceitação: regras de validação
 
-1. Abrir `http://localhost:5173`, separador **Regras de validação**.
+1. Abrir `http://localhost:5173`, separador **Validation rules**.
 2. Carregar os Excel (regras, action types, mapping DTCC ↔ BNPP; 1 a 3 ficheiros, até 10 MB cada).
-3. Confirmar: número de campos igual ao do Excel; problemas do ficheiro esperados (ex. linha sem `Table`); `POSC` aparece como "não usado" se a coluna não existir.
-4. Mudar o "Utilizador (dev)" no topo para outro nome e aprovar um campo (4-eyes).
+3. Confirmar: número de campos igual ao do Excel; problemas do ficheiro esperados (ex. linha sem `Table`); `POSC` aparece como "not used" se a coluna não existir.
+4. Mudar o "User (dev)" no topo para outro nome e aprovar um campo (4-eyes).
 5. Exportar em JSON e Markdown e abrir os ficheiros.
 
 Se a coluna `Table.Item` do mapping estiver formatada como número no Excel, `2.10` é lido como `2.1`: aparecem avisos `DUPLICATE_MAPPING` e `MAPPING_ID_MISMATCH`. Formatar a coluna como texto.

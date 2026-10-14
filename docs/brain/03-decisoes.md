@@ -4,6 +4,7 @@ Mais recente primeiro. Decisões técnicas da aplicação têm ADR em `regdata-p
 
 | Data | Decisão | Porquê |
 | --- | --- | --- |
+| 2026-10-14 | Todo o código em inglês: interface, mensagens da API e do conversor, logs, comentários, testes e template do chunk do RAG (`FIELD_ID`, `RULES_TP1`…); verificação automática no lint (`scripts/check-language.mjs`) | Ordep: o BNP é um banco internacional; resposta à questão #35 |
 | 2026-10-14 | Todas as labels e textos da interface da aplicação em inglês | Definido pelo Ordep |
 | 2026-10-14 | No banco, o registo npm interno fica fora do proxy (`NO_PROXY`) e a credencial do registo é criada com `npm login`; documentado em `arranque-local.md` §3 e §8 | Problemas encontrados no arranque (passo 2d) |
 | 2026-10-13 | Campos de parte no mapping BNPP identificados pelos prefixos `TP1`/`TP2`; blocos do chunk `REGRAS_TP1` / `REGRAS_TP2`; configurado no `.env` local (`FIELD_RULES_PARTY_PREFIX`, `FIELD_RULES_BLOCK_LABELS`) | Confirmado pelo Ordep; evita classificar como parte campos com "1_" no nome |
