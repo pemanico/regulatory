@@ -27,7 +27,7 @@ Regra prática: se a pergunta tem uma resposta exata e verificável ("qual a ver
 
 ## 2. OpenSearch: desenho do índice
 
-- **Pesquisa híbrida:** BM25 + kNN, com reranker por cima. Em texto regulatório e código, o BM25 ganha muitas vezes ("field 2.41", "Article 9", nome de função).
+- **Pesquisa híbrida:** BM25 + kNN, com reranker por cima, alojado dentro do banco (nenhuma API externa recebe documentação interna; decisão de 2026-10-14). Em texto regulatório e código, o BM25 ganha muitas vezes ("field 2.41", "Article 9", nome de função).
 - **Chunking estrutural**, nunca por tamanho fixo:
 
 | Fonte | Unidade de chunk |
@@ -106,6 +106,7 @@ Diferenças face ao padrão genérico da imagem de referência:
 - Números só vindos de outputs de tools; o validator bloqueia números sem origem.
 - Regras citadas com `rule_id@version`; documentação com documento, secção e versão.
 - "Não tenho evidência" é uma resposta válida.
+- Verificação semântica das citações (o trecho citado suporta mesmo a afirmação?) — em aberto (#37); se for feita, corre dentro do banco.
 - Golden set de perguntas por regime, com respostas validadas por especialistas, como gate no CI de prompts e modelos.
 
 ## 6. Documentação como código: Word, Excel, CSV e PDF convertidos para texto em Git
