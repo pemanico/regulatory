@@ -71,7 +71,7 @@ Consequência: a expansão por leg faz sentido **ao nível do mapping**. A regra
 
 ## 1.2 Estrutura observada nas fotos (2026-10-13)
 
-Nomes de colunas BNPP **anonimizados** neste repositório (público). Os nomes reais ficam só no banco.
+Nomes de colunas BNPP anonimizados nesta secção (escrita antes de 2026-10-15). Desde 2026-10-15 os nomes reais de colunas podem entrar no repositório; dados não.
 
 **Folha de regras por campo** (ficheiro interno de reconciliation status matching EMIR REFIT):
 

@@ -90,4 +90,4 @@ O motor da primeira fase é o DuckDB embebido na API (ADR-005). O SQL é gerado 
 2. Em cada mart, indicar `source` (caminho ou glob dos ficheiros Parquet, ou CSV com `"format": "csv"`) e, em `columns`, o nome real de cada coluna lógica. Datas em texto: `{ "column": "...", "dateFormat": "%d/%m/%Y" }`.
 3. Em `apps/api/.env`: `QUERY_BINDINGS_FILE=query-bindings.json`.
 
-Mart com modelo semântico: `emir_recon_breaks` (métricas `breaks_count`, `trades_with_breaks`, `one_sided_breaks`; dimensões `business_date`, `field_in_break`, `primary_asset_class`, `pairing_status`, `reconciliation_status`). Dias úteis = segunda a sexta.
+Mart com modelo semântico: `emir_recon_breaks` (métricas `breaks_count`, `trades_with_breaks`, `one_sided_breaks`; dimensões `business_date`, `field_in_break`, `primary_asset_class`, `pairing_status`, `reconciliation_status`, `valuation_reconciliation_status`, `reporting_type`, `rec_category`, `reconciliation_flag`, `contract_type`, `activity_l1`…`activity_l4`). O `query-bindings.example.json` já traz os nomes reais das colunas; no banco só é preciso ajustar `source` e confirmar a coluna do UTI. Dias úteis = segunda a sexta.

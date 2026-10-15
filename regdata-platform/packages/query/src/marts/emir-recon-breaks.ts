@@ -5,7 +5,8 @@ import type { SemanticMart } from '../model';
  * One row per field in break of a matched position, per business date; a trade
  * can have several rows on the same day. Only breaks are stored.
  *
- * Column names are logical; real names are mapped in the local bindings file.
+ * Column names are logical; the real names are in docs/brain/marts/emir-recon-breaks.md and in
+ * apps/api/query-bindings.example.json.
  */
 
 /** Trade key: UTI and proprietary id together. Either can be empty. */
@@ -68,6 +69,15 @@ export const EMIR_RECON_BREAKS: SemanticMart = {
       description: 'Reconciliation status from the trade repository',
       dimension: true,
     },
+    { id: 'valuation_reconciliation_status', type: 'string', label: 'Valuation reconciliation status', description: 'Valuation reconciliation status from the trade repository', dimension: true },
+    { id: 'reporting_type', type: 'string', label: 'Reporting type', description: 'One-sided or two-sided reporting', dimension: true },
+    { id: 'rec_category', type: 'string', label: 'Reconciliation category', description: 'Reconciliation category from the trade repository', dimension: true },
+    { id: 'reconciliation_flag', type: 'string', label: 'Reconciliation flag', description: 'Status of the position in the prior reconciliation (only matched positions are in the mart)', dimension: true },
+    { id: 'contract_type', type: 'string', label: 'Contract type', description: 'Contract type of the trade', dimension: true },
+    { id: 'activity_l1', type: 'string', label: 'Activity level 1', description: 'Internal activity hierarchy, level 1', dimension: true },
+    { id: 'activity_l2', type: 'string', label: 'Activity level 2', description: 'Internal activity hierarchy, level 2', dimension: true },
+    { id: 'activity_l3', type: 'string', label: 'Activity level 3', description: 'Internal activity hierarchy, level 3', dimension: true },
+    { id: 'activity_l4', type: 'string', label: 'Activity level 4', description: 'Internal activity hierarchy, level 4', dimension: true },
   ],
   metrics: [
     {

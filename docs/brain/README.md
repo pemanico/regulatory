@@ -29,8 +29,8 @@ Uma ficha por mart em [`marts/`](marts/), a partir de [`marts/_template.md`](mar
 
 | Id | Jurisdição | Necessidade de negócio | Estado da ficha |
 | --- | --- | --- | --- |
-| [emir-recon-breaks](marts/emir-recon-breaks.md) | EMIR | Breaks de reconciliação por trade e campo, com o valor de cada parte | Anonimizada; colunas lógicas; só breaks, sobre posições matched; questão #38 |
-| [emir-tr-recon-status](marts/emir-tr-recon-status.md) | EMIR | Recon status file do trade repository (fonte externa): estados e valores TP1/TP2 por campo | Anonimizada; estrutura por grupos |
+| [emir-recon-breaks](marts/emir-recon-breaks.md) | EMIR | Breaks de reconciliação por trade e campo, com o valor de cada parte | Colunas reais + nomes lógicos; só breaks, sobre posições matched; questão #38 |
+| [emir-tr-recon-status](marts/emir-tr-recon-status.md) | EMIR | Recon status file do trade repository (fonte externa): estados e valores TP1/TP2 por campo | Colunas reais (cabeçalho transcrito), pares TP1/TP2 |
 
 ## Regras de manutenção
 

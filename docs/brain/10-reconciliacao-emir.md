@@ -1,6 +1,6 @@
 # Reconciliação EMIR: modelo de dados e ligações
 
-Primeiro exemplo prático de matching EMIR (questão #20), apresentado pelo Ordep em 2026-10-15. Este ficheiro está no repositório **público**: nomes de colunas, valores e identificadores reais não entram aqui. Os nomes abaixo são **lógicos e inventados**; a correspondência com os nomes reais fica num binding local no banco (ver §6).
+Primeiro exemplo prático de matching EMIR (questão #20), apresentado pelo Ordep em 2026-10-15. Este ficheiro está no repositório **público**: desde 2026-10-15 os nomes reais de colunas podem entrar (Ordep); **dados** (valores, identificadores de trades, LEIs, clientes) não. O código usa nomes lógicos; a correspondência com as colunas reais está nas fichas dos marts e no ficheiro de bindings (§6).
 
 Fichas dos dois conjuntos de dados: [`marts/emir-recon-breaks.md`](marts/emir-recon-breaks.md) e [`marts/emir-tr-recon-status.md`](marts/emir-tr-recon-status.md).
 
@@ -52,7 +52,7 @@ Observado nas amostras de 2026-10-12 (PDF transcritos a partir de CSV; alguns id
 
 ### 4.1 Forma do nome do campo em break
 
-Ordep (2026-10-15): o campo em break vem na coluna própria do mart; "Asset class" era só um exemplo de campo. Na amostra os valores têm a forma do **sufixo da coluna do trade repository** (maiúsculas com underscores, igual ao que vem depois de `TP1_`/`TP2_`), e há valores que não têm coluna correspondente no mapping nem no recon (um parece um campo interno do banco). Se for assim, a ligação E → C faz-se retirando o prefixo de parte às colunas do mapping, não pelo nome do campo, e os campos sem correspondência têm de ser contados e listados, não ignorados.
+Ordep (2026-10-15): o campo em break vem na coluna própria do mart; "Asset class" era só um exemplo de campo. Na amostra os valores têm a forma do **sufixo da coluna do trade repository** (maiúsculas com underscores, igual ao que vem depois de `TP1_`/`TP2_`), e há valores que não têm coluna correspondente no mapping nem no recon (na amostra, `PRICE` e `PRICE_CCY`). Se for assim, a ligação E → C faz-se retirando o prefixo de parte às colunas do mapping, não pelo nome do campo, e os campos sem correspondência têm de ser contados e listados, não ignorados.
 
 Proposta (não decidida): ligar o campo em break ao mapping pelas duas formas — nome do campo normalizado **ou** sufixo das colunas `TP1_`/`TP2_` da linha do mapping — e reportar os que não ligam a nenhuma. Funciona qualquer que seja a forma real, sem depender de mais esclarecimentos.
 
