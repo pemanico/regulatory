@@ -79,7 +79,9 @@ Há breaks em que um dos valores está vazio. Para os KPIs é útil separar "val
 
 ### 4.6 Action type do trade
 
-Para ligar um break às regras de B (era obrigatório? era opcional?) é preciso o action type do último report do trade. Nenhuma das amostras o mostra.
+Para ligar um break às regras de B (era obrigatório? era opcional?) seria preciso o action type do último report do trade. Ordep (2026-10-15): o action type não vem em nenhum dos ficheiros; **ignora-se por agora**. O estado M/C/O é mostrado para todos os action types, sem escolher um.
+
+Proposta (não decidida): quando o estado é igual em todos os action types que levam o campo (os que não são `-`), mostrá-lo como estado efetivo; quando difere, indicar "depende do action type".
 
 ## 5. Uso principal (Ordep, 2026-10-15)
 

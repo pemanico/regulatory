@@ -30,7 +30,6 @@
 | 31 | Validar com o Excel real as propostas já implementadas em `09-regras-validacao-campos.md` §2–§5: conversão por código no banco; registo canónico + chunk gerado; join por Table+Item com verificação de Section/Field; vazio = erro; condições preservadas palavra a palavra; metadados de versão | Mudam a especificação | Ordep |
 | 37 | Acrescentar ao Retriever/Director um passo de "juiz" local com saídas tipadas (relevância e suficiência dos trechos, suporte de cada citação)? Decidir com números do golden set (recall@k ao cortar trechos, afirmações sem suporte) | Proposta do Claude: interface trocável, implementação local (reranker + modelo de verificação); não entra na fase 1 | Ordep, depois do passo 9 |
 | 38 | Valores do campo em break sem correspondência no mapping (na amostra, um preço e uma moeda interna): o que são e se devem entrar nos KPIs por campo | Ficam sem regra M/C/O associada; `10` §4.1 | Ordep |
-| 40 | Onde está o action type do trade (para ligar às regras M/C/O)? | Taxa de matching e breaks por obrigatoriedade; `10` §4.4–§4.6 | Ordep |
 | 34 | Persistência dos uploads e revisões (hoje em memória) e destino final: indexação no OpenSearch e gravação no Git interno | A exportação manual é provisória | Ordep / Claude |
 
 ## Respondidas
@@ -46,3 +45,4 @@
 | 40a | O mart tem trades sem break? | Não, só breaks; o denominador das taxas vem do recon status file (2026-10-15) | `10` §4.4 |
 | 40b | O que significa a flag "Matched" em linhas com break? | Estado da posição na reconciliação prévia; o mart só calcula breaks sobre posições matched (2026-10-15) | `10` §4.4 |
 | 41 | Universo de posições matched (denominador) e calendário de dias úteis | Taxas sobre o universo matched fora do âmbito; dias úteis = segunda a sexta, sem feriados (2026-10-15) | `10` §4.4 e §5, `03` |
+| 40c | Onde está o action type do trade? | Não vem em nenhum ficheiro; ignorado por agora (2026-10-15) | `10` §4.6, `03` |

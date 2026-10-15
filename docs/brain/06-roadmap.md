@@ -24,7 +24,7 @@
 
 Inputs do Ordep: ficha anonimizada de um mart com estado de pairing/matching (#20) e os KPIs de matching calculados hoje em Excel, com as escolhas de definição (#19).
 
-Estado (2026-10-15): fichas em `marts/` feitas; #39 e parte de #40 respondidas; faltam #38, #40 (action type), e o resto de #19 (volume: nº ou notional) para fechar os KPIs.
+Estado (2026-10-15): fichas em `marts/` feitas; #39 e parte de #40 respondidas; #40 resolvida (action type ignorado por agora); faltam #38 e o resto de #19 (volume: nº ou notional) para fechar os KPIs.
 
 Critério de conclusão: ficha em `marts/`, KPIs em YAML (`draft`) com numerador, denominador e regras de aging decididas, e as questões #19 e #20 respondidas ou reduzidas a pontos concretos.
 
