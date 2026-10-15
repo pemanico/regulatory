@@ -16,6 +16,7 @@
 | 8b/8c | Código, interface, mensagens e template do chunk em inglês; verificação de língua no lint | PR #11 |
 | 2d | Aplicação a correr na máquina do banco (Windows, registo npm interno, proxy) e teste de aceitação com o Excel real concluído | PR #10, #11; guia `arranque-local.md` |
 | 8d | Prompts dos agentes, contratos e módulos de regulação em inglês | PR #12 |
+| F1.1 | Métricas e compilador: modelo semântico do mart de breaks, spec → SQL (DuckDB), ficheiro de bindings local, `POST /api/views/run`, testes com Parquet e CSV fictícios | PR #16 |
 | 2f | Exemplo de matching EMIR recebido: modelo dos cinco artefactos, fichas anonimizadas do mart de breaks e do recon status file, KPIs candidatos | `10-reconciliacao-emir.md`, `marts/` |
 
 ## Próxima sessão
@@ -32,7 +33,7 @@ Critério de conclusão: ficha em `marts/`, KPIs em YAML (`draft`) com numerador
 
 Ordem proposta (a confirmar passo a passo):
 
-1. **Métricas e compilador**: catálogo de métricas do mart de breaks (lógico), spec → SQL determinístico, execução sobre Parquet fictício, testes. Base para os KPIs e para o explicador (ler as linhas de um break).
+1. ~~**Métricas e compilador**~~ feito (PR #16); falta testar no banco com o mart real (bindings + `npm view` do DuckDB).: catálogo de métricas do mart de breaks (lógico), spec → SQL determinístico, execução sobre Parquet fictício, testes. Base para os KPIs e para o explicador (ler as linhas de um break).
 2. **Explicador de breaks** (CASO-001): break → mapping → regra aprovada → estado M/C/O, contexto do trade, verificações determinísticas, explicação citada.
 3. **Prompt → spec** com LLM (simulado nos testes), validação e resposta com placeholders.
 4. **Modo de exploração** com SQL do LLM, separado e marcado "não certificado".
