@@ -28,6 +28,8 @@ Estado (2026-10-15): fichas em `marts/` feitas; #39 e parte de #40 respondidas; 
 
 Critério de conclusão: ficha em `marts/`, KPIs em YAML (`draft`) com numerador, denominador e regras de aging decididas, e as questões #19 e #20 respondidas ou reduzidas a pontos concretos.
 
+Proposta para o passo seguinte (a confirmar pelo Ordep): **explicador de breaks** (CASO-001) — ligação determinística break → mapping → regra aprovada → estado M/C/O, contexto do trade a partir do recon status file, verificações determinísticas e explicação citada. Dados fictícios no repositório público.
+
 ## Próximo
 
 | Passo | O quê | Precisa de |
