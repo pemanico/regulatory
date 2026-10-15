@@ -21,7 +21,7 @@ Um ficheiro por caso em [`casos/`](casos/), a partir de [`casos/_template.md`](c
 
 | Id | Título | Jurisdição | Estado |
 | --- | --- | --- | --- |
-| — | Ainda sem casos | — | — |
+| [CASO-001](casos/CASO-001-explicar-break.md) | Perceber porque é que um campo está em break (mart de breaks → regras por campo) | EMIR | Recebido |
 
 ## Data marts
 

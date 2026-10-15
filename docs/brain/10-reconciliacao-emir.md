@@ -81,7 +81,11 @@ Há breaks em que um dos valores está vazio. Para os KPIs é útil separar "val
 
 Para ligar um break às regras de B (era obrigatório? era opcional?) é preciso o action type do último report do trade. Nenhuma das amostras o mostra.
 
-## 5. KPIs candidatos (proposta, não decidido)
+## 5. Uso principal (Ordep, 2026-10-15)
+
+Os utilizadores olham para o mart, veem o break e vão ao ficheiro de regras de negócio para perceber o porquê do erro. Caso em [`casos/CASO-001-explicar-break.md`](casos/CASO-001-explicar-break.md). Os KPIs abaixo são secundários face a este uso.
+
+## 5.1 KPIs candidatos (proposta, não decidido)
 
 | Id | Definição proposta | Fonte | Depende de |
 | --- | --- | --- | --- |
