@@ -43,7 +43,7 @@ Só as colunas descritas pelo Ordep ou necessárias às ligações. O mart real 
 
 ## Métricas derivadas (para a semantic layer)
 
-Propostas em `10` §5, todas em `draft` até fechar #19 e as questões #38–#40.
+Propostas em `10` §5, todas em `draft` até fechar #19 e a questão #38.
 
 | Id | Definição | Aditiva? | Estado |
 | --- | --- | --- | --- |
@@ -53,6 +53,7 @@ Propostas em `10` §5, todas em `draft` até fechar #19 e as questões #38–#40
 ## Casos que usam este mart
 
 - Exemplo prático de matching EMIR (`10-reconciliacao-emir.md`).
+- [CASO-001](../casos/CASO-001-explicar-break.md): perceber porque é que um campo está em break.
 
 ## Notas e armadilhas
 

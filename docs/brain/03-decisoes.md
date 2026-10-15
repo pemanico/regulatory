@@ -5,6 +5,10 @@ Mais recente primeiro. Decisões técnicas da aplicação têm ADR em `regdata-p
 | Data | Decisão | Porquê |
 | --- | --- | --- |
 | 2026-10-15 | Modelo da reconciliação EMIR (Ordep): recon status file da DTCC ↔ mapping pelas colunas `TP1_<campo>`/`TP2_<campo>`; mapping ↔ regras e action types pelo nome do campo; mart de breaks ↔ recon status file por UTI + proprietary id + business date; processamento por business date; regras iguais para todas as datas | Exemplo prático de matching (#20); `10-reconciliacao-emir.md` |
+| 2026-10-15 | Motor da primeira fase: DuckDB embebido no NestJS a ler Parquet (ADR-005); Cube + Trino (ADR-001) fica para quando houver mais consumidores ou volume | Ordep (questão #42) |
+| 2026-10-15 | KPIs por prompt (opção B): o LLM traduz o prompt para uma spec estruturada validada (Zod); um compilador determinístico gera o SQL sobre o Parquet a partir de métricas definidas e testadas; o LLM não escreve SQL nem números. Mais tarde, modo de exploração separado com SQL escrito pelo LLM: só leitura, tabelas permitidas, limite de linhas, SQL visível, resultado marcado "não certificado" | Ordep escolheu B entre A (só spec), B (spec + exploração depois) e C (SQL do LLM direto); o grão trade × campo do mart torna o SQL livre propenso a números errados sem erro |
+| 2026-10-15 | Âmbito da primeira fase: explicar os breaks (CASO-001) e gerar KPIs sobre breaks por prompt | Ordep |
+| 2026-10-15 | Action type do trade ignorado por agora (não vem em nenhum ficheiro): o estado M/C/O é mostrado para todos os action types | Ordep (questão #40) |
 | 2026-10-15 | Sem KPIs de taxa sobre o universo de posições matched: a plataforma trabalha só sobre os breaks. Dias úteis = segunda a sexta, sem calendário de feriados | Ordep (questão #41) |
 | 2026-10-15 | O mart de breaks corre sobre uma reconciliação prévia e só calcula breaks das posições matched; aging sempre em dias úteis | Ordep (questões #19, #40) |
 | 2026-10-15 | O mart só tem breaks; UTI e proprietary id vêm no recon status file e o proprietary id segue as mesmas regras de negócio que o UTI | Ordep (questões #39, #40) |
