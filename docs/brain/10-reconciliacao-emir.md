@@ -50,13 +50,15 @@ Consequência para os KPIs: o mart tem granularidade *trade × campo em break*. 
 
 Observado nas amostras de 2026-10-12 (PDF transcritos a partir de CSV; alguns identificadores aparecem escritos de forma diferente entre ficheiros, por isso parte disto pode ser erro de transcrição).
 
-### 4.1 O campo em break não é o nome do campo do mapping
+### 4.1 Forma do nome do campo em break
 
-A descrição diz que o campo em break é o nome do mapping (ex. "Asset class"). Na amostra os valores têm a forma do **sufixo da coluna do trade repository** (maiúsculas com underscores, igual ao que vem depois de `TP1_`/`TP2_`), e há valores que não têm coluna correspondente no mapping nem no recon (um parece um campo interno do banco). Se for assim, a ligação E → C faz-se retirando o prefixo de parte às colunas do mapping, não pelo nome do campo, e os campos sem correspondência têm de ser contados e listados, não ignorados.
+Ordep (2026-10-15): o campo em break vem na coluna própria do mart; "Asset class" era só um exemplo de campo. Na amostra os valores têm a forma do **sufixo da coluna do trade repository** (maiúsculas com underscores, igual ao que vem depois de `TP1_`/`TP2_`), e há valores que não têm coluna correspondente no mapping nem no recon (um parece um campo interno do banco). Se for assim, a ligação E → C faz-se retirando o prefixo de parte às colunas do mapping, não pelo nome do campo, e os campos sem correspondência têm de ser contados e listados, não ignorados.
+
+Proposta (não decidida): ligar o campo em break ao mapping pelas duas formas — nome do campo normalizado **ou** sufixo das colunas `TP1_`/`TP2_` da linha do mapping — e reportar os que não ligam a nenhuma. Funciona qualquer que seja a forma real, sem depender de mais esclarecimentos.
 
 ### 4.2 Chave de ligação E ↔ D
 
-- Nenhum dos dois cabeçalhos transcritos tem uma coluna com o nome UTI; nas linhas de dados há valores com forma de UTI sem cabeçalho correspondente (cabeçalho e dados desalinhados).
+- Ordep (2026-10-15): o UTI e o proprietary id vêm no recon status file; o proprietary id segue as **mesmas regras de negócio que o UTI** (é tratado como identificador do trade). A ligação mart ↔ recon é UTI + proprietary id + business date. Os cabeçalhos transcritos nos PDF estavam incompletos (havia valores sem cabeçalho).
 - A business date vem em formatos diferentes (`dd/mm/yyyy` no recon, ISO no mart). Em Parquet, ambas devem ser do tipo `date`; até lá, o join tem de normalizar.
 
 ### 4.3 Pares TP1/TP2 assimétricos
@@ -65,7 +67,9 @@ No mapping e no recon há pares em que o sufixo da parte 1 e da parte 2 não é 
 
 ### 4.4 Estado "matched" com breaks
 
-O mart traz uma flag final de reconciliação com o valor "Matched" em linhas que têm campo em break, enquanto o estado de reconciliação do trade repository é "não reconciliado" (NREC). Sem definir o que esta flag significa, qualquer KPI de "taxa de matching" pode contar o mesmo trade como matched e em break.
+Ordep (2026-10-15): **o mart só tem breaks.** Logo, um trade reconciliável que está no recon status file e não aparece no mart não tem campos em break nessa business date, e o denominador de qualquer taxa vem do recon status file.
+
+Continua por esclarecer: o mart traz uma flag final de reconciliação com o valor "Matched" em linhas que têm campo em break, enquanto o estado de reconciliação do trade repository é "não reconciliado" (NREC). Sem definir o que esta flag significa, qualquer KPI de "taxa de matching" pode contar o mesmo trade como matched e em break.
 
 ### 4.5 Breaks com um dos lados vazio
 
@@ -81,7 +85,7 @@ Para ligar um break às regras de B (era obrigatório? era opcional?) é preciso
 | --- | --- | --- | --- |
 | `breaks_count` | Nº de linhas do mart (trade × campo) na business date | E | — |
 | `trades_with_breaks` | Nº de trades distintos com ≥ 1 break | E | chave do trade (§4.2) |
-| `break_rate` | `trades_with_breaks` / trades reconciliáveis (paired, two-sided) no recon | E + D | §4.2, §4.4 e definição de "reconciliável" (#19) |
+| `break_rate` | `trades_with_breaks` / trades reconciliáveis (paired, two-sided) no recon; trades fora do mart = sem break | E + D | definição de "reconciliável" (#19) |
 | `breaks_by_field` | `breaks_count` por campo, com nome do campo e Table.Item via mapping | E + C + A | §4.1 |
 | `breaks_by_asset_class` | `breaks_count` por classe de ativo | E | — |
 | `one_sided_breaks` | Breaks com um dos lados vazio, por campo e estado M/C/O | E + B | §4.5, §4.6 |

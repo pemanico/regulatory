@@ -34,6 +34,6 @@ volume_per_month: (a indicar)
 ## Notas e armadilhas
 
 - Business date em `dd/mm/yyyy` no CSV; o mart de breaks usa ISO. Em Parquet, ambos devem ser `date`.
-- Cabeçalho e dados aparentemente desalinhados na amostra transcrita: há valores com forma de UTI sem coluna com esse nome (`10` §4.2).
+- Contém o UTI e o proprietary id (mesmas regras de negócio que o UTI): chave de ligação ao mart de breaks, com a business date. Os cabeçalhos transcritos nos PDF estavam incompletos.
 - Pares TP1/TP2 com sufixos diferentes e colunas repetidas no cabeçalho (`10` §4.3): emparelhar sempre pela linha do mapping.
 - É o denominador natural de "trades reconciliáveis" para os KPIs de taxa.

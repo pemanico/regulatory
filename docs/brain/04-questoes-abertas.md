@@ -29,9 +29,8 @@
 | 30 | O que é o terceiro campo BNPP em alguns mappings (ex. asset class): derivado, consolidado, ou usado no controlo? | Hoje fica como campo comum (`OUTROS_CAMPOS_BNPP`); ver `09` §1.2 | Ordep |
 | 31 | Validar com o Excel real as propostas já implementadas em `09-regras-validacao-campos.md` §2–§5: conversão por código no banco; registo canónico + chunk gerado; join por Table+Item com verificação de Section/Field; vazio = erro; condições preservadas palavra a palavra; metadados de versão | Mudam a especificação | Ordep |
 | 37 | Acrescentar ao Retriever/Director um passo de "juiz" local com saídas tipadas (relevância e suficiência dos trechos, suporte de cada citação)? Decidir com números do golden set (recall@k ao cortar trechos, afirmações sem suporte) | Proposta do Claude: interface trocável, implementação local (reranker + modelo de verificação); não entra na fase 1 | Ordep, depois do passo 9 |
-| 38 | O campo em break do mart é o nome do campo do mapping (ex. "Asset class") ou o sufixo da coluna do trade repository? Na amostra parece o sufixo, e há valores sem correspondência no mapping | Define a ligação mart → mapping → regras; `10` §4.1 | Ordep |
-| 39 | Colunas exatas da ligação mart ↔ recon status file (UTI e proprietary id não aparecem com esse nome nos cabeçalhos da amostra) e formato da business date em Parquet | Sem chave certa, o denominador dos KPIs de taxa falha; `10` §4.2 | Ordep |
-| 40 | O mart tem trades sem break, ou só breaks? O que significa a flag final "Matched" em linhas com break? Onde está o action type do trade? | Define `break_rate`, a taxa de matching e a ligação às regras M/C/O; `10` §4.4–§4.6 | Ordep |
+| 38 | Valores do campo em break sem correspondência no mapping (na amostra, um preço e uma moeda interna): o que são e se devem entrar nos KPIs por campo | Ficam sem regra M/C/O associada; `10` §4.1 | Ordep |
+| 40 | O que significa a flag final "Matched" em linhas com break? Onde está o action type do trade (para ligar às regras M/C/O)? | Taxa de matching e breaks por obrigatoriedade; `10` §4.4–§4.6 | Ordep |
 | 34 | Persistência dos uploads e revisões (hoje em memória) e destino final: indexação no OpenSearch e gravação no Git interno | A exportação manual é provisória | Ordep / Claude |
 
 ## Respondidas
@@ -43,3 +42,5 @@
 | 32 | A folha de action types tem coluna `POSC`? | `POSC` não é usado por agora; a ausência não é erro (2026-10-13) | `09` §1.2, `03` |
 | 33 | Acrescentar a coluna `Table.Item` ao mapping? | O mapping tem a coluna `Table.Item`, concatenação de Table e Item; é a chave de ligação (2026-10-13) | `09` §4.3a, `03` |
 | 30a | Nome dos blocos e prefixo de parte no mapping BNPP | Os campos de parte começam por `TP1` e `TP2`; blocos `REGRAS_TP1` / `REGRAS_TP2` (2026-10-13) | `09` §4.1, `03` |
+| 39 | Chave da ligação mart ↔ recon status file | UTI + proprietary id + business date, ambos no recon status file; o proprietary id segue as mesmas regras de negócio que o UTI (2026-10-15) | `10` §4.2 |
+| 40a | O mart tem trades sem break? | Não, só breaks; o denominador das taxas vem do recon status file (2026-10-15) | `10` §4.4 |

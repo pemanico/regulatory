@@ -10,7 +10,7 @@ business_need: >
   Saber, por business date, que trades têm campos em break na reconciliação do
   trade repository, com o valor reportado pelo BNPP e pela contraparte.
   Responde em parte à necessidade de negócio (Ordep, 2026-10-15).
-grain: trade × campo em break      # um trade pode ter várias linhas no mesmo dia
+grain: trade × campo em break      # só breaks; um trade pode ter várias linhas no mesmo dia
 partition_key: business_date
 location: (binding local)
 format: csv hoje, parquet no futuro
@@ -30,8 +30,8 @@ Só as colunas descritas pelo Ordep ou necessárias às ligações. O mart real 
 | Coluna lógica | Tipo | Significado | Papel |
 | --- | --- | --- | --- |
 | `business_date` | date | Data de processamento | partição / chave de ligação |
-| `uti` | string | Unique Trade Identifier | chave de ligação ao recon status file (cabeçalho por confirmar, `10` §4.2) |
-| `proprietary_id` | string | Identificador proprietário do trade | chave de ligação |
+| `uti` | string | Unique Trade Identifier | chave de ligação ao recon status file (UTI + proprietary id + business date) |
+| `proprietary_id` | string | Identificador proprietário do trade; mesmas regras de negócio que o UTI | chave de ligação |
 | `field_in_break` | string | Campo em break; preenchido sempre que o valor da parte 1 ≠ valor da parte 2 | dimensão / ligação ao mapping (`10` §4.1) |
 | `party_1_value` | string | Valor reportado pelo BNPP (coluna `TP1_<campo>` do recon) | atributo |
 | `party_2_value` | string | Valor reportado pela contraparte (coluna `TP2_<campo>` do recon) | atributo |
@@ -49,7 +49,7 @@ Propostas em `10` §5, todas em `draft` até fechar #19 e as questões #38–#40
 | --- | --- | --- | --- |
 | `breaks_count` | nº de linhas | sim | draft |
 | `trades_with_breaks` | count distinct da chave do trade | não (distinct) | draft |
-| `break_rate` | `trades_with_breaks` / trades reconciliáveis no recon status file | não (rácio) | draft |
+| `break_rate` | `trades_with_breaks` / trades reconciliáveis no recon status file (o mart só tem breaks) | não (rácio) | draft |
 
 ## Casos que usam este mart
 
