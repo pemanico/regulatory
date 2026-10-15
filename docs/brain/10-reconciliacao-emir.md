@@ -103,4 +103,4 @@ Fora do âmbito: taxas sobre o universo de posições matched (ex. % de posiçõ
 
 ## 6. Nomes reais e binding local
 
-O código da plataforma usa os nomes lógicos (ex. `party_1_value`, `field_in_break`, `uti`, `proprietary_id`, `business_date`). No banco, um ficheiro de configuração local faz a correspondência nome lógico → coluna real e caminho do Parquet, ao mesmo nível do `.env`. Assim o repositório público não precisa dos nomes reais e o Ordep só edita configuração, não código. (Proposta; implementar quando a semantic layer for construída — passo 2.)
+O código da plataforma usa os nomes lógicos (ex. `party_1_value`, `field_in_break`, `uti`, `proprietary_id`, `business_date`). No banco, um ficheiro de configuração local faz a correspondência nome lógico → coluna real e caminho do Parquet, ao mesmo nível do `.env`. Assim o repositório público não precisa dos nomes reais e o Ordep só edita configuração, não código. Implementado em 2026-10-15 (PR #16): `apps/api/query-bindings.json`, local, com `source` (Parquet ou CSV) e `columns` (nome lógico → nome real, formato de data opcional).

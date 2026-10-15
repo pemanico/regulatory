@@ -39,6 +39,7 @@ O Vite encaminha `/api` para o backend.
 | GET | `/api/health` | Health check (público) |
 | GET | `/api/catalog/marts` | Marts visíveis para o utilizador |
 | POST | `/api/views/validate` | Valida uma spec de vista |
+| POST | `/api/views/run` | Valida, compila e executa uma spec no DuckDB; devolve linhas, o SQL gerado e avisos (datas sem dados, métricas em draft) |
 | POST | `/api/field-rules/uploads` | Upload de 1–3 `.xlsx` (regras, action types, mapping DTCC ↔ BNPP) e conversão |
 | GET | `/api/field-rules/uploads` | Uploads recentes |
 | GET | `/api/field-rules/uploads/:id` | Campos convertidos, problemas, chunks e estado de revisão |
@@ -80,3 +81,13 @@ O mock recusa arrancar com `NODE_ENV=production`. O SSO entra em
 
 `apps/api/src/catalog/catalog.fixtures.ts` contém um catálogo **fictício**.
 Será substituído pelas fichas de mart reais depois da fase de descoberta.
+
+## Consultas aos marts (DuckDB)
+
+O motor da primeira fase é o DuckDB embebido na API (ADR-005). O SQL é gerado pelo compilador em `packages/query` a partir de métricas definidas em código; nunca é escrito pelo LLM.
+
+1. Copiar `apps/api/query-bindings.example.json` para `apps/api/query-bindings.json` (fica fora do Git).
+2. Em cada mart, indicar `source` (caminho ou glob dos ficheiros Parquet, ou CSV com `"format": "csv"`) e, em `columns`, o nome real de cada coluna lógica. Datas em texto: `{ "column": "...", "dateFormat": "%d/%m/%Y" }`.
+3. Em `apps/api/.env`: `QUERY_BINDINGS_FILE=query-bindings.json`.
+
+Mart com modelo semântico: `emir_recon_breaks` (métricas `breaks_count`, `trades_with_breaks`, `one_sided_breaks`; dimensões `business_date`, `field_in_break`, `primary_asset_class`, `pairing_status`, `reconciliation_status`). Dias úteis = segunda a sexta.

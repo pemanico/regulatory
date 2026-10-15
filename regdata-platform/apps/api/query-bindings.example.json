@@ -1,0 +1,19 @@
+{
+  "marts": {
+    "emir_recon_breaks": {
+      "format": "parquet",
+      "source": "C:/data/example/breaks/**/*.parquet",
+      "columns": {
+        "business_date": "example_business_date",
+        "uti": "example_uti",
+        "proprietary_id": "example_proprietary_id",
+        "field_in_break": "example_field_in_break",
+        "party_1_value": "example_party_1_value",
+        "party_2_value": "example_party_2_value",
+        "primary_asset_class": "example_asset_class",
+        "pairing_status": "example_pairing_status",
+        "reconciliation_status": "example_reconciliation_status"
+      }
+    }
+  }
+}

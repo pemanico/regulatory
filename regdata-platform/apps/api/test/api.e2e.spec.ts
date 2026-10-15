@@ -41,7 +41,7 @@ describe('API', () => {
 
   it('GET /api/catalog/marts filters by the user jurisdictions', async () => {
     const all = await request(app.getHttpServer()).get('/api/catalog/marts').expect(200);
-    expect(all.body.map((m: { id: string }) => m.id)).toEqual(['example_emir_validation', 'example_cftc_recon']);
+    expect(all.body.map((m: { id: string }) => m.id)).toEqual(['example_emir_validation', 'example_cftc_recon', 'emir_recon_breaks']);
 
     const cftcOnly = await request(app.getHttpServer())
       .get('/api/catalog/marts')

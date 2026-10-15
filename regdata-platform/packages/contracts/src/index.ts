@@ -3,3 +3,4 @@ export * from './catalog';
 export * from './view-spec';
 export * from './validation';
 export * from './field-rules';
+export * from './view-result';

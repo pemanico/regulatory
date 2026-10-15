@@ -54,6 +54,7 @@ Notas para uma rede com proxy corporativo (Windows, PowerShell):
   Uma linha `:_authToken` que não comece por `//` é ignorada e o registo responde `E401`.
 - Não pôr utilizador e password dentro de `HTTPS_PROXY` nem colar o output de `npm config list` em canais externos: mostra os tokens.
 - Para verificar o `esbuild` antes do install: `npm view "@esbuild/win32-x64" version`.
+- Para verificar o DuckDB (motor de consulta, ADR-005): `npm view @duckdb/node-api@1.5.2-r.1 version` e `npm view @duckdb/node-bindings@1.5.2-r.1 optionalDependencies` (lista os pacotes por plataforma; o de Windows x64 tem de existir no registo interno).
 
 ## 4. Instalar
 
@@ -87,6 +88,15 @@ O `apps/api/.env` é lido no arranque (Node ≥ 20.12). Valores a rever:
 
 Os valores reais dos prefixos ficam só no `.env` local, que não vai para o Git.
 
+## 5.1 Configurar as consultas aos marts (DuckDB)
+
+1. Copiar `apps/api/query-bindings.example.json` para `apps/api/query-bindings.json` (não vai para o Git).
+2. Em `source`, o caminho dos ficheiros do mart (glob permitido, ex. `D:/dados/breaks/**/*.parquet`). Enquanto os ficheiros forem CSV: `"format": "csv"`.
+3. Em `columns`, o nome real de cada coluna lógica. Datas em texto: `{ "column": "<nome>", "dateFormat": "%d/%m/%Y" }`.
+4. No `.env`: `QUERY_BINDINGS_FILE=query-bindings.json`.
+
+Os nomes reais ficam só neste ficheiro local.
+
 ## 6. Verificar e arrancar
 
 ```bash
@@ -117,6 +127,10 @@ Se a coluna `Table.Item` do mapping estiver formatada como número no Excel, `2.
 | `The term ... is not recognized` no PowerShell | Comando mal escrito, ou comando de cmd no PowerShell | Confirmar que a linha começa por `PS`; usar os comandos PowerShell do guia |
 | `UNABLE_TO_GET_ISSUER_CERT_LOCALLY` / `SELF_SIGNED_CERT_IN_CHAIN` | Proxy com CA interna | `cafile` no `.npmrc` e `NODE_EXTRA_CA_CERTS` para o Node |
 | `esbuild` falha a instalar | Binário da plataforma não espelhado | Pedir `@esbuild/<plataforma>` no registo interno |
+| `@duckdb/node-bindings*` falha a instalar | Binário do DuckDB para a plataforma não espelhado | Pedir o pacote da plataforma listado em `optionalDependencies` no registo interno |
+| `/api/views/run` responde 503 "not configured" | Mart sem entrada no ficheiro de bindings, ou `QUERY_BINDINGS_FILE` em falta | Ver §5.1 |
+| `/api/views/run` responde 500 com "Referenced column … not found" | Nome real de coluna errado no ficheiro de bindings | Corrigir o nome em `columns` |
+| Aviso `MISSING_BUSINESS_DATES` | Dias úteis do período sem ficheiros no `source` | Confirmar se o mart foi processado nessas datas |
 | `EADDRINUSE :3000` ou `:5173` | Porta ocupada | Mudar `PORT` (e o proxy do Vite) ou libertar a porta |
 | Web abre mas dá erro de rede em `/api` | API não arrancou | Ver o output com prefixo `api` no terminal |
 | Aviso "requer Node.js >= 20.12" | Node antigo | Atualizar o Node; sem isso o `.env` é ignorado |

@@ -7,3 +7,4 @@ coverage/
 !.env.example
 .DS_Store
 .npmrc
+apps/api/query-bindings.json
