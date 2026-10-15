@@ -8,6 +8,8 @@ LLM interpreta → sistemas determinísticos executam → sistemas de dados calc
 
 O LLM nunca é fonte de verdade, nunca calcula números e nunca escreve SQL no caminho principal.
 
+Caminho principal dos KPIs (decisão 2026-10-15, opção B): prompt → LLM → spec validada → compilador determinístico → SQL sobre Parquet → resultado. Exceção prevista para mais tarde: **modo de exploração**, separado, em que o LLM escreve SQL só de leitura sobre tabelas permitidas, com limite de linhas, SQL visível e resultado marcado "não certificado"; nunca alimenta KPIs nem reports.
+
 ## Camadas
 
 ```

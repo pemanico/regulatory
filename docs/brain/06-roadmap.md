@@ -28,7 +28,14 @@ Estado (2026-10-15): fichas em `marts/` feitas; #39 e parte de #40 respondidas; 
 
 Critério de conclusão: ficha em `marts/`, KPIs em YAML (`draft`) com numerador, denominador e regras de aging decididas, e as questões #19 e #20 respondidas ou reduzidas a pontos concretos.
 
-Proposta para o passo seguinte (a confirmar pelo Ordep): **explicador de breaks** (CASO-001) — ligação determinística break → mapping → regra aprovada → estado M/C/O, contexto do trade a partir do recon status file, verificações determinísticas e explicação citada. Dados fictícios no repositório público.
+Âmbito da primeira fase (decidido 2026-10-15): explicar os breaks e KPIs sobre breaks por prompt (opção B: spec + compilador; exploração com SQL mais tarde).
+
+Ordem proposta (a confirmar passo a passo):
+
+1. **Métricas e compilador**: catálogo de métricas do mart de breaks (lógico), spec → SQL determinístico, execução sobre Parquet fictício, testes. Base para os KPIs e para o explicador (ler as linhas de um break).
+2. **Explicador de breaks** (CASO-001): break → mapping → regra aprovada → estado M/C/O, contexto do trade, verificações determinísticas, explicação citada.
+3. **Prompt → spec** com LLM (simulado nos testes), validação e resposta com placeholders.
+4. **Modo de exploração** com SQL do LLM, separado e marcado "não certificado".
 
 ## Próximo
 

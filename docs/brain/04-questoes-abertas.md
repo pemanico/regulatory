@@ -30,6 +30,7 @@
 | 31 | Validar com o Excel real as propostas já implementadas em `09-regras-validacao-campos.md` §2–§5: conversão por código no banco; registo canónico + chunk gerado; join por Table+Item com verificação de Section/Field; vazio = erro; condições preservadas palavra a palavra; metadados de versão | Mudam a especificação | Ordep |
 | 37 | Acrescentar ao Retriever/Director um passo de "juiz" local com saídas tipadas (relevância e suficiência dos trechos, suporte de cada citação)? Decidir com números do golden set (recall@k ao cortar trechos, afirmações sem suporte) | Proposta do Claude: interface trocável, implementação local (reranker + modelo de verificação); não entra na fase 1 | Ordep, depois do passo 9 |
 | 38 | Valores do campo em break sem correspondência no mapping (na amostra, um preço e uma moeda interna): o que são e se devem entrar nos KPIs por campo | Ficam sem regra M/C/O associada; `10` §4.1 | Ordep |
+| 42 | Motor da primeira fase: DuckDB embebido no NestJS a ler o Parquet (proposta, ADR-005) ou Cube + Trino (ADR-001)? O binário nativo do DuckDB existe no registo npm do banco? | Define o compilador e o arranque no banco | Ordep / IT |
 | 34 | Persistência dos uploads e revisões (hoje em memória) e destino final: indexação no OpenSearch e gravação no Git interno | A exportação manual é provisória | Ordep / Claude |
 
 ## Respondidas

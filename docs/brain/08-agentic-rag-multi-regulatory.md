@@ -73,6 +73,12 @@ Rules (proposal):
 | `records.sample` | Limited, paginated rows for illustration (max 50) |
 | `matching.breakdown` | Parameterised template: unmatched/unpaired by reason, field in break, aging bucket |
 
+**Decision 2026-10-15 (Ordep, option B):** the main KPI path is prompt → LLM → validated spec → deterministic compiler → SQL on Parquet; the LLM writes neither SQL nor numbers. A separate **exploration mode** comes later:
+
+| Tool | Does |
+| --- | --- |
+| `sql.explore` (later) | LLM-written, read-only SQL over allow-listed tables, row limit, SQL shown to the user, result labelled "not certified"; never feeds KPIs or reports |
+
 All tools run on behalf of the user (row-level security by regulation, entity), log to the audit trail and enforce limits. ClickHouse vs Parquet is a per-mart setting in the semantic layer (ADR-001); agents do not see the difference.
 
 ## 3. Agents
