@@ -1,6 +1,6 @@
 # Reconciliação EMIR: modelo de dados e ligações
 
-Primeiro exemplo prático de matching EMIR (questão #20), apresentado pelo Ordep em 2026-10-15. Este ficheiro está no repositório **público**: nomes de colunas, valores e identificadores reais não entram aqui. Os nomes abaixo são **lógicos e inventados**; a correspondência com os nomes reais fica num binding local no banco (ver §6).
+Primeiro exemplo prático de matching EMIR (questão #20), apresentado pelo Ordep em 2026-10-15. Este ficheiro está no repositório **público**: desde 2026-10-15 os nomes reais de colunas podem entrar (Ordep); **dados** (valores, identificadores de trades, LEIs, clientes) não. O código usa nomes lógicos; a correspondência com as colunas reais está nas fichas dos marts e no ficheiro de bindings (§6).
 
 Fichas dos dois conjuntos de dados: [`marts/emir-recon-breaks.md`](marts/emir-recon-breaks.md) e [`marts/emir-tr-recon-status.md`](marts/emir-tr-recon-status.md).
 

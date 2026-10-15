@@ -98,7 +98,8 @@ No banco o Ordep **não desenvolve**: só descarrega, instala, corre e testa. To
 
 Regra: **nada interno do banco entra aqui**, nem no histórico do Git (apagar depois não resolve).
 
-- Proibido: documentação interna (specs, regras, mapeamentos), nomes reais de marts, colunas, sistemas, entidades, DAGs ou tabelas; definições reais de KPIs; casos práticos com detalhe real; volumes; dados de clientes, contrapartes, LEIs; nomes de colegas.
-- Permitido: código genérico da plataforma, ferramentas de conversão, exemplos **fictícios e marcados como tal**, casos e marts **anonimizados** (estrutura, tipos, lógica, nomes inventados).
+- **Permitido ao nível de colunas** (Ordep, 2026-10-15): nomes reais de colunas, cabeçalhos e estrutura dos ficheiros e marts (schemas, tipos, ligações entre ficheiros).
+- Proibido: **dados** — valores de linhas, identificadores de trades (UTI, ids proprietários, números de trade), LEIs, nomes de clientes e contrapartes, volumes; documentação interna em texto (specs, regras de negócio); definições reais de KPIs ainda não decididas; nomes de colegas.
+- Permitido também: código genérico da plataforma, ferramentas de conversão, exemplos **fictícios e marcados como tal**.
 - O conhecimento real (documentação convertida, catálogo real, casos reais) vive só no repositório de conhecimento no Git interno do banco.
 - Na dúvida, perguntar ao Ordep antes de escrever.

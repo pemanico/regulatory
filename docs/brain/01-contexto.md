@@ -60,4 +60,4 @@ Zero reports recorrentes produzidos manualmente em Excel. Exportações pontuais
 
 - No banco, o Ordep só tem acesso ao Git interno.
 - O desenvolvimento com o Claude é feito no repositório público `pemanico/regulatory`; o Ordep faz download e corre localmente no banco.
-- Consequência: o repositório público só pode ter código genérico e exemplos fictícios ou anonimizados. Conhecimento real fica no Git interno.
+- Consequência: o repositório público só pode ter código genérico, exemplos fictícios e, desde 2026-10-15, nomes reais de colunas e estrutura dos ficheiros (sem dados). Conhecimento real fica no Git interno.

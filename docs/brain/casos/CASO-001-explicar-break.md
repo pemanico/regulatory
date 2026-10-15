@@ -1,6 +1,6 @@
 # CASO-001: perceber porque é que um campo está em break
 
-> Caso anonimizado: sem nomes reais de colunas, valores ou trades. Modelo de dados em [`../10-reconciliacao-emir.md`](../10-reconciliacao-emir.md).
+> Sem dados reais (valores, trades); colunas reais nas fichas dos marts. Modelo de dados em [`../10-reconciliacao-emir.md`](../10-reconciliacao-emir.md).
 
 | Campo | Valor |
 | --- | --- |
