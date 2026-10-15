@@ -16,12 +16,15 @@
 | 8b/8c | Código, interface, mensagens e template do chunk em inglês; verificação de língua no lint | PR #11 |
 | 2d | Aplicação a correr na máquina do banco (Windows, registo npm interno, proxy) e teste de aceitação com o Excel real concluído | PR #10, #11; guia `arranque-local.md` |
 | 8d | Prompts dos agentes, contratos e módulos de regulação em inglês | PR #12 |
+| 2f | Exemplo de matching EMIR recebido: modelo dos cinco artefactos, fichas anonimizadas do mart de breaks e do recon status file, KPIs candidatos | `10-reconciliacao-emir.md`, `marts/` |
 
 ## Próxima sessão
 
 **Exemplo prático de matching EMIR para a fase 1 do Agentic RAG** (`08-agentic-rag-multi-regulatory.md` §3). Objetivo: ter um mart de matching anonimizado e 3–5 KPIs de matching com definição fechada, para construir o runtime da fase 1 (passo 8) com dados fictícios do mesmo formato.
 
 Inputs do Ordep: ficha anonimizada de um mart com estado de pairing/matching (#20) e os KPIs de matching calculados hoje em Excel, com as escolhas de definição (#19).
+
+Estado (2026-10-15): fichas em `marts/` feitas; faltam as respostas a #38–#40 e as definições de #19 para fechar os KPIs.
 
 Critério de conclusão: ficha em `marts/`, KPIs em YAML (`draft`) com numerador, denominador e regras de aging decididas, e as questões #19 e #20 respondidas ou reduzidas a pontos concretos.
 

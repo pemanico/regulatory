@@ -13,6 +13,7 @@ Conhecimento acumulado do projeto, para que qualquer conversa nova (Claude ou pe
 7. [RAG e Agentic RAG](07-rag.md): o que entra no RAG, OpenSearch, fluxo, ingestão de código e documentação
 8. [Multi-regulatory Agentic RAG](08-agentic-rag-multi-regulatory.md) (EN): Director, agentes, vector DB vs ClickHouse, packs de regulação, KPIs, enrichment, fases
 9. [Regras de validação por campo](09-regras-validacao-campos.md): especificação de conversão do Excel de regras EMIR, análise e propostas
+10. [Reconciliação EMIR](10-reconciliacao-emir.md): os cinco artefactos (regras, action types, mapping, recon status file, mart de breaks), ligações, problemas da amostra e KPIs candidatos
 
 ## Casos práticos dos operacionais
 
@@ -28,7 +29,8 @@ Uma ficha por mart em [`marts/`](marts/), a partir de [`marts/_template.md`](mar
 
 | Id | Jurisdição | Necessidade de negócio | Estado da ficha |
 | --- | --- | --- | --- |
-| — | Ainda sem marts documentados | — | — |
+| [emir-recon-breaks](marts/emir-recon-breaks.md) | EMIR | Breaks de reconciliação por trade e campo, com o valor de cada parte | Anonimizada; colunas lógicas; questões #38–#40 |
+| [emir-tr-recon-status](marts/emir-tr-recon-status.md) | EMIR | Recon status file do trade repository (fonte externa): estados e valores TP1/TP2 por campo | Anonimizada; estrutura por grupos |
 
 ## Regras de manutenção
 

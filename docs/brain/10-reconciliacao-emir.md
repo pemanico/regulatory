@@ -1,0 +1,93 @@
+# Reconciliação EMIR: modelo de dados e ligações
+
+Primeiro exemplo prático de matching EMIR (questão #20), apresentado pelo Ordep em 2026-10-15. Este ficheiro está no repositório **público**: nomes de colunas, valores e identificadores reais não entram aqui. Os nomes abaixo são **lógicos e inventados**; a correspondência com os nomes reais fica num binding local no banco (ver §6).
+
+Fichas dos dois conjuntos de dados: [`marts/emir-recon-breaks.md`](marts/emir-recon-breaks.md) e [`marts/emir-tr-recon-status.md`](marts/emir-tr-recon-status.md).
+
+## 1. Os cinco artefactos
+
+| # | Artefacto | O que é | Formato hoje → futuro | Muda? |
+| --- | --- | --- | --- | --- |
+| A | Regras por campo | Uma linha por campo EMIR: Table, Item, Section, Field, Format, Conditions, Error codes | Excel | Não mudou (Ordep, 2026-10-15) |
+| B | Estado por action type | Uma linha por campo: M/C/O/- por action type | Excel | Não mudou |
+| C | Mapping campo ↔ colunas do trade repository | Nome do campo (= `Field` de A/B) ↔ colunas do recon status file, uma por parte (`TP1_<campo>`, `TP2_<campo>`) ou uma só coluna | Excel | Não mudou |
+| D | Recon status file | Ficheiro diário do trade repository (DTCC) com o estado de pairing/reconciliação e, por campo, o valor de cada parte | CSV → Parquet | Dados diários |
+| E | Mart de breaks (BNPP) | Resultado do PySpark/Airflow: **uma linha por campo em break** de cada trade, com o valor de cada parte e o nome do campo | CSV → Parquet | Dados diários |
+
+O processamento é feito por **business date**; o ficheiro de regras (A/B) é o mesmo para todas as datas.
+
+## 2. Ligações (definidas pelo Ordep)
+
+```
+A regras ──(Table.Item / Field)── B action types
+   │
+ Field name
+   │
+C mapping ──(colunas TP1_<x>, TP2_<x>)── D recon status file
+   │                                         │
+ campo em break                       UTI + proprietary id + business date
+   │                                         │
+E mart de breaks ────────────────────────────┘
+```
+
+| De | Para | Chave |
+| --- | --- | --- |
+| D recon status | C mapping | Nome da coluna do recon (`TP1_<x>` / `TP2_<x>`) ↔ coluna DTCC do mapping |
+| C mapping | A/B regras e action types | Nome do campo (`Field`) — ou `Table.Item`, quando o mapping tiver a coluna |
+| E mart | D recon status | UTI + proprietary id + business date |
+| E mart | C mapping | Campo em break ↔ campo do mapping (ver §4.1: a forma exata ainda não está confirmada) |
+
+## 3. Semântica do mart de breaks (Ordep)
+
+- `party_1_value` (nome lógico): valor reportado pelo BNPP = valor da coluna `TP1_<campo>` do recon status file (ex. para o campo "Asset class", a coluna TP1 desse campo).
+- `party_2_value`: valor reportado pela contraparte, tal como chega no ficheiro da DTCC = coluna `TP2_<campo>`.
+- `field_in_break`: preenchido para **todos** os campos em que `TP1_<campo>` ≠ `TP2_<campo>`.
+- Um trade (UTI / proprietary id) pode ter **vários breaks** → várias linhas no mesmo dia.
+
+Consequência para os KPIs: o mart tem granularidade *trade × campo em break*. Contar linhas conta breaks, não trades; "% de trades com break" precisa de `count distinct` da chave do trade e de um denominador que só existe no recon status file (D).
+
+## 4. O que a amostra mostra e ainda não bate certo
+
+Observado nas amostras de 2026-10-12 (PDF transcritos a partir de CSV; alguns identificadores aparecem escritos de forma diferente entre ficheiros, por isso parte disto pode ser erro de transcrição).
+
+### 4.1 O campo em break não é o nome do campo do mapping
+
+A descrição diz que o campo em break é o nome do mapping (ex. "Asset class"). Na amostra os valores têm a forma do **sufixo da coluna do trade repository** (maiúsculas com underscores, igual ao que vem depois de `TP1_`/`TP2_`), e há valores que não têm coluna correspondente no mapping nem no recon (um parece um campo interno do banco). Se for assim, a ligação E → C faz-se retirando o prefixo de parte às colunas do mapping, não pelo nome do campo, e os campos sem correspondência têm de ser contados e listados, não ignorados.
+
+### 4.2 Chave de ligação E ↔ D
+
+- Nenhum dos dois cabeçalhos transcritos tem uma coluna com o nome UTI; nas linhas de dados há valores com forma de UTI sem cabeçalho correspondente (cabeçalho e dados desalinhados).
+- A business date vem em formatos diferentes (`dd/mm/yyyy` no recon, ISO no mart). Em Parquet, ambas devem ser do tipo `date`; até lá, o join tem de normalizar.
+
+### 4.3 Pares TP1/TP2 assimétricos
+
+No mapping e no recon há pares em que o sufixo da parte 1 e da parte 2 não é igual (ex. um sufixo com uma palavra repetida; leg 1 da parte 1 emparelhada com leg 2 da parte 2; nomes de taxa de câmbio e de tracking number diferentes entre partes) e colunas repetidas no cabeçalho do recon. Se for real e não erro de transcrição: o par TP1/TP2 tem de vir **explicitamente da linha do mapping**, nunca de casar nomes por padrão. O conversor de regras já assinala estes casos (`PARTY_FIELD_UNPAIRED`).
+
+### 4.4 Estado "matched" com breaks
+
+O mart traz uma flag final de reconciliação com o valor "Matched" em linhas que têm campo em break, enquanto o estado de reconciliação do trade repository é "não reconciliado" (NREC). Sem definir o que esta flag significa, qualquer KPI de "taxa de matching" pode contar o mesmo trade como matched e em break.
+
+### 4.5 Breaks com um dos lados vazio
+
+Há breaks em que um dos valores está vazio. Para os KPIs é útil separar "valores diferentes" de "campo não reportado por uma das partes"; a regra de action type (B) diz se o campo era obrigatório, condicional ou opcional para esse trade.
+
+### 4.6 Action type do trade
+
+Para ligar um break às regras de B (era obrigatório? era opcional?) é preciso o action type do último report do trade. Nenhuma das amostras o mostra.
+
+## 5. KPIs candidatos (proposta, não decidido)
+
+| Id | Definição proposta | Fonte | Depende de |
+| --- | --- | --- | --- |
+| `breaks_count` | Nº de linhas do mart (trade × campo) na business date | E | — |
+| `trades_with_breaks` | Nº de trades distintos com ≥ 1 break | E | chave do trade (§4.2) |
+| `break_rate` | `trades_with_breaks` / trades reconciliáveis (paired, two-sided) no recon | E + D | §4.2, §4.4 e definição de "reconciliável" (#19) |
+| `breaks_by_field` | `breaks_count` por campo, com nome do campo e Table.Item via mapping | E + C + A | §4.1 |
+| `breaks_by_asset_class` | `breaks_count` por classe de ativo | E | — |
+| `one_sided_breaks` | Breaks com um dos lados vazio, por campo e estado M/C/O | E + B | §4.5, §4.6 |
+
+Aging (dias em break) exige histórico de várias business dates e a regra de dias corridos ou úteis (#19).
+
+## 6. Nomes reais e binding local
+
+O código da plataforma usa os nomes lógicos (ex. `party_1_value`, `field_in_break`, `uti`, `proprietary_id`, `business_date`). No banco, um ficheiro de configuração local faz a correspondência nome lógico → coluna real e caminho do Parquet, ao mesmo nível do `.env`. Assim o repositório público não precisa dos nomes reais e o Ordep só edita configuração, não código. (Proposta; implementar quando a semantic layer for construída — passo 2.)

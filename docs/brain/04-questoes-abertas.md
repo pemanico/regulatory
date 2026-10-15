@@ -17,7 +17,7 @@
 | 14 | Validar formatos de destino, estrutura `knowledge/` e template de documento funcional (07-rag.md §6) | Princípio já decidido; detalhe é proposta | Ordep |
 | 15 | Que produto é o Git interno (GitLab, Bitbucket, GitHub Enterprise) e se tem CI | Define onde corre o CI do repositório de conhecimento e a reindexação | Ordep / IT |
 | 19 | Definições certificadas dos KPIs de matching: denominador da taxa, "volume" (nº ou notional, moeda), aging (dias corridos ou úteis), limiares estritos ou não | Cada escolha muda o número; sem isto não há KPI fiável | Ordep / operacionais |
-| 20 | Que mart(s) EMIR têm estado de pairing/matching, motivo de falha, campos em break e data do primeiro unmatched (ficha anonimizada) | Base dos agentes Matching e KPI | Ordep |
+| 20 | (Em parte respondida em 2026-10-15: mart de breaks e recon status file, ver `10`.) Falta: data do primeiro unmatched / histórico para aging e motivo de falha além do campo em break | Base dos agentes Matching e KPI | Ordep |
 | 21 | Regras internas de matching (limiares de escalamento, procedimentos, prazos) | Alimentam o resumo de regras do Director e a Análise EMIR | Ordep |
 | 22 | Que fontes regulatórias indexar para matching (RTS/ITS, Q&As ESMA, documentação do trade repository) | Conhecimento do Retriever e da Análise EMIR | Ordep |
 | 23 | Orquestração: LangGraph.js ou máquina de estados própria no NestJS | Implementação do runtime do Director | Ordep / Claude |
@@ -29,6 +29,9 @@
 | 30 | O que é o terceiro campo BNPP em alguns mappings (ex. asset class): derivado, consolidado, ou usado no controlo? | Hoje fica como campo comum (`OUTROS_CAMPOS_BNPP`); ver `09` §1.2 | Ordep |
 | 31 | Validar com o Excel real as propostas já implementadas em `09-regras-validacao-campos.md` §2–§5: conversão por código no banco; registo canónico + chunk gerado; join por Table+Item com verificação de Section/Field; vazio = erro; condições preservadas palavra a palavra; metadados de versão | Mudam a especificação | Ordep |
 | 37 | Acrescentar ao Retriever/Director um passo de "juiz" local com saídas tipadas (relevância e suficiência dos trechos, suporte de cada citação)? Decidir com números do golden set (recall@k ao cortar trechos, afirmações sem suporte) | Proposta do Claude: interface trocável, implementação local (reranker + modelo de verificação); não entra na fase 1 | Ordep, depois do passo 9 |
+| 38 | O campo em break do mart é o nome do campo do mapping (ex. "Asset class") ou o sufixo da coluna do trade repository? Na amostra parece o sufixo, e há valores sem correspondência no mapping | Define a ligação mart → mapping → regras; `10` §4.1 | Ordep |
+| 39 | Colunas exatas da ligação mart ↔ recon status file (UTI e proprietary id não aparecem com esse nome nos cabeçalhos da amostra) e formato da business date em Parquet | Sem chave certa, o denominador dos KPIs de taxa falha; `10` §4.2 | Ordep |
+| 40 | O mart tem trades sem break, ou só breaks? O que significa a flag final "Matched" em linhas com break? Onde está o action type do trade? | Define `break_rate`, a taxa de matching e a ligação às regras M/C/O; `10` §4.4–§4.6 | Ordep |
 | 34 | Persistência dos uploads e revisões (hoje em memória) e destino final: indexação no OpenSearch e gravação no Git interno | A exportação manual é provisória | Ordep / Claude |
 
 ## Respondidas
