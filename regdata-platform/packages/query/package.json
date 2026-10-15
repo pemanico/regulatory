@@ -1,0 +1,40 @@
+{
+  "name": "@regdata/query",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Semantic models of the data marts and the deterministic compiler from view specs to SQL (DuckDB over Parquet or CSV)",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "test": "vitest run --reporter=default --reporter=github-actions",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@regdata/contracts": "0.1.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@duckdb/node-api": "1.5.2-r.1",
+    "@types/node": "^22.0.0",
+    "tsup": "^8.3.0",
+    "vitest": "^2.1.0"
+  }
+}
