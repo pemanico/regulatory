@@ -16,7 +16,7 @@
 | 13 | Os documentos têm owner e versão identificáveis? | Sem owner e versão não há citação fiável nem filtro de vigência | Ordep |
 | 14 | Validar formatos de destino, estrutura `knowledge/` e template de documento funcional (07-rag.md §6) | Princípio já decidido; detalhe é proposta | Ordep |
 | 15 | Que produto é o Git interno (GitLab, Bitbucket, GitHub Enterprise) e se tem CI | Define onde corre o CI do repositório de conhecimento e a reindexação | Ordep / IT |
-| 19 | Definições certificadas dos KPIs de matching: denominador da taxa, "volume" (nº ou notional, moeda), aging (dias corridos ou úteis), limiares estritos ou não | Cada escolha muda o número; sem isto não há KPI fiável | Ordep / operacionais |
+| 19 | Definições certificadas dos KPIs de matching. Já decidido: aging em dias úteis; o universo é o das posições matched da reconciliação prévia (2026-10-15). Falta: "volume" (nº ou notional, moeda) e limiares estritos ou não | Cada escolha muda o número; sem isto não há KPI fiável | Ordep / operacionais |
 | 20 | (Em parte respondida em 2026-10-15: mart de breaks e recon status file, ver `10`.) Falta: data do primeiro unmatched / histórico para aging e motivo de falha além do campo em break | Base dos agentes Matching e KPI | Ordep |
 | 21 | Regras internas de matching (limiares de escalamento, procedimentos, prazos) | Alimentam o resumo de regras do Director e a Análise EMIR | Ordep |
 | 22 | Que fontes regulatórias indexar para matching (RTS/ITS, Q&As ESMA, documentação do trade repository) | Conhecimento do Retriever e da Análise EMIR | Ordep |
@@ -30,7 +30,8 @@
 | 31 | Validar com o Excel real as propostas já implementadas em `09-regras-validacao-campos.md` §2–§5: conversão por código no banco; registo canónico + chunk gerado; join por Table+Item com verificação de Section/Field; vazio = erro; condições preservadas palavra a palavra; metadados de versão | Mudam a especificação | Ordep |
 | 37 | Acrescentar ao Retriever/Director um passo de "juiz" local com saídas tipadas (relevância e suficiência dos trechos, suporte de cada citação)? Decidir com números do golden set (recall@k ao cortar trechos, afirmações sem suporte) | Proposta do Claude: interface trocável, implementação local (reranker + modelo de verificação); não entra na fase 1 | Ordep, depois do passo 9 |
 | 38 | Valores do campo em break sem correspondência no mapping (na amostra, um preço e uma moeda interna): o que são e se devem entrar nos KPIs por campo | Ficam sem regra M/C/O associada; `10` §4.1 | Ordep |
-| 40 | O que significa a flag final "Matched" em linhas com break? Onde está o action type do trade (para ligar às regras M/C/O)? | Taxa de matching e breaks por obrigatoriedade; `10` §4.4–§4.6 | Ordep |
+| 40 | Onde está o action type do trade (para ligar às regras M/C/O)? | Taxa de matching e breaks por obrigatoriedade; `10` §4.4–§4.6 | Ordep |
+| 41 | Onde está guardado o universo de posições matched da reconciliação prévia (mart, coluna, filtro), para o denominador das taxas? Que calendário de dias úteis (TARGET2, Lisboa, outro)? | Sem o mesmo universo do mart, `break_rate` mistura populações; o calendário muda o aging; `10` §4.4 e §5 | Ordep |
 | 34 | Persistência dos uploads e revisões (hoje em memória) e destino final: indexação no OpenSearch e gravação no Git interno | A exportação manual é provisória | Ordep / Claude |
 
 ## Respondidas
@@ -44,3 +45,4 @@
 | 30a | Nome dos blocos e prefixo de parte no mapping BNPP | Os campos de parte começam por `TP1` e `TP2`; blocos `REGRAS_TP1` / `REGRAS_TP2` (2026-10-13) | `09` §4.1, `03` |
 | 39 | Chave da ligação mart ↔ recon status file | UTI + proprietary id + business date, ambos no recon status file; o proprietary id segue as mesmas regras de negócio que o UTI (2026-10-15) | `10` §4.2 |
 | 40a | O mart tem trades sem break? | Não, só breaks; o denominador das taxas vem do recon status file (2026-10-15) | `10` §4.4 |
+| 40b | O que significa a flag "Matched" em linhas com break? | Estado da posição na reconciliação prévia; o mart só calcula breaks sobre posições matched (2026-10-15) | `10` §4.4 |

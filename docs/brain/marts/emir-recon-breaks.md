@@ -39,7 +39,7 @@ Só as colunas descritas pelo Ordep ou necessárias às ligações. O mart real 
 | `reconciliation_status` | string | Estado de reconciliação do trade repository | dimensão |
 | `valuation_reconciliation_status` | string | Estado da reconciliação de valuation | dimensão |
 | `primary_asset_class` | string | Classe de ativo principal | dimensão |
-| `reconciliation_flag` | string | Flag final ("Matched"…); significado por confirmar (`10` §4.4) | dimensão |
+| `reconciliation_flag` | string | Estado da posição na reconciliação prévia; o mart só tem posições matched (`10` §4.4) | dimensão |
 
 ## Métricas derivadas (para a semantic layer)
 
@@ -49,13 +49,15 @@ Propostas em `10` §5, todas em `draft` até fechar #19 e as questões #38–#40
 | --- | --- | --- | --- |
 | `breaks_count` | nº de linhas | sim | draft |
 | `trades_with_breaks` | count distinct da chave do trade | não (distinct) | draft |
-| `break_rate` | `trades_with_breaks` / trades reconciliáveis no recon status file (o mart só tem breaks) | não (rácio) | draft |
+| `break_rate` | `trades_with_breaks` / posições matched da reconciliação prévia na mesma business date | não (rácio) | draft |
 
 ## Casos que usam este mart
 
 - Exemplo prático de matching EMIR (`10-reconciliacao-emir.md`).
 
 ## Notas e armadilhas
+
+- Corre sobre uma reconciliação prévia e só calcula breaks das posições matched; aging em dias úteis.
 
 - Granularidade trade × campo: somar linhas conta breaks, não trades.
 - Valores das partes guardados como texto: comparar números ou timestamps exige normalização (ex. `100` vs `100.0`; timestamps com e sem `Z`; exemplos fictícios).

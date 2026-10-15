@@ -5,6 +5,7 @@ Mais recente primeiro. Decisões técnicas da aplicação têm ADR em `regdata-p
 | Data | Decisão | Porquê |
 | --- | --- | --- |
 | 2026-10-15 | Modelo da reconciliação EMIR (Ordep): recon status file da DTCC ↔ mapping pelas colunas `TP1_<campo>`/`TP2_<campo>`; mapping ↔ regras e action types pelo nome do campo; mart de breaks ↔ recon status file por UTI + proprietary id + business date; processamento por business date; regras iguais para todas as datas | Exemplo prático de matching (#20); `10-reconciliacao-emir.md` |
+| 2026-10-15 | O mart de breaks corre sobre uma reconciliação prévia e só calcula breaks das posições matched; aging sempre em dias úteis | Ordep (questões #19, #40) |
 | 2026-10-15 | O mart só tem breaks; UTI e proprietary id vêm no recon status file e o proprietary id segue as mesmas regras de negócio que o UTI | Ordep (questões #39, #40) |
 | 2026-10-15 | Mart de breaks: uma linha por campo em break de cada trade (vários breaks por trade); valor da parte 1 = reportado pelo BNPP (`TP1_`), parte 2 = contraparte (`TP2_`); preenchido sempre que os dois diferem. Recon status file e mart passam de CSV a Parquet | Definido pelo Ordep |
 | 2026-10-14 | Nenhum serviço externo alojado (API de terceiros) pode receber documentação interna, regras, código ou dados: o reranker e qualquer verificação dos trechos (relevância, suficiência, suporte das citações) correm dentro do banco. Exclui juízes externos como o Jev | Restrição do banco, confirmada pelo Ordep |
