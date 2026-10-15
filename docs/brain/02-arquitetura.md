@@ -15,8 +15,9 @@ Caminho principal dos KPIs (decisão 2026-10-15, opção B): prompt → LLM → 
 ```
 React (Ask, Pivot, Reports, Admin)
   → NestJS (API, auth, AI gateway, orquestrador, tools, audit)
-    → Semantic layer (Cube): métricas certificadas
-      → Trino → data marts S3 Parquet      (ClickHouse opcional, ADR-001)
+    → Semantic layer: métricas definidas em código + compilador spec → SQL
+      → DuckDB embebido → data marts Parquet   (primeira fase, ADR-005)
+      → Cube + Trino / ClickHouse              (mais tarde, ADR-001)
     → Conhecimento: catálogo de marts, fichas de regra, OpenSearch, lineage
     → Airflow: jobs allowlisted
 ```

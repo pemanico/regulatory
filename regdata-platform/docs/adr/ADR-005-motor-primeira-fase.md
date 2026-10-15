@@ -1,12 +1,12 @@
 # ADR-005: motor de consulta da primeira fase
 
-**Estado:** proposto · 2026-10-15 (questão #42)
+**Estado:** aceite · 2026-10-15 (decisão do Ordep; questão #42)
 
 ## Contexto
 
 Primeira fase: explicar breaks e KPIs sobre breaks por prompt (opção B: spec validada → compilador determinístico → SQL sobre Parquet). Um único mart de breaks e o recon status file, particionados por business date. O ADR-001 prevê Cube sobre Trino, que exige infraestrutura que ainda não existe para a aplicação.
 
-## Proposta
+## Decisão
 
 DuckDB embebido no NestJS, a ler os ficheiros Parquet diretamente (local ou S3). O compilador gera SQL para o DuckDB a partir das métricas definidas em código; nenhum SQL vem do LLM no caminho principal.
 
