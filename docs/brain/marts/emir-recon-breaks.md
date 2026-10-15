@@ -1,6 +1,6 @@
 # MART: emir-recon-breaks
 
-> Nomes reais de colunas (autorizado pelo Ordep, 2026-10-15); **sem dados**. Modelo completo e ligações: [`../10-reconciliacao-emir.md`](../10-reconciliacao-emir.md). Cabeçalho transcrito da amostra de 2026-10-12 (PDF): pode ter erros de transcrição e colunas em falta.
+> Nomes reais de colunas (autorizado pelo Ordep, 2026-10-15); **sem dados**. Modelo completo e ligações: [`../10-reconciliacao-emir.md`](../10-reconciliacao-emir.md). Cabeçalho completo transcrito da amostra de 2026-10-12 (segundo PDF, 52 colunas); pode ter erros de transcrição.
 
 ```yaml
 mart_id: emir-recon-breaks          # id no código: emir_recon_breaks
@@ -26,7 +26,7 @@ owner: (equipa, a indicar)
 | --- | --- | --- | --- |
 | `BUSINESS_DATE` | `business_date` | Data de processamento (ISO na amostra) | partição / chave de ligação |
 | `PROPRIETARY` | `proprietary_id` | Identificador proprietário; mesmas regras de negócio que o UTI | chave de ligação |
-| (por confirmar) | `uti` | UTI; não aparece no cabeçalho transcrito (questão #43) | chave de ligação |
+| `UTI` | `uti` | Unique Trade Identifier; pode vir vazio quando o trade só tem `PROPRIETARY` (visto na amostra) | chave de ligação |
 | `BREAKING_FIELD` | `field_in_break` | Campo em break; preenchido sempre que TP1 ≠ TP2 | dimensão / ligação ao mapping |
 | `BNPP_REPORTED` | `party_1_value` | Valor reportado pelo BNPP (= `TP1_<campo>` do recon status file) | atributo |
 | `CPTY_REPORTED` | `party_2_value` | Valor reportado pela contraparte (= `TP2_<campo>`) | atributo |
@@ -39,6 +39,9 @@ owner: (equipa, a indicar)
 | `RECONCILIATION` | `reconciliation_status` | Estado de reconciliação do trade repository | dimensão |
 | `VALUATION_RECONCILIATION` | `valuation_reconciliation_status` | Estado da reconciliação de valuation | dimensão |
 | `REVIVED` | — | Trade revived | atributo |
+| `FURTHER_MODIFICATION` | — | Further modification | atributo |
+| `TOTAL_NUMBER_TRANSACTIONS`, `RPT` (transcrito assim; provavelmente `TOTAL_NUMBER_TRANSACTIONS_RPT`) | — | Totais do report | atributos |
+| `REPORTING_COUNTERPARTY_LEI`, `OTHER_COUNTERPARTY_LEGAL_LEI`, `REPORT_SUBMITTING_ENTITY`, `ENTITY_RESP_FOR_REPORT` | — | LEIs das contrapartes e entidades (valores nunca no repositório) | atributos |
 | `FILENAME` | — | Ficheiro de origem do trade repository | auditoria |
 | `C_PRIMARY_ASSET_CLASS` | `primary_asset_class` | Classe de ativo principal | dimensão |
 | `MATCHIG_MSK` | — | Chave de matching (nome tal como no ficheiro) | chave técnica |
@@ -66,5 +69,4 @@ owner: (equipa, a indicar)
 - Granularidade posição × campo: somar linhas conta breaks, não trades.
 - Valores das partes guardados como texto: comparar números ou timestamps exige normalização (ex. `100` vs `100.0`; timestamps com e sem `Z`; exemplos fictícios).
 - Breaks com um dos lados vazio.
-- Na amostra, os valores de `BREAKING_FIELD` têm a forma do sufixo das colunas `TP1_`/`TP2_` (ex. `DELIVERY_TYPE`, `PRODUCT_CLASSIFICATION`), e há valores sem correspondência no mapping (`PRICE`, `BNPP_CCY`) — questão #38.
-- O cabeçalho transcrito tem menos colunas do que as linhas de dados (há valores sem cabeçalho entre `REVIVED` e `PROPRIETARY`).
+- Na amostra, os valores de `BREAKING_FIELD` têm a forma do sufixo das colunas `TP1_`/`TP2_` (ex. `DELIVERY_TYPE`, `PRODUCT_CLASSIFICATION`), e há valores sem correspondência no mapping (`PRICE`, `PRICE_CCY`; o `BNPP_CCY` da primeira transcrição era `PRICE_CCY`) — questão #38.
