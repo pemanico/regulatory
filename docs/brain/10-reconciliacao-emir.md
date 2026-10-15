@@ -71,7 +71,7 @@ Ordep (2026-10-15): **o mart só tem breaks.** Logo, um trade reconciliável que
 
 Ordep (2026-10-15): o mart corre **sobre uma reconciliação feita antes** e só calcula os breaks das **posições matched** dessa reconciliação. A flag "Matched" é o estado da posição nessa reconciliação prévia; os breaks são diferenças campo a campo dentro de posições já matched. Não há contradição com o NREC do trade repository: são níveis diferentes (posição matched vs campos reconciliados).
 
-Consequência: o denominador de `break_rate` é o conjunto de **posições matched** da reconciliação prévia nessa business date — o mesmo universo sobre o qual o mart corre —, não todos os trades do recon status file. Falta saber onde esse universo está guardado (questão #41).
+Consequência: uma taxa de break teria de usar como denominador as posições matched da reconciliação prévia. Decisão do Ordep (2026-10-15): **fora do âmbito** — a plataforma trabalha só sobre os breaks; não há KPIs de taxa sobre o universo matched.
 
 ### 4.5 Breaks com um dos lados vazio
 
@@ -87,12 +87,13 @@ Para ligar um break às regras de B (era obrigatório? era opcional?) é preciso
 | --- | --- | --- | --- |
 | `breaks_count` | Nº de linhas do mart (trade × campo) na business date | E | — |
 | `trades_with_breaks` | Nº de trades distintos com ≥ 1 break | E | chave do trade (§4.2) |
-| `break_rate` | `trades_with_breaks` / posições matched da reconciliação prévia na mesma business date | E + reconciliação prévia | onde está o universo de posições matched (#41) |
 | `breaks_by_field` | `breaks_count` por campo, com nome do campo e Table.Item via mapping | E + C + A | §4.1 |
 | `breaks_by_asset_class` | `breaks_count` por classe de ativo | E | — |
 | `one_sided_breaks` | Breaks com um dos lados vazio, por campo e estado M/C/O | E + B | §4.5, §4.6 |
 
-Aging (dias em break) exige histórico de várias business dates; conta-se sempre em **dias úteis** (Ordep, 2026-10-15). Falta o calendário de dias úteis (#41).
+Aging (dias em break) exige histórico de várias business dates; conta-se sempre em **dias úteis = segunda a sexta**, sem calendário de feriados (Ordep, 2026-10-15).
+
+Fora do âmbito: taxas sobre o universo de posições matched (ex. % de posições com break). Os KPIs são contagens e distribuições de breaks.
 
 ## 6. Nomes reais e binding local
 

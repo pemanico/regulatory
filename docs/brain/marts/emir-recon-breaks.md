@@ -49,7 +49,6 @@ Propostas em `10` §5, todas em `draft` até fechar #19 e as questões #38–#40
 | --- | --- | --- | --- |
 | `breaks_count` | nº de linhas | sim | draft |
 | `trades_with_breaks` | count distinct da chave do trade | não (distinct) | draft |
-| `break_rate` | `trades_with_breaks` / posições matched da reconciliação prévia na mesma business date | não (rácio) | draft |
 
 ## Casos que usam este mart
 
@@ -57,7 +56,7 @@ Propostas em `10` §5, todas em `draft` até fechar #19 e as questões #38–#40
 
 ## Notas e armadilhas
 
-- Corre sobre uma reconciliação prévia e só calcula breaks das posições matched; aging em dias úteis.
+- Corre sobre uma reconciliação prévia e só calcula breaks das posições matched; aging em dias úteis (segunda a sexta). Sem taxas sobre o universo matched (fora do âmbito).
 
 - Granularidade trade × campo: somar linhas conta breaks, não trades.
 - Valores das partes guardados como texto: comparar números ou timestamps exige normalização (ex. `100` vs `100.0`; timestamps com e sem `Z`; exemplos fictícios).
