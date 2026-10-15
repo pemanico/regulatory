@@ -36,4 +36,8 @@
 | FIELD_ID (antes ID_CAMPO) | Chave de um campo nas regras de validação: `Table.Item`, concatenação de Table e Item (ex. 2.24), para todos os campos |
 | Leg | Perna de um contrato (ex. as duas pernas de um swap). Não é o mesmo que lado/contraparte da transação |
 | Parte 1 / parte 2 (trade party) | Os dois lados de um trade na reconciliação; no mapping BNPP, campos com prefixo de parte guardam o valor reportado por cada lado |
+| Recon status file | Ficheiro diário do trade repository (DTCC) com o estado de pairing e reconciliação de cada trade e, por campo, o valor de cada parte (`TP1_<campo>` / `TP2_<campo>`) |
+| Posição matched | Posição dada como matched na reconciliação feita antes do mart de breaks; é o universo sobre o qual os breaks por campo são calculados |
+| Mart de breaks | Mart do BNPP com uma linha por campo em break de cada trade: valor da parte 1 (BNPP), valor da parte 2 (contraparte) e nome do campo |
+| PARD / NREC / RECO / NOAP | Estados do trade repository: paired; não reconciliado; reconciliado; não aplicável (ex. valuation) |
 | Mapping DTCC ↔ BNPP | Correspondência entre cada campo do trade repository (DTCC) e o(s) campo(s) interno(s) do BNPP; campos com valor por parte têm um campo BNPP da parte 1 e outro da parte 2 (às vezes mais um campo comum). Pode ter a coluna `Table.Item`, que é a chave de ligação às regras |
